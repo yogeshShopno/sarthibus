@@ -44,7 +44,8 @@ const PassengerDetails = () => {
         inputValue,
         main_boarding_point_id,
         main_droping_point_id,
-        timerStart
+        timerStart,
+        booking_type
     } = location.state || {
         selectedUpperSeats: [],
         selectedLowerSeats: [],
@@ -304,6 +305,8 @@ const PassengerDetails = () => {
                     selectedUpperSeatPrice,
                     selectedLowerSeatPrice,
                     inputValue,
+                    booking_type
+
 
                 }
             })

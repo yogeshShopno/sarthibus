@@ -65,12 +65,15 @@ const PassengerView = () => {
         inputValue = '',
         main_boarding_point_id = '',
         main_droping_point_id = '',
+        booking_type
     } = location.state || {};
     const history = useHistory();
 
     const timerEnd = localStorage.getItem('timerEnd');
 
     const [timer, setTimer] = useState(timerEnd);
+
+
 
     useEffect(() => {
         const unblock = history.block((location, action) => {
@@ -308,7 +311,6 @@ const PassengerView = () => {
                     //         vData.append('total_main_price', amountApi)
 
                     //         const res = axios.post("ticket_wallet_amount_data_pay_verify", vData);
-                    //         console.log('res.data :>> ', res);
                     //         // if (res.data.success === true) {
                     //         //     submitTicket(response.razorpay_payment_id);
                     //         // }
@@ -330,7 +332,6 @@ const PassengerView = () => {
 
                             try {
                                 const res = await axios.post("ticket_wallet_amount_data_pay_verify", vData);
-                                console.log('res.data :>> ', res);
 
                                 if (res.data.success === true) {
                                     submitTicket(response.razorpay_payment_id);
@@ -398,6 +399,13 @@ const PassengerView = () => {
     const submitTicket = async (transactionId) => {
         setLoading(true)
         let data = new FormData();
+        data.append('bus_name', bus_name)
+        data.append('boarding_point_name', selectedboadingValue.boarding_sub_route_name)
+        data.append('boarding_point_time', selectedboadingValue.boarding_time)
+        data.append('droping_point_name', selecteddropingValue.droping_sub_route_name)
+        data.append('droping_point_time', selecteddropingValue.droping_time)
+        data.append('booking_type', booking_type)
+    
         data.append('bus_id', bus_id)
         data.append('user_id', localStorage.getItem('UserID') || '')
         data.append('boarding_point_id', selectedboadingValue?.boarding_id || '')
@@ -420,6 +428,8 @@ const PassengerView = () => {
         data.append('transaction_id', transactionId)
         data.append('created_type', '2')
         data.append('order_id', orderId)
+        data.append('booking_type', booking_type)
+
 
         for (let i = 0; i < selectedTotalSeat.length; i++) {
             data.append(`seat_number[${i}]`, selectedTotalSeat[i]);
@@ -435,7 +445,7 @@ const PassengerView = () => {
             data.append(`gender[${i}]`, passengerData[i]?.gender);
         }
         try {
-            await axios.post("add_ticket", data, {
+            await axios.post("add_ticket_new", data, {
             }).then((res) => {
                 if (res.data.success == true) {
                     toast.success(res.data.message);
@@ -481,6 +491,7 @@ const PassengerView = () => {
             data.append('coupon_amount', discount)
             data.append('total_amount', totalPrice)
             data.append('booking_date', formattedDate)
+            data.append('booking_type', booking_type)
 
 
             try {

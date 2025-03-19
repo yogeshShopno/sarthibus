@@ -71,7 +71,6 @@ const PassengerView = () => {
         main_boarding_point_id = '',
         main_droping_point_id = '',
     } = location.state || {};
-    // console.log('location.state :>> ', location.state);
     const history = useHistory();
 
     const timerEnd = localStorage.getItem('timerEnd');
@@ -126,7 +125,6 @@ const PassengerView = () => {
 
     useEffect(() => {
         const data = localStorage.getItem('UserID');
-        // console.log(first)
         if (!data) {
             localStorage.setItem('redirectPath', location.pathname);
         }
@@ -161,7 +159,6 @@ const PassengerView = () => {
 
     useEffect(() => {
         const data = localStorage.getItem('UserID');
-        // console.log('hi i am useEffect')
         if (data !== null) {
             getWalletAmount();
         }
@@ -292,7 +289,6 @@ const PassengerView = () => {
 
     //     try {
     //         const res = await axios.get("payment_gateway");
-    //         // console.log(res, "res")
     //         if (res.data.success) {
 
     //             setFacebook(res.data.data.facebook_link);
@@ -379,7 +375,6 @@ const PassengerView = () => {
 
                 const mhk = res.data.data.razorpay_key;
                 const key = removeKeyChars(mhk);
-                console.log('Modified Key:', key);
                 // const key = res.data.data.razorpay_key;
                 setPaymentGatewayKey(key);
 
@@ -393,7 +388,6 @@ const PassengerView = () => {
                     }
                     const remainingTime = Math.floor((timer - Date.now()) / 1000);
 
-                    console.log(remainingTime);
                     const options = {
                         key: key,  // Use the fetched key
                         amount: finalAmountApi * 100,  // Razorpay expects the amount in paise
@@ -530,7 +524,6 @@ const PassengerView = () => {
             await axios.post("coupon_list", data, {
                 params: params
             }).then((res) => {
-                //console.log(res.data.data);
                 setCouponData(res.data.data)
             })
         }
@@ -549,7 +542,6 @@ const PassengerView = () => {
             try {
                 await axios.post("ticket_wallet_amount", data, {
                 }).then((res) => {
-                    console.log(res.data.data.orderId, 'data');
                     setFinalAmountApi(res.data.data.total_main_price)
                     setWalletAmount(res.data.data.total_wallet)
                     setFinalSarthiDis(res.data.data.sarthi_discount)
