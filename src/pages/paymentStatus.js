@@ -28,14 +28,15 @@ const PaymentStatus = () => {
                 const res = await axios.post("/payment_check", data); // Ensure correct API URL
 
                 if (res.data.success) {
-                    console.log("Payment Success:", res.data.message);
+                    
+                    console.log("Payment Success:", res.data.success);
                     setLoading(false);
                     history.push("/success-ticket", { "status": true });
 
                 } else {
-                    console.error("Payment Failed:", res.data.message || "Invalid Message");
+                    console.error("Payment Failed:", res.data.success || "Invalid Message");
                     setLoading(false);
-                    history.push("/success-ticket", { "status": true });
+                    history.push("/success-ticket", { "status": false });
 
                 }
             } catch (error) {
