@@ -54,7 +54,7 @@ const PassengerView = () => {
         bus_name = '',
         boarding_point_name = '',
         droping_point_name = '',
-        selectedboadingValue = null,
+        selectedboardingValue = null,
         selecteddropingValue = null,
         bus_ac = '',
         droping_time = '',
@@ -191,7 +191,7 @@ const PassengerView = () => {
                 bus_name,
                 boarding_point_name,
                 droping_point_name,
-                selectedboadingValue,
+                selectedboardingValue,
                 selecteddropingValue,
                 bus_ac,
                 droping_time,
@@ -225,7 +225,7 @@ const PassengerView = () => {
                         bus_name,
                         boarding_point_name,
                         droping_point_name,
-                        selectedboadingValue,
+                        selectedboardingValue,
                         selecteddropingValue,
                         bus_ac,
                         droping_time,
@@ -256,7 +256,7 @@ const PassengerView = () => {
         if (!bus_name) newErrors.bus_name = 'Bus name is missing';
         if (!boarding_point_name) newErrors.boarding_point_name = 'Boarding point is required';
         if (!droping_point_name) newErrors.droping_point_name = 'Dropping point is required';
-        if (!selectedboadingValue) newErrors.selectedboadingValue = 'Boarding value is required';
+        if (!selectedboardingValue) newErrors.selectedboardingValue = 'Boarding value is required';
         if (!selecteddropingValue) newErrors.selecteddropingValue = 'Dropping value is required';
         if (!bus_ac) newErrors.bus_ac = 'Bus AC status is missing';
         if (!droping_time) newErrors.droping_time = 'Dropping time is missing';
@@ -458,7 +458,7 @@ const PassengerView = () => {
         let data = new FormData();
         data.append('bus_id', bus_id)
         data.append('user_id', localStorage.getItem('UserID') || '')
-        data.append('boarding_point_id', selectedboadingValue?.boarding_id || '')
+        data.append('boarding_point_id', selectedboardingValue?.boarding_id || '')
         data.append('droping_point_id', selecteddropingValue?.droping_id || '')
         data.append('main_boarding_point_id', main_boarding_point_id)
         data.append('main_droping_point_id', main_droping_point_id)

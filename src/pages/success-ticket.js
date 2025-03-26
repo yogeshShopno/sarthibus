@@ -1,14 +1,25 @@
 
 import { Button, CardActions, CardContent } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
 import axios from "axios";
 import { Card } from "react-bootstrap";
+import { useLocation, useHistory } from "react-router-dom";
+
 
 const SuccessTicket = () => {
     const [facebook, setFacebook] = useState('')
     const [linkedin, setLinkedin] = useState('')
     const [twitter, setTwitter] = useState('')
     const [instagram, setInstagram] = useState('')
+    const location = useLocation();
+    const status = location.state?.status || false; // Prevents error if state is undefined
+    const history = useHistory();
+
+    useEffect(() => {
+        if (!location.state) {
+            history.push("/"); // Redirect to home if state is missing
+        }
+    }, [location, history]);
 
     useEffect(() => {
         successTicket();
@@ -52,58 +63,7 @@ const SuccessTicket = () => {
                 // backgroundColor: "#eedbf1",
             }}>
 
-            {/* <Card className="m-auto" style={{ width: "100%", maxWidth: "400px" }} >
 
-                <CardContent>
-                    <CardContent id="alert-dialog-description">
-                        <div className="confirmed--div text-center">
-                            <img
-                                src="assets/images/confirmed.svg"
-                                alt=""
-                                width="120px"
-                                height="120px"
-                                className="img-fluid"
-                            />
-                            <h4 className="fw-bold mt-3">Ticket Confirmed</h4>
-
-
-                        </div>
-                    </CardContent>
-                </CardContent>
-
-                <CardActions sx={{
-                    display: "flex",
-                    justifyContent: "center",  // Centers the buttons horizontally
-                    alignItems: "center",
-                    gap: 1.5     // Aligns buttons vertically in the center
-                }}>
-                    <a href={instagram} target="_blank">
-                        <img style={{ width: "25px" }} src="\assets\icons\instagram.png" />
-
-                    </a>
-                    <a href={facebook} target="_blank">
-                        <img style={{ width: "25px" }} src="\assets\icons\communication.png" />
-                    </a >
-
-                    <a href={twitter} target="_blank">
-                        <img style={{ width: "25px" }} src="\assets\icons\twitter.png" />
-                    </a>
-
-                    <a href={linkedin} target="_blank">
-                        <img style={{ width: "25px" }} src="\assets\icons\linkedin.png" />
-                    </a>
-                </CardActions>
-
-                <CardActions sx={{ display: "grid", justifyContent: "center" }}>
-                    <Button href="/" autoFocus color="error" onClick={() => {
-                    }}
-                        style={{ backgroundColor: "rgb(121 44 143)", color: "white", marginBottom: "20px", marginTop: "1rem" }}
-                    >
-                        Back to Home
-                    </Button>
-                </CardActions>
-
-            </Card> */}
             <Card
                 className="m-auto"
                 style={{
@@ -125,7 +85,7 @@ const SuccessTicket = () => {
                             <div class="icon-fix"></div>
                         </div>
                     </div> */}
-                    <div class="main-container">
+                    {status && <div class="main-container">
                         <div class="check-container">
                             <div class="check-background">
                                 <svg viewBox="0 0 65 51" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -134,7 +94,8 @@ const SuccessTicket = () => {
                             </div>
                             <div class="check-shadow"></div>
                         </div>
-                    </div>
+                    </div>}
+
                     {/* <img
                         src="assets/images/confirmed.svg"
                         alt="Ticket Confirmed"
@@ -148,7 +109,8 @@ const SuccessTicket = () => {
                             marginBottom: "1rem",
                         }}
                     >
-                        Ticket Confirmed
+                        {status ? "Ticket Confirmed" : "Ticket Not Confirmed"}
+
                     </h3>
                 </CardContent>
 

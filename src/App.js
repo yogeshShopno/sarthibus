@@ -29,6 +29,7 @@ import PrivacyPolicy from './components/profile/privacy-policy';
 import Faq from './components/profile/faq';
 import Wallet from './components/profile/wallet';
 import SuccessTicket from './pages/success-ticket';
+import PaymentStatus from './pages/paymentStatus';
 
 
 function App() {
@@ -91,6 +92,10 @@ function App() {
           <TitleRoute path='/passnger-detail-view' title="Passenger View - sarthibus.com">
             <PassengerView />
           </TitleRoute>
+          <TitleRoute path='/payment-status' title="payment-status - sarthibus.com">
+            <PaymentStatus />
+          </TitleRoute>
+
           <TitleRoute path='/contact-us' title="Conact Us - sarthibus.com">
             <ContactUs />
           </TitleRoute>

@@ -155,7 +155,7 @@ const BusList = (seat) => {
   const [busInputToValue, setBusInputToValue] = useState("");
   const dirIcon = process.env.PUBLIC_URL + "assets/images/direction.png";
   const [selectedDate, setSelectedDate] = useState(formattedDate);
-  const [selectedboadingValue, setSelectedBoadingValue] = useState({});
+  const [selectedboardingValue, setSelectedBoardingValue] = useState({});
   const [selecteddropingValue, setSelectedDropingValue] = useState({});
   const [gender, setGender] = useState([]);
   const [errors, setErrors] = useState({});
@@ -236,12 +236,12 @@ const BusList = (seat) => {
     localStorage.removeItem("passengerData");
   }, []);
 
-  const handleSelectBoadingPoint = (event) => {
+  const handleSelectBoardingPoint = (event) => {
     const selectedPoint = busWisePickupDropPoints?.boarding_array?.find(
       (point) => point.boarding_id === event.target.value
     );
-    localStorage.setItem("SelectedBoadingValue", JSON.stringify(selectedPoint));
-    setSelectedBoadingValue(selectedPoint);
+    localStorage.setItem("SelectedBoardingValue", JSON.stringify(selectedPoint));
+    setSelectedBoardingValue(selectedPoint);
     setValue(1);
   };
 
@@ -272,7 +272,7 @@ const BusList = (seat) => {
     // const localMainDropingPointIdArr = JSON.parse(localStorage.getItem("main_droping_point_id_arr"));
 
     const SelectedDroping = JSON.parse(localStorage.getItem("SelectedDropingValue"));
-    const SelectedBoading = JSON.parse(localStorage.getItem("SelectedBoadingValue"));
+    const SelectedBoarding = JSON.parse(localStorage.getItem("SelectedBoardingValue"));
     const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats"));
 
     const selectedUpperSeats = JSON.parse(
@@ -300,7 +300,7 @@ const BusList = (seat) => {
         // localMainDropingPointIdArr
       );
       setSelectedDropingValue(SelectedDroping);
-      setSelectedBoadingValue(SelectedBoading);
+      setSelectedBoardingValue(SelectedBoarding);
       setTotalPrice(totalPriceLocal);
       setSelectedLowerSeat(selectedSeats);
       setSelectedUpperSeat(selectedUpperSeats);
@@ -444,11 +444,13 @@ const BusList = (seat) => {
     }
   };
 
-  const busLayoutAPI = async (busId) => {
+  const busLayoutAPI = async (busId,booking_type) => {
     let data = new FormData();
     data.append("bus_id", busId);
     data.append("booking_date", selectedDate);
     data.append("calling_type", 1);
+    data.append("booking_type", booking_type);
+
     setLoading(true);
 
     try {
@@ -693,7 +695,7 @@ const BusList = (seat) => {
         setImageSrcLower({});
         setImageSrcUpper({});
         setSelectedDropingValue({});
-        setSelectedBoadingValue({});
+        setSelectedBoardingValue({});
         setTotalPrice(0);
 
         if (busId == JSON.parse(localBusId) && localSeat) {
@@ -712,7 +714,7 @@ const BusList = (seat) => {
       setBookingPolicies(false);
       setAmenitiesOpen(false);
       setBusID(busId);
-      busLayoutAPI(busId);
+      busLayoutAPI(busId,booking_type);
       BusWiseBoardingDroppingPoints(
         busId,
         main_boarding_point_id,
@@ -738,7 +740,7 @@ const BusList = (seat) => {
     setSelectedUpperSeat([]);
     setSelectedLowerSeat([]);
     setSelectedDropingValue({});
-    setSelectedBoadingValue({});
+    setSelectedBoardingValue({});
   };
 
   const handleShowAmenities = (busId) => {
@@ -1034,7 +1036,7 @@ const BusList = (seat) => {
                 bus_id: item?.id,
                 bus_name: item?.bus_name,
                 bus_ac: item?.bus_ac,
-                selectedboadingValue,
+                selectedboardingValue,
                 selecteddropingValue,
                 droping_time: item?.droping_time,
                 boarding_time: item?.boarding_time,
@@ -1095,8 +1097,8 @@ const BusList = (seat) => {
     if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0) {
       newErrors.selectedLowerSeats = "Select any Seat";
       toast.error("Select any Seat");
-    } else if (!selectedboadingValue?.boarding_id) {
-      newErrors.selectedboadingValue = "Select any Boarding Points";
+    } else if (!selectedboardingValue?.boarding_id) {
+      newErrors.selectedboardingValue = "Select any Boarding Points";
       toast.error("Select any Boarding Points");
     } else if (!selecteddropingValue?.droping_id) {
       newErrors.selecteddropingValue = "Select any Droping Points";
@@ -3934,10 +3936,10 @@ const BusList = (seat) => {
                                                     >
                                                       <RadioGroup
                                                         value={
-                                                          selectedboadingValue?.boarding_id
+                                                          selectedboardingValue?.boarding_id
                                                         }
                                                         onChange={
-                                                          handleSelectBoadingPoint
+                                                          handleSelectBoardingPoint
                                                         }
                                                         className="d-block"
                                                         style={{
@@ -4086,17 +4088,17 @@ const BusList = (seat) => {
 
                                                       <Typography className="loc text-gray fw-semibold">
                                                         {
-                                                          selectedboadingValue?.boarding_address
+                                                          selectedboardingValue?.boarding_address
                                                         }
                                                       </Typography>
                                                       <Typography className="fs-16 text-body-tertiary fw-medium mb-0">
                                                         {
-                                                          selectedboadingValue?.boarding_sub_route_name
+                                                          selectedboardingValue?.boarding_sub_route_name
                                                         }
                                                       </Typography>
                                                       <Typography className="time text-gray fw-semibold">
                                                         {
-                                                          selectedboadingValue?.boarding_time
+                                                          selectedboardingValue?.boarding_time
                                                         }
                                                       </Typography>
                                                     </Box>

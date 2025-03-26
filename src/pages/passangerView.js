@@ -50,7 +50,7 @@ const PassengerView = () => {
         bus_name = '',
         boarding_point_name = '',
         droping_point_name = '',
-        selectedboadingValue = null,
+        selectedboardingValue = null,
         selecteddropingValue = null,
         bus_ac = '',
         droping_time = '',
@@ -178,7 +178,7 @@ const PassengerView = () => {
                 bus_name,
                 boarding_point_name,
                 droping_point_name,
-                selectedboadingValue,
+                selectedboardingValue,
                 selecteddropingValue,
                 bus_ac,
                 droping_time,
@@ -212,7 +212,7 @@ const PassengerView = () => {
                         bus_name,
                         boarding_point_name,
                         droping_point_name,
-                        selectedboadingValue,
+                        selectedboardingValue,
                         selecteddropingValue,
                         bus_ac,
                         droping_time,
@@ -242,7 +242,7 @@ const PassengerView = () => {
         if (!bus_name) newErrors.bus_name = 'Bus name is missing';
         if (!boarding_point_name) newErrors.boarding_point_name = 'Boarding point is required';
         if (!droping_point_name) newErrors.droping_point_name = 'Dropping point is required';
-        if (!selectedboadingValue) newErrors.selectedboadingValue = 'Boarding value is required';
+        if (!selectedboardingValue) newErrors.selectedboardingValue = 'Boarding value is required';
         if (!selecteddropingValue) newErrors.selecteddropingValue = 'Dropping value is required';
         if (!bus_ac) newErrors.bus_ac = 'Bus AC status is missing';
         if (!droping_time) newErrors.droping_time = 'Dropping time is missing';
@@ -257,6 +257,7 @@ const PassengerView = () => {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            console.log(newErrors);
             toast.error('Please fill in all the required fields before proceeding');
             return;
         }
@@ -264,12 +265,12 @@ const PassengerView = () => {
         const isValid = Object.keys(newErrors).length === 0;
 
         if (isValid) {
-            mhkRazor();
+            submitTicket();
 
         }
     };
 
-    const mhkRazor = async () => {
+    const Razor = async () => {
         let data = new FormData();
         let vData = new FormData();
         setLoading(true);
@@ -395,74 +396,152 @@ const PassengerView = () => {
 
         return () => clearInterval(interval);
     }, [timer]);
-
-    const submitTicket = async (transactionId) => {
-        setLoading(true)
+    const submitTicket = async () => {
+        setLoading(true);
         let data = new FormData();
-        data.append('bus_name', bus_name)
-        data.append('boarding_point_name', selectedboadingValue.boarding_sub_route_name)
-        data.append('boarding_point_time', selectedboadingValue.boarding_time)
-        data.append('droping_point_name', selecteddropingValue.droping_sub_route_name)
-        data.append('droping_point_time', selecteddropingValue.droping_time)
-        data.append('booking_type', booking_type)
     
-        data.append('bus_id', bus_id)
-        data.append('user_id', localStorage.getItem('UserID') || '')
-        data.append('boarding_point_id', selectedboadingValue?.boarding_id || '')
-        data.append('droping_point_id', selecteddropingValue?.droping_id || '')
-        data.append('main_boarding_point_id', main_boarding_point_id)
-        data.append('main_droping_point_id', main_droping_point_id)
-        data.append('boarding_id', from?.city_id || '')
-        data.append('droping_id', to?.city_id || '')
-        data.append('booking_date', formattedDate)
-        data.append('contact_name', name)
-        data.append('contact_email_id', emailId)
-        data.append('contact_details', mobileNo)
-        data.append('tax_amount', 0)
-        data.append('sub_total', totalPrice)
-        data.append('discount', discount)
-        data.append('sarthibus_discount', finalSarthiDis)
-        data.append('wallet', walletAmount)
-        data.append('final_price', finalAmountApi)
-        data.append('payment_method', '1')
-        data.append('transaction_id', transactionId)
-        data.append('created_type', '2')
-        data.append('order_id', orderId)
-        data.append('booking_type', booking_type)
-
-
+        data.append('booking_type', booking_type);
+        data.append('bus_id', bus_id || '');
+        data.append('bus_name', bus_name || '');
+        data.append('user_id', localStorage.getItem('UserID') || '');
+        data.append('boarding_point_id', selectedboardingValue?.boarding_id || '');
+        data.append('boarding_point_name', selectedboardingValue.boarding_sub_route_name);
+        data.append('boarding_point_time', selectedboardingValue.boarding_time);
+        data.append('droping_point_id', selecteddropingValue?.droping_id || '');
+        data.append('droping_point_name', selecteddropingValue.droping_sub_route_name);
+        data.append('droping_point_time', selecteddropingValue.droping_time);
+        data.append('boarding_id', from?.city_id || '');
+        data.append('droping_id', to?.city_id || '');
+        data.append('booking_date', formattedDate);
+        data.append('contact_name', name);
+        data.append('contact_email_id', emailId);
+        data.append('contact_details', mobileNo);
+        data.append('sub_total', totalPrice);
+        data.append('tax_amount', 0);
+        data.append('discount', discount);
+        data.append('sarthibus_discount', finalSarthiDis);
+        data.append('wallet', walletAmount);
+        data.append('final_price', finalAmountApi);
+        data.append('payment_method', '1');
+        data.append('transaction_id', '');
+        data.append('main_boarding_point_id', main_boarding_point_id);
+        data.append('main_droping_point_id', main_droping_point_id);
+        data.append('order_id', '');
+        data.append('created_type', '2');
+        data.append('booking_type', booking_type);
+    
         for (let i = 0; i < selectedTotalSeat.length; i++) {
             data.append(`seat_number[${i}]`, selectedTotalSeat[i]);
         }
-
+    
         for (let i = 0; i < selectedTotalSeatPrice.length; i++) {
             data.append(`seat_price[${i}]`, selectedTotalSeatPrice[i]);
         }
-
+    
         for (let i = 0; i < passengerData.length; i++) {
             data.append(`name[${i}]`, passengerData[i]?.name);
             data.append(`age[${i}]`, passengerData[i]?.age);
             data.append(`gender[${i}]`, passengerData[i]?.gender);
         }
+    
         try {
-            await axios.post("add_ticket_new", data, {
-            }).then((res) => {
-                if (res.data.success == true) {
-                    toast.success(res.data.message);
-                    setLoading(false)
-                    history.push({
-                        pathname: '/success-ticket', // Make sure to define the correct path
-                    });
-                    setOpenPopUpBoxConfirm(true)
-                } else {
-                    toast.error(res.data.message || 'Invalid Message');
+            const res = await axios.post("add_ticket_hold", data);
+    
+            if (res.data.success) {
+                toast.success(res.data.message);
+                setLoading(false);
+                setOpenPopUpBoxConfirm(true);
+    
+                if (res.data.data) {
+                    // Parse form and auto-submit
+                    const tempDiv = document.createElement("div");
+                    tempDiv.innerHTML = res.data.data;
+    
+                    const form = tempDiv.querySelector("form");
+                    if (form) {
+                        document.body.appendChild(form); // Append form to DOM
+                        form.submit(); // Auto-submit the form
+                    }
                 }
-            })
+            } else {
+                toast.error(res.data.message || "Invalid Message");
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong");
+            setLoading(false);
         }
-        catch (res) {
-            toast.error(res.data.message);
-        }
-    }
+    };
+    
+    // const submitTicket = async () => {
+    //     setLoading(true)
+    //     let data = new FormData();
+       
+    //     data.append('booking_type', booking_type)
+    
+    //     data.append('bus_id', bus_id || '')
+    //     data.append('bus_name', bus_name || '')
+    //     data.append('user_id', localStorage.getItem('UserID') || '')
+    //     data.append('boarding_point_id', selectedboardingValue?.boarding_id || '')
+    //     data.append('boarding_point_name', selectedboardingValue.boarding_sub_route_name)
+    //     data.append('boarding_point_time', selectedboardingValue.boarding_time)
+    //     data.append('droping_point_id', selecteddropingValue?.droping_id || '')
+    //     data.append('droping_point_name', selecteddropingValue.droping_sub_route_name)
+    //     data.append('droping_point_time', selecteddropingValue.droping_time)
+    //     data.append('boarding_id', from?.city_id || '')
+    //     data.append('droping_id', to?.city_id || '')
+    //     data.append('booking_date', formattedDate)
+    //     data.append('contact_name', name)
+    //     data.append('contact_email_id', emailId)
+    //     data.append('contact_details', mobileNo)
+
+
+    //     data.append('sub_total', totalPrice)
+    //     data.append('tax_amount', 0)
+    //     data.append('discount', discount)
+    //     data.append('sarthibus_discount', finalSarthiDis)
+    //     data.append('wallet', walletAmount)
+    //     data.append('final_price', finalAmountApi)
+    //     data.append('payment_method', '1')
+    //     data.append('transaction_id', '')
+    //     data.append('main_boarding_point_id', main_boarding_point_id)
+    //     data.append('main_droping_point_id', main_droping_point_id)
+    //     data.append('order_id', '')
+    //     data.append('created_type', '2')
+    //     data.append('booking_type', booking_type)
+
+
+    //     for (let i = 0; i < selectedTotalSeat.length; i++) {
+    //         data.append(`seat_number[${i}]`, selectedTotalSeat[i]);
+    //     }
+
+    //     for (let i = 0; i < selectedTotalSeatPrice.length; i++) {
+    //         data.append(`seat_price[${i}]`, selectedTotalSeatPrice[i]);
+    //     }
+
+    //     for (let i = 0; i < passengerData.length; i++) {
+    //         data.append(`name[${i}]`, passengerData[i]?.name);
+    //         data.append(`age[${i}]`, passengerData[i]?.age);
+    //         data.append(`gender[${i}]`, passengerData[i]?.gender);
+    //     }
+    //     try {
+    //         await axios.post("add_ticket_hold", data, {
+    //         }).then((res) => {
+    //             if (res.data.success == true) {
+    //                 toast.success(res.data.message);
+    //                 setLoading(false)
+    //                 // history.push({
+    //                 //     pathname: '/success-ticket', 
+    //                 // });
+    //                 setOpenPopUpBoxConfirm(true)
+    //             } else {
+    //                 toast.error(res.data.message || 'Invalid Message');
+    //             }
+    //         })
+    //     }
+    //     catch (res) {
+    //         toast.error(res.data.message);
+    //     }
+    // }
     const resetAddDialogConfirm = () => {
         setOpenPopUpBoxConfirm(false)
     }
