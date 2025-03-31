@@ -26,6 +26,8 @@ const PassengerView = () => {
     const location = useLocation();
     const [finalAmount, setFinalAmount] = useState(0);
     const [finalAmountApi, setFinalAmountApi] = useState(0);
+    const [GSTAmountApi, setGSTAmountApi] = useState(0);
+    const [serviceChargeAPI, setServiceChargeAPI] = useState(0);
     const [finalSarthiDis, setFinalSarthiDis] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [couponData, setCouponData] = useState([])
@@ -134,15 +136,23 @@ const PassengerView = () => {
     const handleHideCoupon = () => {
         setCouponOpen(false)
     }
+
+    // useEffect(() => {
+
+    //     const x = totalPrice - discount  ;
+    //     setFinalAmount(x);
+
+    //     const y = finalAmount - walletAmount  ;
+    //     console.log('finalAmount', GSTAmountApi, serviceChargeAPI,x,y)
+
+
+    //     setFinalAmountApi(y);
+    // }, [finalAmount,  finalAmountApi])
+
     useEffect(() => {
         couponList(bus_id)
-        const x = totalPrice - discount;
-        setFinalAmount(x);
 
-        const y = finalAmount - walletAmount;
-        setFinalAmountApi(y);
-
-    }, [finalAmount, bus_id, finalAmountApi])
+    }, [bus_id])
 
     useEffect(() => {
         const data = localStorage.getItem('UserID');
@@ -305,25 +315,6 @@ const PassengerView = () => {
                     const script = document.createElement('script');
                     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
 
-                    // decodedData.handler = function (response) {
-                    //     if (response.razorpay_payment_id) {
-                    //         vData.append('booking_date', formattedDate)
-                    //         vData.append('user_id', localStorage.getItem('UserID'))
-                    //         vData.append('total_main_price', amountApi)
-
-                    //         const res = axios.post("ticket_wallet_amount_data_pay_verify", vData);
-                    //         // if (res.data.success === true) {
-                    //         //     submitTicket(response.razorpay_payment_id);
-                    //         // }
-                    //         // else {
-                    //         //     toast.error(res.data.message);
-                    //         // }
-                    //     }
-                    //     else {
-                    //         toast.error("Payment failed");
-                    //     }
-                    // };
-
 
                     decodedData.handler = async function (response) {
                         if (response.razorpay_payment_id) {
@@ -399,7 +390,7 @@ const PassengerView = () => {
     const submitTicket = async () => {
         setLoading(true);
         let data = new FormData();
-    
+
         data.append('booking_type', booking_type);
         data.append('bus_id', bus_id || '');
         data.append('bus_name', bus_name || '');
@@ -418,8 +409,10 @@ const PassengerView = () => {
         data.append('contact_details', mobileNo);
         data.append('sub_total', totalPrice);
         data.append('tax_amount', 0);
-        data.append('discount', discount);
+        data.append('discount', parseInt(discount));
         data.append('sarthibus_discount', finalSarthiDis);
+        data.append('total_gst_amount', GSTAmountApi);
+        data.append('total_service_charge', serviceChargeAPI);
         data.append('wallet', walletAmount);
         data.append('final_price', finalAmountApi);
         data.append('payment_method', '1');
@@ -429,34 +422,34 @@ const PassengerView = () => {
         data.append('order_id', '');
         data.append('created_type', '2');
         data.append('booking_type', booking_type);
-    
+
         for (let i = 0; i < selectedTotalSeat.length; i++) {
             data.append(`seat_number[${i}]`, selectedTotalSeat[i]);
         }
-    
+
         for (let i = 0; i < selectedTotalSeatPrice.length; i++) {
             data.append(`seat_price[${i}]`, selectedTotalSeatPrice[i]);
         }
-    
+
         for (let i = 0; i < passengerData.length; i++) {
             data.append(`name[${i}]`, passengerData[i]?.name);
             data.append(`age[${i}]`, passengerData[i]?.age);
             data.append(`gender[${i}]`, passengerData[i]?.gender);
         }
-    
+
         try {
             const res = await axios.post("add_ticket_hold", data);
-    
+
             if (res.data.success) {
                 toast.success(res.data.message);
                 setLoading(false);
                 setOpenPopUpBoxConfirm(true);
-    
+
                 if (res.data.data) {
                     // Parse form and auto-submit
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = res.data.data;
-    
+
                     const form = tempDiv.querySelector("form");
                     if (form) {
                         document.body.appendChild(form); // Append form to DOM
@@ -471,13 +464,13 @@ const PassengerView = () => {
             setLoading(false);
         }
     };
-    
+
     // const submitTicket = async () => {
     //     setLoading(true)
     //     let data = new FormData();
-       
+
     //     data.append('booking_type', booking_type)
-    
+
     //     data.append('bus_id', bus_id || '')
     //     data.append('bus_name', bus_name || '')
     //     data.append('user_id', localStorage.getItem('UserID') || '')
@@ -562,12 +555,13 @@ const PassengerView = () => {
             toast.error(error.data.message);
         }
     }
+
     const getWalletAmount = async () => {
         if (localStorage.getItem('UserID') != null) {
             let data = new FormData();
 
             data.append('user_id', localStorage.getItem('UserID'))
-            data.append('coupon_amount', discount)
+            data.append('coupon_amount', parseInt(discount))
             data.append('total_amount', totalPrice)
             data.append('booking_date', formattedDate)
             data.append('booking_type', booking_type)
@@ -580,6 +574,8 @@ const PassengerView = () => {
                     setWalletAmount(res.data.data.total_wallet)
                     setFinalSarthiDis(res.data.data.sarthi_discount)
                     setOrderId(res.data.data.orderId)
+                    setServiceChargeAPI(res.data.data.total_service_charge)
+                    setGSTAmountApi(res.data.data.total_gst_amount)
                 })
             }
             catch (error) {
@@ -869,17 +865,38 @@ const PassengerView = () => {
                                                                 <h6 className="fw-semibold mb-2" >Discount</h6>
                                                                 {finalSarthiDis && (finalSarthiDis !== "0" && finalSarthiDis !== null && finalSarthiDis !== "") && (
                                                                     <h6 className="fw-semibold mb-2">Sarthi Discount</h6>
+
                                                                 )}
                                                                 <h6 className="fw-semibold mb-2" >Wallet</h6>
+
+                                                                {GSTAmountApi && (GSTAmountApi !== "0" && GSTAmountApi !== null && GSTAmountApi !== "") && (
+                                                                    <h6 className="fw-semibold mb-2" >GST</h6>
+
+                                                                )}
+                                                                {serviceChargeAPI && (serviceChargeAPI !== "0" && serviceChargeAPI !== null && serviceChargeAPI !== "") && (
+                                                                    <h6 className="fw-semibold mb-2" >Service Charge</h6>
+
+                                                                )}
+
                                                                 <h6 className="fw-semibold mb-2 fs-5" >Total Price</h6>
                                                             </div>
                                                             <div className="bustimediv  d-flex flex-column align-items-end">
                                                                 <h6 className="fw-semibold mb-2">{totalPrice}</h6>
-                                                                <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-{discount}</h6>
+                                                                <h6 className="fw-semibold mb-2">-{parseInt(discount)}</h6>
+
                                                                 {finalSarthiDis && (finalSarthiDis !== "0" && finalSarthiDis !== null && finalSarthiDis !== "") && (
-                                                                    <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-{finalSarthiDis}</h6>
+                                                                    <h6 className="fw-semibold mb-2">-{finalSarthiDis}</h6>)}
+                                                                <h6 className="fw-semibold mb-2">-{walletAmount}</h6>
+
+                                                                {GSTAmountApi && (GSTAmountApi !== "0" && GSTAmountApi !== null && GSTAmountApi !== "") && (
+                                                                    <h6 className="fw-semibold mb-2">+{GSTAmountApi}</h6>
+
                                                                 )}
-                                                                <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-{walletAmount}</h6>
+                                                                {serviceChargeAPI && (serviceChargeAPI !== "0" && serviceChargeAPI !== null && serviceChargeAPI !== "") && (
+                                                                    <h6 className="fw-semibold mb-2">+{serviceChargeAPI}</h6>
+
+                                                                )}
+
                                                                 <h6 className="fw-semibold mb-2 fs-5 ">{finalAmountApi ? finalAmountApi : finalAmount}</h6>
                                                             </div>
                                                         </div>

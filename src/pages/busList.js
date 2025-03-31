@@ -3970,8 +3970,8 @@ const BusList = (seat) => {
                                                                       </strong>
                                                                     </Box>
 
-                                                                    <Box className="pointnm">
-                                                                      <Typography className="text-nowrap fw-semibold">
+                                                                    <Box className="pointnm mb-1">
+                                                                      <Typography className="text-wrap fw-semibold">
                                                                         {
                                                                           point?.boarding_sub_route_name
                                                                         }
@@ -4005,7 +4005,8 @@ const BusList = (seat) => {
                                                       </span>
                                                     </div>
                                                     <Box
-                                                      className="borddrop--content ps-md-3 bg-white  p-4 p-md-2 p-lg-4 w-50 d-flex justify-content-between"
+                                                      className="borddrop--content 
+                                                      boarding_txt bg-white  p-4 p-md-2  ps-md-3 w-100 d-flex justify-content-between"
                                                       value={value}
                                                       index={0}
                                                     >
@@ -4044,7 +4045,7 @@ const BusList = (seat) => {
                                                                       </strong>
                                                                     </Box>
                                                                     <Box clapointnm ssName="pointnm mb-1">
-                                                                      <Typography className="fw-semibold ">
+                                                                      <Typography className=" text-wrap fw-semibold ">
                                                                         {
                                                                           point?.droping_sub_route_name
                                                                         }

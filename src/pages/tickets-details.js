@@ -147,11 +147,11 @@ const TicketsDetailsView = () => {
             const downloadURL = URL.createObjectURL(blob);
 
             const a = document.createElement('a');
-            a.download = 'ticket.pdf';  
+            a.download = 'ticket.pdf';
             a.click();
         }
     };
-    
+
     const resonCancelAPI = async () => {
         let data = new FormData();
         data.append('ticket_id', id)
@@ -354,19 +354,33 @@ const TicketsDetailsView = () => {
                                                             )}
                                                             <h6 className="fw-semibold mb-2" >Wallet</h6>
 
-                                                            <h6 className="fw-semibold mb-2" >Total Price</h6>
 
+                                                            {singleTicketsData?.ticket_list?.price_details_array?.gst_amount && (singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== "0" && singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== null && singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== "") && (
+                                                                <h6 className="fw-semibold mb-2" >GST</h6>
+
+                                                            )}
+                                                            {singleTicketsData?.ticket_list?.price_details_array?.service_charge && (singleTicketsData?.ticket_list?.price_details_array?.service_charge !== "0" && singleTicketsData?.ticket_list?.price_details_array?.service_charge !== null && singleTicketsData?.ticket_list?.price_details_array?.service_charge !== "") && (
+                                                                <h6 className="fw-semibold mb-2" >Service Charge</h6>
+
+                                                            )}
+                                                            <h6 className="fw-semibold mb-2" >Total Price</h6>
 
                                                         </div>
                                                         <div className="bustimediv d-flex flex-column align-items-end">
                                                             <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">&nbsp;₹{singleTicketsData?.ticket_list?.price_details_array?.price}</h6>
                                                             <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-₹{singleTicketsData?.ticket_list?.price_details_array?.discount}</h6>
                                                             {sarthiDis && (sarthiDis !== "0" && sarthiDis !== null && sarthiDis !== "") && (
-                                                                <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-{sarthiDis}</h6>
+                                                                  <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-₹{sarthiDis}</h6>
                                                             )}
                                                             <h6 style={{ color: '#3F7135' }} className="fw-semibold mb-2">-₹{singleTicketsData?.ticket_list?.price_details_array?.wallet}</h6>
+                                                            {singleTicketsData?.ticket_list?.price_details_array?.gst_amount && (singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== "0" && singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== null && singleTicketsData?.ticket_list?.price_details_array?.gst_amount !== "") && (
+                                                                <h6 className="fw-semibold mb-2" >{singleTicketsData?.ticket_list?.price_details_array?.gst_amount}</h6>
 
+                                                            )}
+                                                            {singleTicketsData?.ticket_list?.price_details_array?.service_charge && (singleTicketsData?.ticket_list?.price_details_array?.service_charge !== "0" && singleTicketsData?.ticket_list?.price_details_array?.service_charge !== null && singleTicketsData?.ticket_list?.price_details_array?.service_charge !== "") && (
+                                                                <h6 className="fw-semibold mb-2" >+{singleTicketsData?.ticket_list?.price_details_array?.service_charge}</h6>
 
+                                                            )}
                                                             <h6 className="fw-semibold mb-2">&nbsp;₹{singleTicketsData?.ticket_list?.price_details_array?.total_price}</h6>
                                                         </div>
                                                     </div>
@@ -481,7 +495,7 @@ const TicketsDetailsView = () => {
                                             </div>
                                         </div>
                                     </div>
- 
+
                                     <div className="bustimediv  d-flex gap-3">
                                         {action !== 'cancel' && (
                                             <Button variant="contained" onClick={handleDownload} disabled={!downloadTicket} style={{ width: "32%", backgroundColor: "rgb(121 44 143)" }}>Download Ticket</Button>
@@ -506,7 +520,7 @@ const TicketsDetailsView = () => {
                         "& .MuiDialog-container": {
                             "& .MuiPaper-root": {
                                 width: "30%",
-                                maxWidth: "1500px",   
+                                maxWidth: "1500px",
                             },
                         },
                     }}
@@ -600,7 +614,7 @@ const TicketsDetailsView = () => {
                                         rows={5}
                                         InputProps={{
                                             sx: {
-                                                paddingY: '10px',  
+                                                paddingY: '10px',
                                                 margin: "10px"
                                             },
                                         }}
