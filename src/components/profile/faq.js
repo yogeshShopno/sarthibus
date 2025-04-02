@@ -39,9 +39,15 @@ const Faq = () => {
                     <div className="accordion mt-4" id="accordionExample">
                         {
                             faqData?.faqs?.map((f, index) => (
-                                <div className="accordion-item" key={index}>
+                                <div className="accordion-item" key={index} style={{
+                                    borderRadius:"1rem",
+                                    border:"1px solid #F3F4F9",
+                                    padding:"1.55rem 1.5rem",
+                                    lineHeight:"20px",
+                                    margin:"20px 10px"
+                                }}>
                                     <h2 className="accordion-header" id={`heading${index}`}>
-                                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`} >
+                                        <button className="accordion-button collapsed" style={{}} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`} >
                                             {f.question}
                                         </button>
                                     </h2>

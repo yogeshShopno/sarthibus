@@ -18,8 +18,14 @@ const AboutUs = () => {
         try {
             const res = await axios.get("about_us", data);
             setAboutUsData(res.data.data.about_us);
+            setLoading(false)
         } catch (error) {
             toast.error(error.response.data.message);
+            setLoading(false)
+            
+        }finally{
+            setLoading(false)
+
         }
     };
     return (

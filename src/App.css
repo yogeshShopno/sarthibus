@@ -135,3 +135,13 @@ body {
   overflow: hidden !important;
   position: absolute !important;
 }
+.accordion-button:focus{
+  box-shadow: none !important;
+}
+.accordion-button:not(.collapsed){
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.accordion-body {
+  padding: 1rem 0.75rem !important;
+}
