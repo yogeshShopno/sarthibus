@@ -1,6 +1,7 @@
 import React from 'react';
 import './loader.css';
 import { Dialog } from '@mui/material';
+const busIcon = process.env.PUBLIC_URL + 'assets/images/bus-icon.svg';
 
 const Loader = () => {
   return (
@@ -21,10 +22,15 @@ const Loader = () => {
           },
         }}
       >
-        <div className="loader">
+        {/* <div className="loader">
 
+        </div> */}
+        <div className="runningbus my-5">
+          <div className="runningbusanim">
+            <img src={busIcon} alt="" className="img-fluid" />
+          </div>
         </div>
-        <h2>Please Wait...</h2>
+        <h4 className=''>Please Wait...</h4>
       </Dialog>
     </>
   );
@@ -32,28 +38,3 @@ const Loader = () => {
 
 export default Loader;
 
-// import '../loader/loader.css'
-// const Loader = () => {
-//     return (
-//         <>
-//             <div class="loader-wrapper">
-//                 <div class="truck-wrapper">
-//                     <div class="truck">
-//                         <div class="truck-container"></div>
-//                         <div class="glases"></div>
-//                         <div class="bonet"></div>
-
-//                         <div class="base"></div>
-
-//                         <div class="base-aux"></div>
-//                         <div class="wheel-back"></div>
-//                         <div class="wheel-front"></div>
-
-//                         <div class="smoke"></div>
-//                     </div>
-//                 </div>
-//             </div>
-//         </>
-//     )
-// }
-// export default Loader

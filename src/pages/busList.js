@@ -285,7 +285,7 @@ const BusList = (seat) => {
       localBusType &&
       localBusId &&
       localMainBoardingPointId &&
-      localMainDropingPointId 
+      localMainDropingPointId
       // localBookingType &&
       // localMainBoardingPointIdArr &&
       // localMainDropingPointIdArr
@@ -343,6 +343,9 @@ const BusList = (seat) => {
     const isSelf = localSeats?.includes(seat.seat_number);
     return seat.is_booked && !isSelf;
   };
+  useEffect(() => {
+    console.log("", loading)
+  }, [loading])
 
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
@@ -391,17 +394,22 @@ const BusList = (seat) => {
           setBusList(res.data.data);
           setOpenDialog(false);
           setLoading(false);
+          console.log(false)
           firstInputRef.current?.focus();
 
         });
-    setLoading(false);
+      setLoading(false);
+      console.log(false)
+
 
     } catch (error) {
       toast.error(error.data.message);
-    setLoading(false);
-
-    } finally{
       setLoading(false);
+      console.log(false)
+
+    } finally {
+      setLoading(false);
+      console.log(false)
 
     }
   };
@@ -441,10 +449,11 @@ const BusList = (seat) => {
       toast.error(error.data.message);
     } finally {
       setLoading(false);
+      console.log(false)
     }
   };
 
-  const busLayoutAPI = async (busId,booking_type) => {
+  const busLayoutAPI = async (busId, booking_type) => {
     let data = new FormData();
     data.append("bus_id", busId);
     data.append("booking_date", selectedDate);
@@ -474,6 +483,8 @@ const BusList = (seat) => {
     main_boarding_point_id_arr,
     main_droping_point_id_arr,
   ) => {
+    setLoading(true);
+
     let data = new FormData();
     data.append("bus_id", busId);
     data.append("boarding_point_id", main_boarding_point_id);
@@ -491,36 +502,37 @@ const BusList = (seat) => {
         }
       });
       setLoading(false);
-    
+      console.log(false)
+
     } catch (res) {
       toast.error(res.data.message);
       setLoading(false);
-     
+      console.log(false)
+
     } finally {
       setLoading(false);
-    
+      console.log(false)
+
     }
   };
 
   const busFilterData = async () => {
     let data = new FormData();
- 
-    setLoading(true);
+
     try {
       await axios.post("bus_filter_list", data, {}).then((res) => {
         setAmenities(res.data.data?.amenities);
         setBusActype(res.data.data?.bus_ac_types);
         setBusType(res.data.data?.bus_types);
       });
-      setLoading(false);
-      
+
     } catch (error) {
       toast.error(error.data.message);
-      setLoading(false);
-     
+
+
     } finally {
-     
-      setLoading(true);
+
+
     }
   };
 
@@ -674,11 +686,11 @@ const BusList = (seat) => {
     } else {
       localStorage.setItem("bus_type", JSON.stringify(busType));
       localStorage.setItem("bus_id", JSON.stringify(busId));
-      localStorage.setItem("main_boarding_point_id",JSON.stringify(main_boarding_point_id));
-      localStorage.setItem("main_droping_point_id",JSON.stringify(main_droping_point_id));
+      localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
+      localStorage.setItem("main_droping_point_id", JSON.stringify(main_droping_point_id));
       localStorage.setItem("booking_type", JSON.stringify(booking_type));
-      localStorage.setItem("main_boarding_point_id_arr",JSON.stringify(main_boarding_point_id_arr));
-      localStorage.setItem("main_droping_point_id_arr",JSON.stringify(main_droping_point_id_arr));
+      localStorage.setItem("main_boarding_point_id_arr", JSON.stringify(main_boarding_point_id_arr));
+      localStorage.setItem("main_droping_point_id_arr", JSON.stringify(main_droping_point_id_arr));
 
       const localBusId = localStorage.getItem("bus_id");
       const localSeat = localStorage.getItem("selectedSeats");
@@ -714,7 +726,7 @@ const BusList = (seat) => {
       setBookingPolicies(false);
       setAmenitiesOpen(false);
       setBusID(busId);
-      busLayoutAPI(busId,booking_type);
+      busLayoutAPI(busId, booking_type);
       BusWiseBoardingDroppingPoints(
         busId,
         main_boarding_point_id,
@@ -845,7 +857,6 @@ const BusList = (seat) => {
   const cityList = async (searchTerm = "", start = 0) => {
     if (loading) return;
 
-    setLoading(true);
     const data = new FormData();
     data.append("city_name", searchTerm);
     data.append("start", start);
@@ -863,19 +874,22 @@ const BusList = (seat) => {
       } else {
         setCities((prevCities) => [...prevCities, ...newCities]);
       }
-      setLoading(false);
-     
+
+      
+
     } catch (error) {
       console.error("Error fetching city list:", error);
-      setLoading(false);
-    
+      
+     
+
     } finally {
-      setLoading(false);
+     
+     
     }
   };
 
   const cityToList = async (searchTerm, start = 0) => {
-    if (loading) return;
+   
     let data = new FormData();
     data.append("city_name", searchTerm);
     data.append("start", start);
@@ -892,10 +906,11 @@ const BusList = (seat) => {
       } else {
         setToCities((prevCities) => [...prevCities, ...newCities]);
       }
+     
     } catch (error) {
       console.error("Error fetching filtered city list:", error);
     } finally {
-      setLoading(false);
+  
     }
   };
 
@@ -999,7 +1014,7 @@ const BusList = (seat) => {
     data.append("booking_date", formattedDate);
     data.append("boarding_point_id", item?.main_boarding_point_id);
 
-    
+
 
     localStorage.setItem("selectedSeats", JSON.stringify(selectedLowerSeats));
     localStorage.setItem(
@@ -1052,14 +1067,14 @@ const BusList = (seat) => {
                 inputValue,
                 main_boarding_point_id: item?.main_boarding_point_id,
                 main_droping_point_id: item?.main_droping_point_id,
-                booking_type:item?.booking_type,
-                main_boarding_point_id_arr:item?.main_boarding_point_id_arr,
-                main_droping_point_id_arr:item?.main_droping_point_id_arr,
+                booking_type: item?.booking_type,
+                main_boarding_point_id_arr: item?.main_boarding_point_id_arr,
+                main_droping_point_id_arr: item?.main_droping_point_id_arr,
               },
             });
           } else {
             toast.success(res.data.message);
-            
+
           }
         } else {
           toast.error(res.data.message || "Invalid Message");
@@ -1068,7 +1083,8 @@ const BusList = (seat) => {
     } catch (res) {
       toast.error(res.data.message);
     } finally {
-    setLoading(false);
+      setLoading(false);
+      console.log(false)
 
     }
   };
@@ -1680,15 +1696,15 @@ const BusList = (seat) => {
                               className="text-capitalize mb-2 fw-semibold d-flex"
                               style={{ alignItems: "baseline" }}
                             >
-                              bus type{" "}
+                              bus type
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
                               >
-                                {" "}
-                              </p>{" "}
+                               
+                              </p>
                             </h5>
                             <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
                               {busType.map((label, index) => (
@@ -2256,7 +2272,7 @@ const BusList = (seat) => {
                               As of now this route is offline.
                             </h5>
                             <h5 className="text-capitalize d-flex gap-2 align-items-baseline">
-                            For booking, request to call on <h4 className="fw-bold text-black">9930031000</h4>
+                              For booking, request to call on <h4 className="fw-bold text-black">9930031000</h4>
                             </h5>
                           </Alert>
 

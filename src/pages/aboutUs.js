@@ -3,14 +3,17 @@ import Footer from "../components/footer"
 import Header from "../components/header"
 import axios from "axios"
 import { ToastContainer, toast } from "react-toastify"
+import Loader from "../components/loader"
 
 const AboutUs = () => {
     const [aboutUsData, setAboutUsData] = useState({})
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         AboutUsList()
     }, [])
     const AboutUsList = async () => {
+        setLoading(true)
         let data = new FormData();
         try {
             const res = await axios.get("about_us", data);
@@ -48,6 +51,7 @@ const AboutUs = () => {
                 </section>
                 <Footer />
             </div>
+            {loading && <Loader />}
         </>
     )
 }

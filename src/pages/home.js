@@ -200,8 +200,7 @@ const Home = () => {
 
     const cityList = async (searchTerm = '', start = 0) => {
         if (loading) return; // Prevent multiple simultaneous API calls
-        setLoading(true);
-
+      
         const data = new FormData();
         data.append('city_name', searchTerm);
         data.append('start', start);
@@ -224,13 +223,13 @@ const Home = () => {
         } catch (error) {
             console.error('Error fetching city list:', error);
         } finally {
-            setLoading(false);
+      
         }
     };
 
     const cityToList = async (searchTerm, start = 0) => {
         if (loading) return; // Prevent multiple simultaneous API calls
-        setLoading(true);
+       
         let data = new FormData();
         data.append('city_name', searchTerm);
         data.append('start', start);
