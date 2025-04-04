@@ -47,7 +47,7 @@ const Faq = () => {
                                     margin:"20px 10px"
                                 }}>
                                     <h2 className="accordion-header" id={`heading${index}`}>
-                                        <button className="accordion-button collapsed" style={{}} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`} >
+                                        <button className="accordion-button collapsed font-bold" style={{fontWeight:"600"}} type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`} >
                                             {f.question}
                                         </button>
                                     </h2>

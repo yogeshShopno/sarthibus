@@ -26,7 +26,7 @@ const TermsConditions = () => {
     
     return (
         <>
-            <div className="container">
+            <div className="container card-border">
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}
@@ -38,7 +38,7 @@ const TermsConditions = () => {
                     draggable
                     pauseOnHover
                 />
-                <div className="p-4">
+                <div className="terms-main p-4 card">
                     <span dangerouslySetInnerHTML={{ __html: termsConditionsData?.terms_and_conditions }} />
                 </div>
             </div>

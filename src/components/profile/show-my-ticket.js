@@ -121,7 +121,7 @@ const ShowMyTicket = () => {
                         ticketsData?.ticket_list?.map((ticket, index) => (
 
                             <div onClick={() => handleTicketClick( 1,ticket.id)}>
-                                <div className="ticket-container mt-4">
+                                <div className="ticket-container mt-4 card-border">
                                     <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3"  >
                                         <div className="d-flex justify-content-between align-items-center busnmflex ">
                                             <div className="busname--icons">
@@ -167,7 +167,7 @@ const ShowMyTicket = () => {
             </TabPanel>
 
             <TabPanel value={value} index={1}>
-                <div className="prevbookdiv">
+                <div className="prevbookdiv card-border">
                     <div className="eidtproftitle titlediv my-3">
                         <h5 className="text-capitalize fw-semibold fs-4">Completed Trips</h5>
                     </div>

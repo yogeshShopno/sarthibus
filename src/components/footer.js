@@ -29,7 +29,7 @@ const Footer = () => {
 
   return (
     <footer>
-      <div className="footer--div mt-100 pt-5">
+      <div className="footer--div mt-100 pt-5" style={{ backgroundColor: "#F6F0F8" }}>
         <div className="container">
           <div className=" row pb-5 justify-content-between">
             <div className="col-xl-3 col-lg-3 col-sm-12 col-md-12 col-12 mb-4 mb-lg-0">
@@ -172,12 +172,12 @@ const Footer = () => {
           </div>
 
         </div>
-        <div style={{ backgroundColor: "rgb(121, 44, 143)" }}>
+        <div style={{ backgroundColor: "#F6F0F8" }}>
           <p className='class="d-flex justify-content-center mb-0 mt-1 py-3'> <a target="_blank"
             class="d-flex justify-content-center"
             style={{
               textDecoration: 'none',
-              color: 'white',
+              color: 'black',
               fontWeight: '700',
               cursor: 'pointer',
 

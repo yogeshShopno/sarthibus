@@ -218,14 +218,14 @@ const TicketsDetailsView = () => {
                     pauseOnHover
                 />
                 <div className="container mt-5">
-                    <h1>Ticket Details</h1>
+                    <h1 className="pt-3 pb-2">Ticket Details</h1>
                     <div className="container">
                         <div className="row gap-2">
                             <div className="d-flex gap-5 flex-wrap">
-                                <div className="col-6">
+                                <div className="col-md-5 col-12">
                                     {/* Bus Details */}
                                     <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <div className="busname--icons">
                                                     <div className="d-flex align-items-center gap-2">
@@ -263,7 +263,7 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
                                     <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div>
                                                 <div className="col-12 align-items-center">
                                                     <div>
@@ -310,7 +310,7 @@ const TicketsDetailsView = () => {
 
 
                                     <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <h5 className="m-0 me-2 fw-semibold">Payment Details</h5>
                                             </div>
@@ -338,7 +338,7 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
                                     <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <h5 className="m-0 me-2 fw-semibold">Price Details</h5>
                                             </div>
@@ -390,10 +390,10 @@ const TicketsDetailsView = () => {
                                     </div>
 
                                 </div>
-                                <div className="col-5">
+                                <div className="col-md-5 col-12">
                                     {/* Passengers Details */}
-                                    <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                    <div className="mb-3 row buslist--card d-flex h-25">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <h5 className="m-0 me-2 fw-semibold">Passenger(s)</h5>
                                             </div>
@@ -430,8 +430,8 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
                                     {/* Contact Details */}
-                                    <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                    <div className="mb-3 row buslist--card d-flex h-25">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <h5 className="m-0 me-2 fw-semibold">Contact Details</h5>
                                             </div>
@@ -461,8 +461,8 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
 
-                                    <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                    <div className="mb-3 row buslist--card d-flex h-25">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="d-flex justify-content-between align-items-center busnmflex">
                                                 <h5 className="m-0 me-2 fw-semibold">Driver Details</h5>
                                             </div>
@@ -485,7 +485,7 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
                                     <div className="mb-3 row buslist--card d-flex">
-                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3">
+                                        <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3" style={{backgroundColor:"#fdf6ff"}}>
                                             <div className="row col-12 align-items-center">
                                                 <div className="d-flex justify-content-between align-items-center bustimeflex">
                                                     <div className="bustimediv">
@@ -496,17 +496,18 @@ const TicketsDetailsView = () => {
                                         </div>
                                     </div>
 
-                                    <div className="bustimediv  d-flex gap-3">
+                                    <div className="bustimediv  d-flex gap-3 justify-content-between">
+                                        
                                         {action !== 'cancel' && (
-                                            <Button variant="contained" onClick={handleDownload} disabled={!downloadTicket} style={{ width: "32%", backgroundColor: "rgb(121 44 143)" }}>Download Ticket</Button>
+                                            toggleRating == "0" ? <Button variant="contained" onClick={handleOpenReview} style={{ width: "50%", border: "2px solid rgb(121 44 143)", backgroundColor: "white", color: "rgb(121 44 143)" }}>Review</Button> : <></>
+                                        )}
+                                        {action !== 'cancel' && (
+                                            <Button variant="contained" onClick={handleDownload} disabled={!downloadTicket} style={{ width: "50%", backgroundColor: "rgb(121 44 143)" }}>Download Ticket</Button>
                                         )}
                                         {
-                                            toggleCancel == "1" ? <Button variant="outlined" color="error" onClick={handleOpen} style={{ width: "32%", border: "2px solid rgb(121 44 143)", backgroundColor: "white", color: "rgb(121 44 143)" }}>Cancel Ticket</Button> : <></>
+                                            toggleCancel == "1" ? <Button variant="outlined" color="error" onClick={handleOpen} style={{ width: "50%", border: "2px solid rgb(121 44 143)", backgroundColor: "white", color: "rgb(121 44 143)" }}>Cancel Ticket</Button> : <></>
 
                                         }
-                                        {action !== 'cancel' && (
-                                            toggleRating == "0" ? <Button variant="contained" onClick={handleOpenReview} style={{ width: "32%", border: "2px solid rgb(121 44 143)", backgroundColor: "white", color: "rgb(121 44 143)" }}>Review</Button> : <></>
-                                        )}
                                     </div>
 
                                 </div>

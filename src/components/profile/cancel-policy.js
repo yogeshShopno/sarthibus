@@ -27,20 +27,20 @@ const CancelPolicy = () => {
     };
     return (
         <>
-            <div>
+            <div className="card-border">
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}
                     hideProgressBar={false}
                     newestOnTop={false}
-                    closeOnClick
+                    closeOnClick 
                     rtl={false}
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
                 />
-                <div className="p-4">
-                    <span dangerouslySetInnerHTML={{ __html: cancelPolicyData?.cancle_policy }} />
+                <div className="cancellation-policy p-4 card">
+                    <span  dangerouslySetInnerHTML={{ __html: cancelPolicyData?.cancle_policy }} />
                 </div>
             </div>
         </>

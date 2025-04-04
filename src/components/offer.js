@@ -68,7 +68,7 @@ const BusBookingDiscountOffers = (props) => {
     const sliderSettings = {
         dots: false,
         infinite: true,
-        slidesToShow: 4,
+        slidesToShow: 3,
         slidesToScroll: 1,
         autoplay: false,
         autoplaySpeed: false,
@@ -119,7 +119,7 @@ const BusBookingDiscountOffers = (props) => {
                                             src={offers?.image_url + dis?.image}
                                             alt=""
                                             onClick={() => handleOpen(dis)}
-                                            style={{ width: '90%', height: '90%', borderRadius: "20px" }}
+                                            style={{ width: '100%', height: '90%', borderRadius: "20px" }}
                                         />
                                     </div>
                                 </div>

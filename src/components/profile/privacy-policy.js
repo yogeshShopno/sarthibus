@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
     };
     return (
         <>
-            <div>
+            <div className="card-border">
                 <ToastContainer
                     position="top-right"
                     autoClose={5000}
@@ -37,7 +37,7 @@ const PrivacyPolicy = () => {
                     draggable
                     pauseOnHover
                 />
-                <div className="p-4">
+                <div className="p-4 privacy-main card">
                     <span dangerouslySetInnerHTML={{ __html: privacyPolicyData?.privacy_policy }} />
                 </div>
             </div>

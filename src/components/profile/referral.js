@@ -59,8 +59,8 @@ const Referral = () => {
                     pauseOnHover
                 />
                 <div>
-                    <div className="container my-5 ">
-                        <div className="card shadow">
+                    <div className="container my-5 card-border">
+                        <div className="card shadow ">
                             <div className="card-body">
                                 <div className="d-flex gap-2 flex-wrap flex-md-nowrap justify-content-between align-items-center" >
                                     <Lottie className="w-30 " animationData={referAndEarn} loop={true} />
@@ -87,8 +87,8 @@ const Referral = () => {
                         </div>
                     </div>
                 </div>
-                <div className="container my-5 ">
-                    <div className="card shadow">
+                <div className="container my-5 card-border">
+                    <div className="card shadow history-card">
                         <div className="card-body">
                             <h4 className="fs-2 text-bold   my-3 ">
                                 {" "}

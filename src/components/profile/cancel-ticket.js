@@ -49,7 +49,7 @@ const CancelTicket = () => {
 
     return (
 
-        <div className="prevbookdiv">
+        <div className="prevbookdiv card-border">
             <div className="eidtproftitle titlediv my-3">
                 <h5 className="text-capitalize fw-semibold fs-4">Cancel Ticket</h5>
             </div>

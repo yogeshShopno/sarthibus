@@ -6,7 +6,7 @@ import { Card } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import './style.css';
 import DatePicker from 'react-datepicker';
-import profileIcon from "../../Images/Untitled-3-01 (1).png";
+import profileIcon from "../../Images/profile.png";
 import bg_img from "../../Images/Sarthi bus banner website (new)-01.jpg";
 import { set } from 'date-fns';
 

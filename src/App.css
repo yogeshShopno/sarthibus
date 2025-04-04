@@ -141,7 +141,90 @@ body {
 .accordion-button:not(.collapsed){
   background-color: transparent !important;
   box-shadow: none !important;
+  color: #000 !important;
 }
 .accordion-body {
   padding: 1rem 0.75rem !important;
+}
+.privacy-main {
+  background-color: rgb(255, 255, 255) !important;
+  padding: 15px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f2f2;
+}
+.cancellation-policy {
+  background-color: rgb(255, 255, 255) !important;
+  padding: 15px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f2f2;
+}
+.terms-main {
+  background-color: rgb(255, 255, 255) !important;
+  padding: 15px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f2f2;
+}
+.privacy-main h2{
+  padding: 10px 0px;
+}
+.privacy-main h3{
+  padding: 10px;
+}
+.privacy-main p{
+  padding: 5px 15px;
+}
+.terms-main h2{
+  padding: 10px 0px;
+}
+.terms-main h3{
+  padding: 10px;
+}
+.terms-main p{
+  padding: 5px 15px;
+}
+.cancellation-policy h1{
+  padding: 10px;
+}
+.cancellation-policy p{
+  padding: 10px;
+}
+.css-1ujykiq-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #6c2a7f !important;
+}
+.css-1aquho2-MuiTabs-indicator {
+  position: absolute;
+  height: 2px;
+  bottom: 0;
+  width: 100%;
+  -webkit-transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  background-color: #a361b6 !important;
+}
+.history-card {
+  background-color: rgb(255, 255, 255) !important;
+  padding: 15px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f2f2;
+}
+.support-card a{
+  color: #6c2a7f !important;
+}
+.support-card {
+  background-color: rgb(255, 255, 255) !important;
+  padding: 15px 10px !important;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f2f2;
+}
+.card-border .card {
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #6c2a7f !important;
+}
+.card-border .card a{
+  color: #6c2a7f;
 }

@@ -47,7 +47,7 @@ const PreviousBooking = () => {
     };
     return (
 
-        <div className="prevbookdiv">
+        <div className="prevbookdiv card-border">
             <div className="eidtproftitle titlediv my-3">
                 <h5 className="text-capitalize fw-semibold fs-4">Your Previous Bookings</h5>
             </div>

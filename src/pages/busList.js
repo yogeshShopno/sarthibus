@@ -1553,7 +1553,7 @@ const BusList = (seat) => {
             </div>
           </div>
         </div>
-        <div className="searchpage--main mt-2">
+        <div className="searchpage--main mt-2 card-border">
           <div className="searchpagediv">
             <div className="container-md container-sm container-xl">
               <div className="serchpagerow m-auto">
@@ -1577,7 +1577,7 @@ const BusList = (seat) => {
                             <h5 className="text-capitalize mb-2 fw-semibold">
                               Amenities
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-2 align-items-center">
                               {amenities.map((label, index) => (
                                 <li className="fltrli mb-2" key={index}>
                                   <div>
@@ -3986,7 +3986,7 @@ const BusList = (seat) => {
                                                                       </strong>
                                                                     </Box>
 
-                                                                    <Box className="pointnm mb-1">
+                                                                    <Box className="pointnm mt-1">
                                                                       <Typography className="text-wrap fw-semibold">
                                                                         {
                                                                           point?.boarding_sub_route_name
@@ -4060,7 +4060,7 @@ const BusList = (seat) => {
                                                                         }
                                                                       </strong>
                                                                     </Box>
-                                                                    <Box clapointnm ssName="pointnm mb-1">
+                                                                    <Box clapointnm ssName="pointnm" className="mt-1">
                                                                       <Typography className=" text-wrap fw-semibold ">
                                                                         {
                                                                           point?.droping_sub_route_name
