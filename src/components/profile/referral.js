@@ -91,8 +91,8 @@ const Referral = () => {
                     <div className="card shadow history-card">
                         <div className="card-body">
                             <h4 className="fs-2 text-bold   my-3 ">
-                                {" "}
-                                Transaction History{" "}
+                                
+                                Transaction History
                             </h4>
                              <div>
                                 <div>

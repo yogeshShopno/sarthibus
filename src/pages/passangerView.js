@@ -47,6 +47,7 @@ const PassengerView = () => {
         mobileNo = '',
         selectedTotalSeat = [],
         totalPrice = 0,
+        serviceTax= [],
         selectedTotalSeatPrice = [],
         bus_id = null,
         bus_name = '',
@@ -69,6 +70,8 @@ const PassengerView = () => {
         main_droping_point_id = '',
         booking_type
     } = location.state || {};
+
+
     const history = useHistory();
 
     const timerEnd = localStorage.getItem('timerEnd');
@@ -183,6 +186,7 @@ const PassengerView = () => {
                 mobileNo,
                 selectedTotalSeat,
                 totalPrice,
+                serviceTax,
                 selectedTotalSeatPrice,
                 bus_id,
                 bus_name,
@@ -217,6 +221,7 @@ const PassengerView = () => {
                         mobileNo,
                         selectedTotalSeat,
                         totalPrice,
+                        serviceTax,
                         selectedTotalSeatPrice,
                         bus_id,
                         bus_name,
@@ -248,6 +253,7 @@ const PassengerView = () => {
         if (!selectedTotalSeat) newErrors.selectedTotalSeat = 'Please select the number of seats';
         if (!totalPrice) newErrors.totalPrice = 'Total price is missing';
         if (!selectedTotalSeatPrice) newErrors.selectedTotalSeatPrice = 'Seat price is missing';
+        // if (!serviceTax) newErrors.serviceTax = 'Service tax is missing';
         if (!bus_id) newErrors.bus_id = 'Bus ID is missing';
         if (!bus_name) newErrors.bus_name = 'Bus name is missing';
         if (!boarding_point_name) newErrors.boarding_point_name = 'Boarding point is required';
@@ -430,6 +436,10 @@ const PassengerView = () => {
         for (let i = 0; i < selectedTotalSeatPrice.length; i++) {
             data.append(`seat_price[${i}]`, selectedTotalSeatPrice[i]);
         }
+        for (let i = 0; i < serviceTax.length; i++) {
+            data.append(`service_tax[${i}]`, serviceTax[i]);
+        }
+
 
         for (let i = 0; i < passengerData.length; i++) {
             data.append(`name[${i}]`, passengerData[i]?.name);
@@ -446,14 +456,14 @@ const PassengerView = () => {
                 setOpenPopUpBoxConfirm(true);
 
                 if (res.data.data) {
-                    // Parse form and auto-submit
+                
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = res.data.data;
 
                     const form = tempDiv.querySelector("form");
                     if (form) {
-                        document.body.appendChild(form); // Append form to DOM
-                        form.submit(); // Auto-submit the form
+                        document.body.appendChild(form); 
+                        form.submit(); 
                     }
                 }
             } else {

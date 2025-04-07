@@ -23,6 +23,7 @@ const PassengerDetails = () => {
         selectedUpperSeats,
         selectedLowerSeats,
         totalPrice,
+        serviceTax,
         selectedUpperSeatPrice,
         selectedLowerSeatPrice,
         bus_id,
@@ -50,6 +51,7 @@ const PassengerDetails = () => {
         selectedUpperSeats: [],
         selectedLowerSeats: [],
         totalPrice: 0,
+        serviceTax: [],
         selectedUpperSeatPrice: [],
         selectedLowerSeatPrice: [],
         bus_id: "",
@@ -73,6 +75,8 @@ const PassengerDetails = () => {
         main_boarding_point_id: '',
         main_droping_point_id: '',
     };
+
+
     const totalSeats = selectedUpperSeats.length + selectedLowerSeats.length;
     const selectedTotalSeat = selectedUpperSeats.concat(selectedLowerSeats)
     const selectedTotalSeatPrice = selectedUpperSeatPrice.concat(selectedLowerSeatPrice)
@@ -98,7 +102,7 @@ const PassengerDetails = () => {
 
     useEffect(() => {
         const handlePopState = () => {
-            history.push('/bus-list', { selectedUpperSeats, selectedLowerSeats, totalPrice });
+            history.push('/bus-list', { selectedUpperSeats, selectedLowerSeats, totalPrice, serviceTax });
         };
 
         window.addEventListener('popstate', handlePopState);
@@ -106,21 +110,22 @@ const PassengerDetails = () => {
         return () => {
             window.removeEventListener('popstate', handlePopState);
         };
-    }, [history, selectedUpperSeats, selectedLowerSeats, totalPrice]);
+    }, [history, selectedUpperSeats, selectedLowerSeats, totalPrice, serviceTax]);
 
     const handleBack = () => {
-        history.push('/bus-list', { selectedUpperSeats, selectedLowerSeats, totalPrice });
+        history.push('/bus-list', { selectedUpperSeats, selectedLowerSeats, totalPrice, serviceTax });
     };
 
     useEffect(() => {
-        const x = JSON.parse(localStorage.getItem('passengerData'))
-        if (localStorage.getItem('Name') && localStorage.getItem('Email') && localStorage.getItem('Mobile')) {
+        if (localStorage.getItem('Name') && localStorage.getItem('Email') && localStorage.getItem('Mobile') && localStorage.getItem('passengerData')) {
 
             const name = JSON.parse(localStorage.getItem('Name'))
             const email = JSON.parse(localStorage.getItem('Email'))
             const mob = JSON.parse(localStorage.getItem('Mobile'))
-            if (x) {
-                setPassengerData(x)
+            const passengerData = JSON.parse(localStorage.getItem('passengerData'))
+
+            if (passengerData) {
+                setPassengerData(passengerData)
             }
             if (name) {
                 setName(name)
@@ -135,6 +140,7 @@ const PassengerDetails = () => {
             getContactInfo()
 
         }
+        console.log("passengerData", passengerData)
     }, []);
 
     const getContactInfo = async () => {
@@ -146,6 +152,11 @@ const PassengerDetails = () => {
             setName(res.data.data.name);
             setMobileNo(res.data.data.mobile_number);
             setEmailId(res.data.data.email);
+            setPassengerData(prevData => {
+                const updated = [...prevData];
+                updated[0] = { ...updated[0], name: res.data.data.name, age: '', gender: '' };
+                return updated;
+            });
 
         } catch (error) {
             console.error(error.response ? error.response.data.message : "An error occurred");
@@ -265,11 +276,11 @@ const PassengerDetails = () => {
             newErrors.mobileNo = 'Mobile number must be 10 digits';
             toast.error('Mobile number must be 10 digits');
         }
-     
+
         setErrors(newErrors);
         const isValid = Object.keys(newErrors).length === 0;
         if (isValid) {
-           
+
             history.push({
                 pathname: '/passnger-detail-view',
                 state: {
@@ -279,6 +290,7 @@ const PassengerDetails = () => {
                     emailId,
                     selectedTotalSeat,
                     totalPrice,
+                    serviceTax,
                     selectedTotalSeatPrice,
                     bus_id,
                     bus_name,
@@ -306,8 +318,6 @@ const PassengerDetails = () => {
                     selectedLowerSeatPrice,
                     inputValue,
                     booking_type
-
-
                 }
             })
         }
@@ -340,7 +350,7 @@ const PassengerDetails = () => {
                                 </div>
                             </div>
                             <div className='d-flex gap-3 align-items-center '>
-                                
+
                             </div>
                             <div className="passengerticktcard  rounded-4  ">
                                 <div className="psngrdet--1 ">
@@ -388,7 +398,7 @@ const PassengerDetails = () => {
                                 </div>
 
                             </div>
-                            
+
                             <div className="passanger--infodiv mt-5">
                                 <div className="psngerinfotitle d-flex align-items-center justify-content-between">
                                     <div className="d-flex gap-3 align-items-center">
@@ -415,7 +425,7 @@ const PassengerDetails = () => {
                                                 </label>
                                             ) : null
                                         }
- 
+
                                     </div>
                                 </div>
 
@@ -445,12 +455,12 @@ const PassengerDetails = () => {
                                                                     size='small'
                                                                     placeholder='Name'
                                                                     id={`name-${index}`}
-                                                                    value={passengerData[index]?.name || ''}
+                                                                    value={passengerData[index]?.name || ""}
                                                                     onChange={(e) => handleTextChange(index, 'name', e.target.value)}
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="col-md-6">
+                                                        <div className="col-md-3">
                                                             <div className="mb-3 form-group">
                                                                 <label htmlFor={`age-${index}`} className="form-label fs-6 fw-semibold text-capitalize">
                                                                     Age
@@ -465,48 +475,52 @@ const PassengerDetails = () => {
                                                                     onChange={(e) => handleTextChange(index, 'age', e.target.value)}
                                                                     onKeyDown={(e) => {
                                                                         if (e.key === '-' || e.key === '+' || e.key === 'e') {
-                                                                            e.preventDefault();  
+                                                                            e.preventDefault();
                                                                         }
                                                                     }}
                                                                     inputProps={{ min: 0 }}
                                                                 />
                                                             </div>
                                                         </div>
+                                                        <div className="col-md-3">
+
+                                                            <label htmlFor={`age-${index}`} className="form-label fs-6 ml-15 fw-semibold text-capitalize">
+                                                                Select Gender
+                                                            </label>
+
+
+                                                            <div className="d-flex align-items-start gap-5">
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="radio"
+                                                                        name={`gender-${index}`}
+                                                                        id={`MALE-${index}`}
+                                                                        checked={passengerData[index]?.gender === 'MALE'}
+                                                                        onChange={() => handleGenderChange(index, 'MALE')}
+                                                                    />
+                                                                    <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`MALE-${index}`}>
+                                                                        Male
+                                                                    </label>
+                                                                </div>
+                                                                <div className="form-check">
+                                                                    <input
+                                                                        className="form-check-input"
+                                                                        type="radio"
+                                                                        name={`gender-${index}`}
+                                                                        id={`FEMALE-${index}`}
+                                                                        checked={passengerData[index]?.gender === 'FEMALE'}
+                                                                        onChange={() => handleGenderChange(index, 'FEMALE')}
+                                                                    />
+                                                                    <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`FEMALE-${index}`}>
+                                                                        Female
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="selectgemnddiv mt-2">
-                                                    <div className="titlediv">
-                                                        <h6 className="fw-semibold fs-6 text-capitalize">Select Gender</h6>
-                                                    </div>
-                                                    <div className="d-flex align-items-center gap-5">
-                                                        <div className="form-check">
-                                                            <input
-                                                                className="form-check-input"
-                                                                type="radio"
-                                                                name={`gender-${index}`}
-                                                                id={`MALE-${index}`}
-                                                                checked={passengerData[index]?.gender === 'MALE'}
-                                                                onChange={() => handleGenderChange(index, 'MALE')}
-                                                            />
-                                                            <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`MALE-${index}`}>
-                                                                Male
-                                                            </label>
-                                                        </div>
-                                                        <div className="form-check">
-                                                            <input
-                                                                className="form-check-input"
-                                                                type="radio"
-                                                                name={`gender-${index}`}
-                                                                id={`FEMALE-${index}`}
-                                                                checked={passengerData[index]?.gender === 'FEMALE'}
-                                                                onChange={() => handleGenderChange(index, 'FEMALE')}
-                                                            />
-                                                            <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`FEMALE-${index}`}>
-                                                                Female
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
+
                                             </div>
                                         ))}
                                     </form>
@@ -515,7 +529,7 @@ const PassengerDetails = () => {
 
                             <div className="cnfirmsdvi mt-3">
                                 <div className="warningmsg mb-4">
-                                    
+
                                 </div>
                                 <div className="d-flex align-items-center justify-content-between">
                                     <div className="flx-item">
