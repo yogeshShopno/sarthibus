@@ -721,7 +721,7 @@ const BusList = (seat) => {
       }, 2000);
     } else {
       localStorage.setItem("bus_type", JSON.stringify(busType));
-      localStorage.setItem("bus_id", JSON.stringify(busId));
+      // localStorage.setItem("bus_id", JSON.stringify(busId));
       localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
       localStorage.setItem("main_droping_point_id", JSON.stringify(main_droping_point_id));
       localStorage.setItem("booking_type", JSON.stringify(booking_type));
@@ -2957,7 +2957,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck
+                                                                    Upper Deck 
                                                                   </span>
                                                                 </li>
                                                               </div>
@@ -3427,7 +3427,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck
+                                                                    Upper Deck 
                                                                   </span>
                                                                 </li>
                                                               </div>
@@ -3882,7 +3882,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck
+                                                                    Upper Deck 
                                                                   </span>
                                                                 </li>
                                                               </div>

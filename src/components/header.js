@@ -24,6 +24,8 @@ const Header = () => {
         localStorage.removeItem('MobileNo')
         localStorage.removeItem('UserID')
         setOpen(false)
+        localStorage.clear();
+
         history.push('/')
     }
 
