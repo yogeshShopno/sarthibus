@@ -388,7 +388,7 @@ const BusList = (seat) => {
             ? 3
             : ""
     );
-     data.append(
+    data.append(
       "price_range_type",
       selectedPrice.length === 0
         ? ""
@@ -403,14 +403,14 @@ const BusList = (seat) => {
       "Before 6 AM": 1,
       "6 AM to 12 PM": 2,
       "12 PM to 6 PM": 3,
-      "After 6 PM": 4, 
+      "After 6 PM": 4,
     };
-    
+
     const arrivalTime =
       selectedTime.length === 0 ? "" : timeMapping[selectedTime[0]] || "";
-    
+
     data.append("arrival_time", arrivalTime);
-    
+
 
 
     data.append("from_price", "");
@@ -1830,7 +1830,7 @@ const BusList = (seat) => {
                               className="text-capitalize mb-2 fw-semibold d-flex"
                               style={{ alignItems: "baseline" }}
                             >
-                            Sort By Price
+                              Sort By Price
                               <p
                                 style={{
                                   fontSize: "medium",
@@ -1866,7 +1866,7 @@ const BusList = (seat) => {
                                         alignItems: "center",
                                       }}
                                     >
-                                         {label.image && (
+                                      {label.image && (
                                         <img
                                           src={label?.image}
                                           alt={label.type}
@@ -1877,7 +1877,7 @@ const BusList = (seat) => {
                                           }}
                                         />
                                       )}
-                                     
+
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
                                       </span>
@@ -1892,7 +1892,7 @@ const BusList = (seat) => {
                               className="text-capitalize mb-2 fw-semibold d-flex"
                               style={{ alignItems: "baseline" }}
                             >
-                            Time 
+                              Arrival Time
                               <p
                                 style={{
                                   fontSize: "medium",
@@ -1939,7 +1939,7 @@ const BusList = (seat) => {
                                           }}
                                         />
                                       )}
-                                     
+
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
                                       </span>
@@ -1950,7 +1950,7 @@ const BusList = (seat) => {
                             </ul>
                           </div>
 
-                     
+
 
                           <div
                             className="gap-2"
@@ -2195,7 +2195,7 @@ const BusList = (seat) => {
                               className="text-capitalize mb-2 fw-semibold d-flex"
                               style={{ alignItems: "baseline" }}
                             >
-                                                          Sort By Price
+                              Sort By Price
 
                               <p
                                 style={{
@@ -2231,7 +2231,10 @@ const BusList = (seat) => {
                                         cursor: "pointer",
                                         alignItems: "center",
                                       }}
+                                      
                                     >
+                                      
+                                      
                                       {label.image && (
                                         <img
                                           src={label?.image}
@@ -2257,7 +2260,7 @@ const BusList = (seat) => {
                               className="text-capitalize mb-2 fw-semibold d-flex"
                               style={{ alignItems: "baseline" }}
                             >
-                                                         Time
+                              Arrival Time
 
                               <p
                                 style={{
@@ -2314,7 +2317,7 @@ const BusList = (seat) => {
                               ))}
                             </ul>
                           </div>
-                     
+
 
                           <div
                             className="gap-2"
@@ -2623,29 +2626,29 @@ const BusList = (seat) => {
                                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap mt-2">
                                     <div className="d-flex flex-wrap gap-2 px-3 w-100 pb-3">
                                       {item?.amenities?.map((ami, index) => (
-                                        <div key={index}>
-                                          <div
-                                            className="d-flex gap-2 align-items-center"
-                                            style={{ whiteSpace: "pre" }}
-                                          >
-                                            <img
-                                              src={
-                                                busList?.image_url + ami?.image
-                                              }
-                                              alt=""
-                                              className="img-fluid filter_icon_bus"
-                                              style={{
-                                                width: "20px",
-                                                height: "20px",
-                                                objectFit: "contain",
-                                              }}
-                                            />
-                                            <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
+                                           
+                                            <div key={index}  style={{ whiteSpace: "pre" }}    className="d-flex gap-2 align-items-center" >
+                                         
+                                            <Tooltip title={ami?.ameniti_name}>
+                                              <img
+                                                src={busList?.image_url + ami?.image}
+                                                alt=""
+                                                className="img-fluid filter_icon_bus"
+                                                style={{
+                                                  width: "22px",
+                                                  height: "22px",
+                                                  objectFit: "contain",
+                                                  marginInline:"5px",
+                                                }}
+                                              />
+                                            </Tooltip>
+                                            {/* <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
                                               {ami?.ameniti_name}
-                                            </h5>
-                                          </div>
+                                            </h5> */}
+                                          
                                         </div>
                                       ))}
+
                                     </div>
                                     <ul
                                       className="align-items-lg-center capitalize d-flex row-gap-2 featurenav flex-lg-row flex-md-column justify-content-end text-end list-unstyled px-3 text- w-100 bus_cancellation_view"
@@ -2957,7 +2960,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck 
+                                                                    Upper Deck
                                                                   </span>
                                                                 </li>
                                                               </div>
@@ -3427,7 +3430,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck 
+                                                                    Upper Deck
                                                                   </span>
                                                                 </li>
                                                               </div>
@@ -3882,7 +3885,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Upper Deck 
+                                                                    Upper Deck
                                                                   </span>
                                                                 </li>
                                                               </div>
