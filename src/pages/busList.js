@@ -356,7 +356,29 @@ const BusList = (seat) => {
     const isSelf = localSeats?.includes(seat.seat_number);
     return seat.is_booked && !isSelf;
   };
-
+  // Function to compare boarding date and time with current date and time
+  const isBoardingTimePassed = ( boardingTime) => {
+    
+    if (formattedDate && boardingTime) {
+      // Parse the date part
+      const [year, month, day] = formattedDate.split('-').map(Number);
+  
+      // Convert "6:30 PM" to 24-hour time
+      const [time, meridian] = boardingTime.split(' ');
+      let [hour, minute] = time.split(':').map(Number);
+  
+      if (meridian === 'PM' && hour < 12) hour += 12;
+      if (meridian === 'AM' && hour === 12) hour = 0;
+  
+      const boardingDateObj = new Date(year, month - 1, day, hour, minute);
+      const currentDateObj = new Date();
+  
+      return boardingDateObj < currentDateObj;
+    }
+  
+    return false;
+  };
+  
 
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
@@ -2231,10 +2253,8 @@ const BusList = (seat) => {
                                         cursor: "pointer",
                                         alignItems: "center",
                                       }}
-                                      
+
                                     >
-                                      
-                                      
                                       {label.image && (
                                         <img
                                           src={label?.image}
@@ -2626,26 +2646,26 @@ const BusList = (seat) => {
                                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap mt-2">
                                     <div className="d-flex flex-wrap gap-2 px-3 w-100 pb-3">
                                       {item?.amenities?.map((ami, index) => (
-                                           
-                                            <div key={index}  style={{ whiteSpace: "pre" }}    className="d-flex gap-2 align-items-center" >
-                                         
-                                            <Tooltip title={ami?.ameniti_name}>
-                                              <img
-                                                src={busList?.image_url + ami?.image}
-                                                alt=""
-                                                className="img-fluid filter_icon_bus"
-                                                style={{
-                                                  width: "22px",
-                                                  height: "22px",
-                                                  objectFit: "contain",
-                                                  marginInline:"5px",
-                                                }}
-                                              />
-                                            </Tooltip>
-                                            {/* <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
+
+                                        <div key={index} style={{ whiteSpace: "pre" }} className="d-flex gap-2 align-items-center" >
+
+                                          <Tooltip title={ami?.ameniti_name}>
+                                            <img
+                                              src={busList?.image_url + ami?.image}
+                                              alt=""
+                                              className="img-fluid filter_icon_bus"
+                                              style={{
+                                                width: "22px",
+                                                height: "22px",
+                                                objectFit: "contain",
+                                                marginInline: "5px",
+                                              }}
+                                            />
+                                          </Tooltip>
+                                          {/* <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
                                               {ami?.ameniti_name}
                                             </h5> */}
-                                          
+
                                         </div>
                                       ))}
 
@@ -4142,54 +4162,34 @@ const BusList = (seat) => {
                                                       index={0}
                                                     >
                                                       <RadioGroup
-                                                        value={
-                                                          selectedboardingValue?.boarding_id
-                                                        }
-                                                        onChange={
-                                                          handleSelectBoardingPoint
-                                                        }
+                                                        value={selectedboardingValue?.boarding_id}
+                                                        onChange={handleSelectBoardingPoint}
                                                         className="d-block"
-                                                        style={{
-                                                          whiteSpace: "pre",
-                                                        }}
+                                                        style={{ whiteSpace: 'pre' }}
                                                       >
-                                                        {busWisePickupDropPoints?.boarding_array?.map(
-                                                          (point, index) => (
-                                                            <Box
-                                                              key={index}
-                                                              className="bpdplist_item mb-2 d-flex justify-content-between "
-                                                            >
+                                                        {busWisePickupDropPoints?.boarding_array?.map((point, index) => {
+                                                          const isDisabled = isBoardingTimePassed(point?.boarding_time);
+                                                          return (
+                                                            <Box key={index} className="bpdplist_item mb-2 d-flex justify-content-between">
                                                               <FormControlLabel
-                                                                value={
-                                                                  point?.boarding_id
-                                                                }
-                                                                control={
-                                                                  <Radio className="form-radio-input" />
-                                                                }
+                                                                value={point?.boarding_id}
+                                                                control={<Radio className="form-radio-input" disabled={isDisabled} />}
                                                                 label={
-                                                                  <Box className="fw-medium form-checkk fs-20 d-flex justify-content-between align-items-center ">
+                                                                  <Box className="fw-medium form-checkk fs-20 d-flex justify-content-between align-items-center">
                                                                     <Box className="me-4">
-
-                                                                      <strong className="fs-6 time ">
-                                                                        {
-                                                                          point?.boarding_time
-                                                                        }
-                                                                      </strong>
+                                                                      <strong className="fs-6 time">{point?.boarding_time}</strong>
                                                                     </Box>
-
                                                                     <Box className="pointnm mt-1">
                                                                       <Typography className="text-wrap fw-semibold">
-                                                                        {
-                                                                          point?.boarding_sub_route_name
-                                                                        }
+                                                                        {point?.boarding_sub_route_name}
                                                                       </Typography>
                                                                     </Box>
                                                                   </Box>
                                                                 }
                                                               />
                                                             </Box>
-                                                          )
-                                                        )}
+                                                          );
+                                                        })}
                                                       </RadioGroup>
                                                     </Box>
                                                   </div>
