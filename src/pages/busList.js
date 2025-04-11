@@ -2811,7 +2811,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck
+                                                                    Lower Deck  
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
@@ -2837,7 +2837,7 @@ const BusList = (seat) => {
                                                                     key={
                                                                       rowIndex
                                                                     }
-                                                                    className="d-flex"
+                                                                    className="d-flex "
                                                                     style={{
                                                                       cursor:
                                                                         "pointer",
@@ -2857,9 +2857,10 @@ const BusList = (seat) => {
                                                                         >
                                                                           {seat.seat_number ===
                                                                             "" ? (
-                                                                            <span className="seating-none"></span>
+                                                                            <span className="seating-none "></span>
                                                                           ) : (
-                                                                            <Tooltip
+                                                                            <span
+                                                                             className="d-block"
                                                                               title={
                                                                                 isBookedLower(
                                                                                   seat
@@ -2870,23 +2871,7 @@ const BusList = (seat) => {
                                                                               placement="top-start"
                                                                               arrow
                                                                             >
-                                                                              <span
-                                                                                style={{
-                                                                                  color:
-                                                                                    !isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? "black"
-                                                                                      : "white",
-                                                                                }}
-                                                                              >
-                                                                                ₹
-                                                                                {!isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? seat.seat_price
-                                                                                  : ""}
-                                                                              </span>
+                                                                              
                                                                               <div
                                                                                 className={`seat-container ${isBookedLower(
                                                                                   seat
@@ -2906,6 +2891,25 @@ const BusList = (seat) => {
                                                                                   }
                                                                                 }}
                                                                               >
+                                                                                <span
+                                                                              
+                                                                              style={{
+                                                                               color:
+                                                                                 !isBookedLower(
+                                                                                   seat
+                                                                                 )
+                                                                                   ? "black"
+                                                                                   : "white",
+
+                                                                             }}
+                                                                           >
+                                                                             ₹
+                                                                             {!isBookedLower(
+                                                                               seat
+                                                                             )
+                                                                               ? seat.seat_price
+                                                                               : ""}
+                                                                           </span>
                                                                                 <div>
                                                                                   <img
                                                                                     src={
@@ -2947,7 +2951,7 @@ const BusList = (seat) => {
                                                                                   </span>
                                                                                 </div>
                                                                               </div>
-                                                                            </Tooltip>
+                                                                            </span>
                                                                           )}
                                                                         </React.Fragment>
                                                                       )
@@ -3281,7 +3285,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck
+                                                                    Lower Deck  
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
@@ -3714,7 +3718,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck
+                                                                    Lower Deck   
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
