@@ -228,3 +228,8 @@ body {
 .card-border .card a{
   color: #6c2a7f;
 }
+.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active {
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid #782586 !important;
+}

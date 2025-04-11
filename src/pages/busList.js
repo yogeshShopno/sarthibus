@@ -357,28 +357,28 @@ const BusList = (seat) => {
     return seat.is_booked && !isSelf;
   };
   // Function to compare boarding date and time with current date and time
-  const isBoardingTimePassed = ( boardingTime) => {
-    
+  const isBoardingTimePassed = (boardingTime) => {
+
     if (formattedDate && boardingTime) {
       // Parse the date part
       const [year, month, day] = formattedDate.split('-').map(Number);
-  
+
       // Convert "6:30 PM" to 24-hour time
       const [time, meridian] = boardingTime.split(' ');
       let [hour, minute] = time.split(':').map(Number);
-  
+
       if (meridian === 'PM' && hour < 12) hour += 12;
       if (meridian === 'AM' && hour === 12) hour = 0;
-  
+
       const boardingDateObj = new Date(year, month - 1, day, hour, minute);
       const currentDateObj = new Date();
-  
+
       return boardingDateObj < currentDateObj;
     }
-  
+
     return false;
   };
-  
+
 
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
@@ -1740,9 +1740,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {busAcType.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1764,6 +1764,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        // justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -1771,13 +1772,15 @@ const BusList = (seat) => {
                                           src={label?.image}
                                           alt={label.type}
                                           style={{
-                                            width: "30px",
-                                            height: "30px",
+                                            width: "20px",
+                                            height: "20px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
-                                      <span style={{ fontSize: "16px" }}>
+                                      <span style={{ fontSize: "13px" }}>
                                         {label.type}
                                       </span>
                                     </label>
@@ -1801,9 +1804,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {busType.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1825,6 +1828,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        // justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -1832,13 +1836,15 @@ const BusList = (seat) => {
                                           src={label?.image}
                                           alt={label.type}
                                           style={{
-                                            width: "30px",
-                                            height: "30px",
+                                            width: "20px",
+                                            height: "20px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
-                                      <span style={{ fontSize: "16px" }}>
+                                      <span style={{ fontSize: "13px" }}>
                                         {label.type}
                                       </span>
                                     </label>
@@ -1862,9 +1868,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {price.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1886,6 +1892,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        // justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -1893,14 +1900,16 @@ const BusList = (seat) => {
                                           src={label?.image}
                                           alt={label.type}
                                           style={{
-                                            width: "30px",
-                                            height: "30px",
+                                            width: "20px",
+                                            height: "20px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
 
-                                      <span style={{ fontSize: "16px" }}>
+                                      <span style={{ fontSize: "13px" }}>
                                         {label.type}
                                       </span>
                                     </label>
@@ -1924,9 +1933,12 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {time.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li
+                                  className="fltrli mb-2 col-md-6 p-2"
+                                  key={index}
+                                >
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1948,6 +1960,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        // justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -1955,14 +1968,16 @@ const BusList = (seat) => {
                                           src={label?.image}
                                           alt={label.type}
                                           style={{
-                                            width: "30px",
-                                            height: "30px",
+                                            width: "20px",
+                                            height: "20px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
 
-                                      <span style={{ fontSize: "16px" }}>
+                                      <span style={{ fontSize: "12px" }}>
                                         {label.type}
                                       </span>
                                     </label>
@@ -2105,9 +2120,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row">
                               {busAcType.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-6" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -2129,6 +2144,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -2139,6 +2155,8 @@ const BusList = (seat) => {
                                             width: "30px",
                                             height: "30px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
@@ -2166,9 +2184,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {busType.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-6" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -2190,6 +2208,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -2200,6 +2219,8 @@ const BusList = (seat) => {
                                             width: "30px",
                                             height: "30px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
@@ -2228,9 +2249,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {price.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-6" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -2252,6 +2273,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        justifyContent: "center"
                                       }}
 
                                     >
@@ -2263,6 +2285,8 @@ const BusList = (seat) => {
                                             width: "30px",
                                             height: "30px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
@@ -2291,9 +2315,9 @@ const BusList = (seat) => {
 
                               </p>
                             </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-3 align-items-center">
+                            <ul className="filterul list-unstyled row align-items-center">
                               {time.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
+                                <li className="fltrli mb-2 col-6" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -2315,6 +2339,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
+                                        justifyContent: "center"
                                       }}
                                     >
                                       {label.image && (
@@ -2325,6 +2350,8 @@ const BusList = (seat) => {
                                             width: "30px",
                                             height: "30px",
                                             objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px"
                                           }}
                                         />
                                       )}
@@ -2585,7 +2612,7 @@ const BusList = (seat) => {
                                   </div>
                                 </div>
                                 <div className="row px-4 align-items-center row-gap-3">
-                                  <div className="col-lg-8 mt-md-2 boarding_point_bus">
+                                  <div className="col-lg-12 mt-md-2 boarding_point_bus">
                                     <div className="d-flex justify-content-between align-items-center bustimeflex">
                                       <div className="bustimediv boarding_txt_point_name">
                                         <h6 className="fw-semibold mb-1 boarding_txt_point_name">
@@ -2633,13 +2660,13 @@ const BusList = (seat) => {
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="col-lg-4 ">
+                                  {/* <div className="col-lg-4 ">
                                     <div className="tcktpricediv text-end">
                                       <h4 className="fw-bold m-0 bus_list_price">
                                         ₹{item?.bus_price}
                                       </h4>
                                     </div>
-                                  </div>
+                                  </div> */}
                                 </div>
 
                                 <div className="features--div">
@@ -2650,31 +2677,44 @@ const BusList = (seat) => {
                                         <div key={index} style={{ whiteSpace: "pre" }} className="d-flex gap-2 align-items-center" >
 
                                           <Tooltip title={ami?.ameniti_name}>
-                                            <img
+                                           <div style={{border:"1.5px solid purple", padding:'5px', borderRadius:"50%"}}>
+                                           <img
                                               src={busList?.image_url + ami?.image}
                                               alt=""
                                               className="img-fluid filter_icon_bus"
                                               style={{
-                                                width: "22px",
-                                                height: "22px",
+                                                width: "16px",
+                                                height: "16px",
                                                 objectFit: "contain",
                                                 marginInline: "5px",
                                               }}
                                             />
+                                           </div>
                                           </Tooltip>
                                           {/* <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
                                               {ami?.ameniti_name}
                                             </h5> */}
-
                                         </div>
                                       ))}
 
                                     </div>
                                     <ul
                                       className="align-items-lg-center capitalize d-flex row-gap-2 featurenav flex-lg-row flex-md-column justify-content-end text-end list-unstyled px-3 text- w-100 bus_cancellation_view"
-                                      style={{ whiteSpace: "pre" }}
+                                      style={{ whiteSpace: "pre", margin: "0px" }}
                                     >
+
                                       <li
+                                        className="nav-item cancellation_policy_bus"
+                                        style={{
+                                          cursor: "pointer",
+                                          color: "rgb(108, 42, 127)",
+                                        }}
+                                      >
+                                        <h4 className="fw-bold bus_list_price mx-3 my-2" style={{ color: 'black' }}>
+                                          ₹{item?.bus_price}
+                                        </h4>
+                                      </li>
+                                      {/* <li
                                         className="nav-item cancellation_policy_bus"
                                         style={{
                                           cursor: "pointer",
@@ -2702,7 +2742,7 @@ const BusList = (seat) => {
                                             <MdOutlineKeyboardArrowDown className="fs-3" />
                                           </a>
                                         )}
-                                      </li>
+                                      </li> */}
                                       <li className="d-flex justify-content-end nav-item ">
                                         {selectedSeatBusId !== item.id ? (
                                           <Button
@@ -2721,6 +2761,7 @@ const BusList = (seat) => {
                                             style={{
                                               backgroundColor:
                                                 "rgb(121 44 143)",
+                                                textTransform:"capitalize"
                                             }}
                                             className="seat_view_bus_list_txt h-100 w-100 m-0"
                                           >
@@ -2740,7 +2781,36 @@ const BusList = (seat) => {
 
                                     </ul>
                                   </div>
-
+                                  <div
+                                    className="nav-item cancellation_policy_bus d-flex justify-content-end"
+                                    style={{
+                                      cursor: "pointer",
+                                      color: "rgb(108, 42, 127)",
+                                      padding: "0px 10px 5px 10px"
+                                    }}
+                                  >
+                                    {bookingPolicies &&
+                                      selectedPoliciesBusId === item.id ? (
+                                      <a
+                                        onClick={() =>
+                                          handleHideBookingPolicies(item.id)
+                                        }
+                                      >
+                                        Cancellation Policy
+                                        <MdOutlineKeyboardArrowUp className="fs-3" />
+                                      </a>
+                                    ) : (
+                                      <a
+                                        onClick={() =>
+                                          handleShowBookingPolicies(item.id)
+                                        }
+                                        style={{ minHeight: "10px" }}
+                                      >
+                                        Cancellation Policy
+                                        <MdOutlineKeyboardArrowDown className="fs-3" />
+                                      </a>
+                                    )}
+                                  </div>
                                   {selectedPoliciesBusId === item.id &&
                                     bookingPolicies &&
                                     item.cancellation_policy && (
@@ -2757,7 +2827,7 @@ const BusList = (seat) => {
                                         </div>
                                       </div>
                                     )}
-                                  <div className="tab-content border-top">
+                                  <div className="tab-content">
                                     {selectedBusId === item.id &&
                                       showSeats &&
                                       busLayoutData?.BusLayoutData?.length >
@@ -2811,7 +2881,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck  
+                                                                    Lower Deck
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
@@ -2860,7 +2930,7 @@ const BusList = (seat) => {
                                                                             <span className="seating-none "></span>
                                                                           ) : (
                                                                             <span
-                                                                             className="d-block"
+                                                                              className="d-block"
                                                                               title={
                                                                                 isBookedLower(
                                                                                   seat
@@ -2871,7 +2941,7 @@ const BusList = (seat) => {
                                                                               placement="top-start"
                                                                               arrow
                                                                             >
-                                                                              
+
                                                                               <div
                                                                                 className={`seat-container ${isBookedLower(
                                                                                   seat
@@ -2892,24 +2962,24 @@ const BusList = (seat) => {
                                                                                 }}
                                                                               >
                                                                                 <span
-                                                                              
-                                                                              style={{
-                                                                               color:
-                                                                                 !isBookedLower(
-                                                                                   seat
-                                                                                 )
-                                                                                   ? "black"
-                                                                                   : "white",
 
-                                                                             }}
-                                                                           >
-                                                                             ₹
-                                                                             {!isBookedLower(
-                                                                               seat
-                                                                             )
-                                                                               ? seat.seat_price
-                                                                               : ""}
-                                                                           </span>
+                                                                                  style={{
+                                                                                    color:
+                                                                                      !isBookedLower(
+                                                                                        seat
+                                                                                      )
+                                                                                        ? "black"
+                                                                                        : "white",
+
+                                                                                  }}
+                                                                                >
+                                                                                  ₹
+                                                                                  {!isBookedLower(
+                                                                                    seat
+                                                                                  )
+                                                                                    ? seat.seat_price
+                                                                                    : ""}
+                                                                                </span>
                                                                                 <div>
                                                                                   <img
                                                                                     src={
@@ -3285,7 +3355,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck  
+                                                                    Lower Deck
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
@@ -3718,7 +3788,7 @@ const BusList = (seat) => {
 
                                                                   <span className="fs-3">
 
-                                                                    Lower Deck   
+                                                                    Lower Deck
                                                                   </span>
                                                                 </li>
                                                                 {busLayoutData
