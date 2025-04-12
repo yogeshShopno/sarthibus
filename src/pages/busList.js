@@ -1727,8 +1727,7 @@ const BusList = (seat) => {
 
                           <div className="fltrtitle my-4">
                             <h5
-                              className="text-capitalize mb-2 fw-semibold d-flex"
-                              style={{ alignItems: "baseline" }}
+                              className="text-capitalize fw-semibold d-flex"
                             >
                               bus ac
                               <p
@@ -1742,7 +1741,7 @@ const BusList = (seat) => {
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {busAcType.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1791,8 +1790,7 @@ const BusList = (seat) => {
                           </div>
                           <div className="fltrtitle my-4">
                             <h5
-                              className="text-capitalize mb-2 fw-semibold d-flex"
-                              style={{ alignItems: "baseline" }}
+                              className="text-capitalize fw-semibold d-flex"
                             >
                               bus type
                               <p
@@ -1806,7 +1804,7 @@ const BusList = (seat) => {
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {busType.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1855,8 +1853,7 @@ const BusList = (seat) => {
                           </div>
                           <div className="fltrtitle my-4">
                             <h5
-                              className="text-capitalize mb-2 fw-semibold d-flex"
-                              style={{ alignItems: "baseline" }}
+                              className="text-capitalize fw-semibold d-flex"
                             >
                               Sort By Price
                               <p
@@ -1870,7 +1867,7 @@ const BusList = (seat) => {
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {price.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2" key={index}>
+                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1920,8 +1917,7 @@ const BusList = (seat) => {
                           </div>
                           <div className="fltrtitle my-4">
                             <h5
-                              className="text-capitalize mb-2 fw-semibold d-flex"
-                              style={{ alignItems: "baseline" }}
+                              className="text-capitalize fw-semibold d-flex"
                             >
                               Arrival Time
                               <p
@@ -1936,7 +1932,7 @@ const BusList = (seat) => {
                             <ul className="filterul list-unstyled row align-items-center">
                               {time.map((label, index) => (
                                 <li
-                                  className="fltrli mb-2 col-md-6 p-2"
+                                  className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
                                   <div>

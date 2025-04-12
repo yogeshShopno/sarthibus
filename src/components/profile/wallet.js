@@ -110,9 +110,18 @@ const Wallet = () => {
 
 
           <div className="container my-1">
-            <div className="card shadow rounded-4" style={{background: "#ffffff",borderColor: "rgb(121, 44, 143)"}}>
+            <div className="card shadow rounded-4" style={{ background: "#ffffff", borderColor: "rgb(121, 44, 143)" }}>
+              <h4 className="fw-bold text-white"
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  backgroundColor: "#44164c",
+                  color: "#fff !important",
+                  padding: "13px",
+                  marginTop: "0px !important",
+                  borderRadius: "15px 15px 0px 0px",
+                }}>Transaction History</h4>
               <div className="card-body p-4">
-                <h4 className="fs-2 fw-bold my-3 text-dark">Transaction History</h4>
                 <div>
                   <div>
                     {transactionHistory && transactionHistory.wallet_list ? (
@@ -277,10 +286,16 @@ const Wallet = () => {
                                 color: "#FF2020",
                               }}
                             >
-                              Transaction History Not Found
+                              <img
+                                src="/assets/images/wallet-transaction.png"
+                                alt="No Transactions"
+                                style={{ maxWidth: "300px", marginBottom: "20px" }}
+                              />
+                              <div>Transaction History Not Found</div>
                             </li>
                           </ul>
                         </div>
+
                       )
                     ) : (
                       <p>

@@ -13,11 +13,11 @@ const CancelTicket = () => {
         }
     }, []);
 
-    
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-    
+
     useEffect(() => {
         if (userID) {
             TicketsList();
@@ -43,7 +43,7 @@ const CancelTicket = () => {
         catch (error) {
         }
     }
-    const handleTicketClick = (ticketId,type) => {
+    const handleTicketClick = (ticketId, type) => {
         window.location.href = `/ticket-details-view/${type}/${ticketId}?action=cancel`;
     };
 
@@ -51,12 +51,20 @@ const CancelTicket = () => {
 
         <div className="prevbookdiv card-border">
             <div className="eidtproftitle titlediv my-3">
-                <h5 className="text-capitalize fw-semibold fs-4">Cancel Ticket</h5>
+                <h5 className="text-capitalize fw-semibold fs-4"
+                    style={{
+                        textAlign: "center",
+                        fontSize: "20px",
+                        backgroundColor: "#44164c",
+                        color: "white",
+                        padding: "10px",
+                        borderRadius: "10px"
+                    }}>Cancel Ticket</h5>
             </div>
 
             {
                 ticketsData?.ticket_list?.map((ticket, index) => (
-                    <div onClick={() => handleTicketClick(ticket.id,3)}>
+                    <div onClick={() => handleTicketClick(ticket.id, 3)}>
                         <div className="ticket-container mt-4">
                             <div className="d-flex rounded-9 flex-column gap-4 buslist--card card shadow-hover border-hover-none p-3 "  >
                                 <div className="d-flex justify-content-between align-items-center busnmflex ">
@@ -87,7 +95,7 @@ const CancelTicket = () => {
                                                     <p className="bustotalhours fw-medium m-0">{ticket?.time_different}</p>
                                                 </div>
                                                 <div className="bustimediv">
-                                                    <h6 className="fw-semibold mb-1" style={{display:"flex",justifyContent:"end"}}>{ticket?.ending_point_name}</h6>
+                                                    <h6 className="fw-semibold mb-1" style={{ display: "flex", justifyContent: "end" }}>{ticket?.ending_point_name}</h6>
                                                     <p className="fw-medium m-0" style={{ color: 'rgb(108 42 127)', fontSize: '17px' }}>9.00 pm </p>
                                                     <p className="fw-medium m-0">{ticket.droping_time}</p>
 
@@ -101,6 +109,32 @@ const CancelTicket = () => {
                         </div>
                     </div>
                 ))
+            }
+            {
+                (ticketsData?.ticket_list?.length === 0 || !ticketsData?.ticket_list) && (
+                    <div
+                        className="d-flex flex-column align-items-center justify-content-center"
+                        style={{
+                            padding: "80px 20px",
+                            backgroundColor: "#f5f0fa", // light purple background
+                            borderRadius: "16px",
+                            border: "1px dashed #b99ddf", // muted purple border
+                            margin: "10px auto",
+                            boxShadow: "0 4px 16px rgba(179, 136, 255, 0.1)", // soft purple shadow
+                        }}
+                    >
+                        <img
+                            src="/assets/images/bus-ticket.png"
+                            alt="No Bookings"
+                            style={{ maxWidth: "300px", marginBottom: "20px" }}
+                        />
+                        <h5 style={{ color: "#6c2a7f", fontWeight: 600 }}>No Data Found</h5>
+                        <p style={{ color: "#8a4fb5", marginTop: "8px" }}>
+                            It looks like there are no tickets to display right now.
+                        </p>
+                    </div>
+
+                )
             }
         </div>
     );
