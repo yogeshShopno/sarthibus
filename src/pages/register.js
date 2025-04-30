@@ -311,7 +311,7 @@ const RegisterDetail = () => {
                                                 <div className="d-flex justify-content-center mr-2 my-4 reg_bottom_text">
                                                     Already have an account?
                                                     <span style={{ color: "darkblue", fontWeight: 500, cursor: "pointer", marginLeft: "10px" }} onClick={() => {
-                                                        if (redirectPath === '/passnger-detail-view') {
+                                                        if (redirectPath === '/passenger-detail-view') {
                                                             history.push('/login', {
                                                                 passengerData,
                                                                 name,

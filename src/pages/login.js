@@ -156,9 +156,9 @@ const LoginDetail = () => {
 
                     setTimeout(() => {
 
-                        if (redirectPath === '/passnger-detail-view') {
+                        if (redirectPath === '/passenger-detail-view') {
                             localStorage.removeItem('redirectPath');
-                            history.push('/passnger-detail-view', {
+                            history.push('/passenger-detail-view', {
                                 passengerData,
                                 name,
                                 emailId,
@@ -297,7 +297,7 @@ const LoginDetail = () => {
                                                 <div className="d-flex justify-content-center mr-2 my-md-4 reg_bottom_text">
                                                     Don’t have an account?
                                                     <span style={{ color: "darkblue", fontWeight: 500, cursor: "pointer", marginLeft: "10px" }} onClick={() => {
-                                                        if (redirectPath === '/passnger-detail-view') {
+                                                        if (redirectPath === '/passenger-detail-view') {
                                                             history.push('/sign-up', {
                                                                 passengerData,
                                                                 name,

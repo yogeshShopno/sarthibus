@@ -20,6 +20,8 @@ const PassengerDetails = () => {
 
 
     const {
+        selectedUpperSeat,
+        selectedLowerSeat,
         selectedUpperSeats,
         selectedLowerSeats,
         totalPrice,
@@ -48,6 +50,8 @@ const PassengerDetails = () => {
         timerStart,
         booking_type
     } = location.state || {
+        selectedUpperSeat: [],
+        selectedLowerSeat: [],
         selectedUpperSeats: [],
         selectedLowerSeats: [],
         totalPrice: 0,
@@ -140,7 +144,6 @@ const PassengerDetails = () => {
             getContactInfo()
 
         }
-        console.log("passengerData", passengerData)
     }, []);
 
     const getContactInfo = async () => {
@@ -282,7 +285,7 @@ const PassengerDetails = () => {
         if (isValid) {
 
             history.push({
-                pathname: '/passnger-detail-view',
+                pathname: '/passenger-detail-view',
                 state: {
                     passengerData,
                     name,

@@ -1,0 +1,145 @@
+.layout{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+table {
+    border-collapse: collapse;
+  }
+
+  
+  .main-table {
+    border: 2px solid rgb(165 92 185);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+  
+  td {
+    width: 40px;
+    height: 60px;
+    border-radius: 10px;
+    gap: 40px;
+    align-items: center;
+    background-color: white;
+    padding: 6px;
+  }
+  
+
+  .selected   .seat-price{
+
+    background-color: #7a2c8f;
+
+  }
+  
+  .sleeper {
+    border: 1px solid rgb(165 92 185);
+    height: 100px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+    flex-direction: column;
+    position: relative;
+    border-radius: 10px;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  
+.sleeper[colspan='2'] {
+  width: 100%;  /* Make it span full width when colspan is 2 */
+  height: 100px;  /* Adjust height if needed to fit the grid */
+}
+  
+ .selected {
+    border-color:#7a2c8f !important;
+
+  }
+  
+  .seater {
+    background-color: rgb(255, 255, 255);
+    /* border: 1px solid rgb(165 92 185); */
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+    flex-direction: column;
+    position: relative;
+    border-radius: 10px;
+    min-height: auto;
+  }
+
+  .seatLayout2 {
+    position: absolute;
+    height: 50px;
+    width: 50px;
+    z-index: 10;
+    /* Adjust the size as needed for seater and sleeper */
+  }
+  
+  .gallery {
+    background-color: rgb(255, 255, 255);
+    font-style: italic;
+    color: rgb(148, 148, 148);
+    visibility: hidden;
+    display: none;
+  }
+  
+  .booked {
+    color: rgb(255, 255, 255);
+    cursor: not-allowed !important;
+    border-color:  black  ;
+  }
+
+  .booked .seat-price{
+    color: rgb(0, 0, 0);
+
+    background-color: rgb(0, 0, 0) !important;
+    
+  }
+  
+  .available {
+    color: black;
+    cursor: pointer;
+  }
+  
+  .stacked-seat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .seat-price {
+    background-color: rgba(4, 0, 216, 0.24);
+    color: white;
+    width: 50px;
+    text-align: center;
+    padding: 2px 0;
+    z-index: 100;
+  }
+
+  .deck{
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+ 
+  }
+  .rotate-seat {
+  /* transform: rotate(90deg);
+  transform-origin: center; */
+  /* border: 1px solid rgb(165 92 185); */
+  height: 100%;
+    width: 100%;
+    min-height: auto;
+
+}

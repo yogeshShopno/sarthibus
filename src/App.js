@@ -30,6 +30,10 @@ import Faq from './components/profile/faq';
 import Wallet from './components/profile/wallet';
 import SuccessTicket from './pages/success-ticket';
 import PaymentStatus from './pages/paymentStatus';
+import SeatLayout2 from './pages/seatLayout2';
+import SeatLayout1 from './pages/seatLayout1';
+
+
 
 
 function App() {
@@ -55,6 +59,13 @@ function App() {
           <TitleRoute exact path='/' title="Sarthi Bus - sarthibus.com">
             <Home />
           </TitleRoute >
+          <TitleRoute exact path="/seat-layout2" title="Sarthi Bus - sarthibus.com">
+            <SeatLayout1 />
+          </TitleRoute>
+
+          <TitleRoute exact path="/seat-layout2" title="Sarthi Bus - sarthibus.com">
+            <SeatLayout2 />
+          </TitleRoute>
           <TitleRoute path='/bus-list' title="Bus List - sarthibus.com" >
             <BusList />
           </TitleRoute>
@@ -89,7 +100,7 @@ function App() {
           <TitleRoute path='/about-us' title="About - sarthibus.com">
             <AboutUs />
           </TitleRoute >
-          <TitleRoute path='/passnger-detail-view' title="Passenger View - sarthibus.com">
+          <TitleRoute path='/passenger-detail-view' title="Passenger View - sarthibus.com">
             <PassengerView />
           </TitleRoute>
           <TitleRoute path='/payment-status' title="payment-status - sarthibus.com">

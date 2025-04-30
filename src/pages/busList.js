@@ -6,7 +6,14 @@ import {
   MdOutlineArrowForwardIos,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { FaAngleDoubleDown, FaAngleLeft, FaAngleRight, FaBusAlt, FaChevronRight, FaFilter, } from "react-icons/fa";
+import {
+  FaAngleDoubleDown,
+  FaAngleLeft,
+  FaAngleRight,
+  FaBusAlt,
+  FaChevronRight,
+  FaFilter,
+} from "react-icons/fa";
 
 import CloseIcon from "@mui/icons-material/Close";
 import { GiSteeringWheel } from "react-icons/gi";
@@ -25,7 +32,10 @@ import {
   IconButton,
   selectClasses,
   TextField,
-  FormControl, InputLabel, MenuItem, Select
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import {
   useHistory,
@@ -68,17 +78,26 @@ import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
 import { StaticTimePicker } from "@mui/x-date-pickers/StaticTimePicker";
 import Loader from "../components/loader";
 import debounce from "lodash.debounce";
-import { Container, Dropdown, Modal, Nav, Navbar, Offcanvas } from "react-bootstrap";
+import {
+  Container,
+  Dropdown,
+  Modal,
+  Nav,
+  Navbar,
+  Offcanvas,
+} from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import { CiMenuBurger } from "react-icons/ci";
 import { AiOutlineSwap } from "react-icons/ai";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenNib } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from "react";
+import SeatType from "../components/SeatTypes";
+import SeatLayout2 from "./seatLayout2";
+import SeatLayout1 from "./seatLayout1";
 
 const BusList = (seat) => {
-
-  const firstInputRef = useRef('');
+  const firstInputRef = useRef("");
   const location = useLocation();
   const [cities, setCities] = useState([]);
   const [toCities, setToCities] = useState([]);
@@ -89,15 +108,15 @@ const BusList = (seat) => {
   // const handleBusPhotosClose = () => setBusShowModal(false);
   const handleBusPhotosShow = (id) => {
     setSelectedBusId(id);
-    setBusShowModal(true)
+    setBusShowModal(true);
 
     // const selectedBus = busPhotos.find((bus) => bus.id === id);
-    const selectedBus = busList?.bus_array?.find(bus => bus.id === id);
+    const selectedBus = busList?.bus_array?.find((bus) => bus.id === id);
 
     // If the bus is found, update the state with its image_array
     if (selectedBus && selectedBus.image_array) {
       setBusPhotos(selectedBus.image_array);
-      setCurrentIndex(0)
+      setCurrentIndex(0);
     } else {
       setBusPhotos([]); // Reset to an empty array if no images are found
     }
@@ -117,7 +136,7 @@ const BusList = (seat) => {
 
   const handleBusPhotosClose = () => {
     setSelectedBusId(null);
-    setBusShowModal(false)
+    setBusShowModal(false);
   };
   // const [filteredCities, setFilteredCities] = useState([]);
 
@@ -128,16 +147,16 @@ const BusList = (seat) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
-    setFrom(displayFrom)
-    setTo(displayTo)
+    setFrom(displayFrom);
+    setTo(displayTo);
 
-    setShowModal(true)
-    handleHideBusSeat()
+    setShowModal(true);
+    handleHideBusSeat();
   };
   const handleCloseModal = () => {
-    setFrom(displayFrom)
-    setTo(displayTo)
-    setShowModal(false)
+    setFrom(displayFrom);
+    setTo(displayTo);
+    setShowModal(false);
   };
 
   const {
@@ -150,7 +169,6 @@ const BusList = (seat) => {
   const [to, setTo] = useState(initialTo);
   const [displayFrom, setDisplayFrom] = useState(initialFrom);
   const [displayTo, setDisplayTo] = useState(initialTo);
-
 
   const [inputValue, setInputValue] = useState(intialInputValue);
   const [busInputValue, setBusInputValue] = useState("");
@@ -198,6 +216,10 @@ const BusList = (seat) => {
   const history = useHistory();
   const [showSeats, setShowSeats] = useState(false);
   const [value, setValue] = useState(0);
+  const [selectedSeatLayout2, setSelectedSeatLayout2] = useState([])
+  const [selectedSeatLayout1, setSelectedSeatLayout1] = useState([])
+
+
   const [selectedLowerSeat, setSelectedLowerSeat] = useState([]);
   const [selectedLowerSeatPrice, setSelectedLowerSeatPrice] = useState([]);
   const [selectedUpperSeat, setSelectedUpperSeat] = useState([]);
@@ -216,12 +238,10 @@ const BusList = (seat) => {
   const [selectedPrice, setSelectedPrice] = useState([]);
   const [selectedTime, setSelectedTime] = useState([]);
 
-
   const [busAcType, setBusActype] = useState([]);
   const [busType, setBusType] = useState([]);
   const [price, setPrice] = useState([]);
   const [time, setTime] = useState([]);
-
 
   const [priceRange, setPriceRange] = useState([500, 5000]);
   const [tempDate, setTempDate] = useState(formattedDate);
@@ -230,6 +250,7 @@ const BusList = (seat) => {
   const [toTime, setToTime] = useState();
   const [loading, setLoading] = useState(false);
   const [start, setStart] = useState(0);
+  const [bookingType, setBookingType] = useState("");
 
   const [unholdSeat, setUnholdSeat] = useState([]);
   const [unholdBus, setUnholdBus] = useState();
@@ -248,11 +269,32 @@ const BusList = (seat) => {
     localStorage.removeItem("passengerData");
   }, []);
 
+  useEffect(() => {
+    const upperSeats = selectedSeatLayout2
+      .filter(seat => seat.UpLowBerth === 'UB')
+      .map(seat => seat.SeatNo);
+
+    const lowerSeats = selectedSeatLayout2
+      .filter(seat => seat.UpLowBerth === 'LB')
+      .map(seat => seat.SeatNo);
+
+    const total = selectedSeatLayout2.reduce((sum, seat) => {
+      return sum + (parseInt(seat.seat_price) || 0);
+    }, 0);
+
+    setSelectedUpperSeat(upperSeats);
+    setSelectedLowerSeat(lowerSeats);
+    setTotalPrice(total);
+  }, [selectedSeatLayout2]);
+
   const handleSelectBoardingPoint = (event) => {
     const selectedPoint = busWisePickupDropPoints?.boarding_array?.find(
       (point) => point.boarding_id === event.target.value
     );
-    localStorage.setItem("SelectedBoardingValue", JSON.stringify(selectedPoint));
+    localStorage.setItem(
+      "SelectedBoardingValue",
+      JSON.stringify(selectedPoint)
+    );
     setSelectedBoardingValue(selectedPoint);
     setValue(1);
   };
@@ -279,41 +321,46 @@ const BusList = (seat) => {
     const localBusId = JSON.parse(localStorage.getItem("bus_id"));
     const localMainBoardingPointId = JSON.parse(localStorage.getItem("main_boarding_point_id"));
     const localMainDropingPointId = JSON.parse(localStorage.getItem("main_droping_point_id"));
-    // const localBookingType = JSON.parse(localStorage.getItem("booking_type"));
-    // const localMainBoardingPointIdArr = JSON.parse(localStorage.getItem("main_boarding_point_id_arr"));
-    // const localMainDropingPointIdArr = JSON.parse(localStorage.getItem("main_droping_point_id_arr"));
-
+    const localBookingType = JSON.parse(localStorage.getItem("booking_type"));
+    const localMainBoardingPointIdArr = JSON.parse(localStorage.getItem("main_boarding_point_id_arr"));
+    const localMainDropingPointIdArr = JSON.parse(localStorage.getItem("main_droping_point_id_arr"));
     const SelectedDroping = JSON.parse(localStorage.getItem("SelectedDropingValue"));
     const SelectedBoarding = JSON.parse(localStorage.getItem("SelectedBoardingValue"));
     const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats"));
     const servicetax = JSON.parse(localStorage.getItem("serviceTax"));
     const selectedUpperSeats = JSON.parse(localStorage.getItem("selectedUpperSeats"));
     const totalPriceLocal = localStorage.getItem("totalPrice");
-
+    setSelectedLowerSeat(selectedSeats);
+    setSelectedUpperSeat(selectedUpperSeats);
+    setSelectedLowerSeats(selectedSeats);
+    setSelectedUpperSeats(selectedUpperSeats);
     if (
       userID &&
       localBusType &&
       localBusId &&
       localMainBoardingPointId &&
-      localMainDropingPointId
-      // localBookingType &&
-      // localMainBoardingPointIdArr &&
-      // localMainDropingPointIdArr
+      localMainDropingPointId &&
+      localBookingType &&
+      localMainBoardingPointIdArr &&
+      localMainDropingPointIdArr
+
     ) {
       handleShowBusSeat(
         localBusType,
         localBusId,
         localMainBoardingPointId,
         localMainDropingPointId,
-        // localBookingType ,
-        // localMainBoardingPointIdArr ,
-        // localMainDropingPointIdArr
+        localBookingType,
+        localMainBoardingPointIdArr,
+        localMainDropingPointIdArr
       );
       setSelectedDropingValue(SelectedDroping);
       setSelectedBoardingValue(SelectedBoarding);
       setTotalPrice(totalPriceLocal);
       setSelectedLowerSeat(selectedSeats);
       setSelectedUpperSeat(selectedUpperSeats);
+      setSelectedLowerSeats(selectedSeats);
+      setSelectedUpperSeats(selectedUpperSeats);
       setServiceTax(servicetax);
     } else {
       console.error(
@@ -322,8 +369,7 @@ const BusList = (seat) => {
     }
   }, []);
 
-  useEffect(() => {
-  }, [
+  useEffect(() => { }, [
     from?.id,
     to?.id,
     formattedDate,
@@ -358,17 +404,16 @@ const BusList = (seat) => {
   };
   // Function to compare boarding date and time with current date and time
   const isBoardingTimePassed = (boardingTime) => {
-
     if (formattedDate && boardingTime) {
       // Parse the date part
-      const [year, month, day] = formattedDate.split('-').map(Number);
+      const [year, month, day] = formattedDate.split("-").map(Number);
 
       // Convert "6:30 PM" to 24-hour time
-      const [time, meridian] = boardingTime.split(' ');
-      let [hour, minute] = time.split(':').map(Number);
+      const [time, meridian] = boardingTime.split(" ");
+      let [hour, minute] = time.split(":").map(Number);
 
-      if (meridian === 'PM' && hour < 12) hour += 12;
-      if (meridian === 'AM' && hour === 12) hour = 0;
+      if (meridian === "PM" && hour < 12) hour += 12;
+      if (meridian === "AM" && hour === 12) hour = 0;
 
       const boardingDateObj = new Date(year, month - 1, day, hour, minute);
       const currentDateObj = new Date();
@@ -378,7 +423,6 @@ const BusList = (seat) => {
 
     return false;
   };
-
 
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
@@ -433,8 +477,6 @@ const BusList = (seat) => {
 
     data.append("arrival_time", arrivalTime);
 
-
-
     data.append("from_price", "");
     data.append("to_price", "");
     data.append(
@@ -445,28 +487,19 @@ const BusList = (seat) => {
     data.append("amenities", amenitiesJSON);
 
     try {
-      await axios
-        .post("search_bus", data, {
-        })
-        .then((res) => {
-          setBusList(res.data.data);
-          setOpenDialog(false);
-          setLoading(false);
+      await axios.post("search_bus", data, {}).then((res) => {
+        setBusList(res.data.data);
+        setOpenDialog(false);
+        setLoading(false);
 
-          firstInputRef.current?.focus();
-
-        });
+        firstInputRef.current?.focus();
+      });
       setLoading(false);
-
-
     } catch (error) {
       toast.error(error.data.message);
       setLoading(false);
-
     } finally {
       setLoading(false);
-
-
     }
   };
 
@@ -481,33 +514,28 @@ const BusList = (seat) => {
     data.append("bus_name", inputValue ? inputValue : "");
 
     try {
-      await axios
-        .post("search_bus", data, {
-        })
-        .then((res) => {
-          setBusList(res.data.data);
-          setOpenDialog(false);
+      await axios.post("search_bus", data, {}).then((res) => {
+        setBusList(res.data.data);
+        setOpenDialog(false);
 
-          setSelectedBusTypeAc([]);
-          setBusPhotos(res.data.data.bus_array);
-          setSelectedBusType([]);
-          setSelectedPrice([])
-          setSelectedTime([]);
-          setFromTime();
-          setToTime();
-          setSelectedBusTypeAc("");
-          setSelectedBusType("");
-          setPriceRange([500, 5000]);
-          setSelectedAmenities([]);
-          setSelectedAmenitiesId([]);
-          firstInputRef.current?.focus();
-
-        });
+        setSelectedBusTypeAc([]);
+        setBusPhotos(res.data.data.bus_array);
+        setSelectedBusType([]);
+        setSelectedPrice([]);
+        setSelectedTime([]);
+        setFromTime();
+        setToTime();
+        setSelectedBusTypeAc("");
+        setSelectedBusType("");
+        setPriceRange([500, 5000]);
+        setSelectedAmenities([]);
+        setSelectedAmenitiesId([]);
+        firstInputRef.current?.focus();
+      });
     } catch (error) {
       toast.error(error.data.message);
     } finally {
       setLoading(false);
-
     }
   };
 
@@ -520,16 +548,47 @@ const BusList = (seat) => {
 
     setLoading(true);
 
+    let url = "";
+    if (booking_type === "2") {
+      url = "bus_layout_new";
+    } else if (booking_type === "1") {
+      url = "bus_layout_old";
+    } else {
+      console.error("Error in selecting booking type layout");
+      setLoading(false);
+      return;
+    }
+
     try {
-      await axios.post("bus_layout", data, {}).then((res) => {
-        if (res.data.success == true) {
+      const res = await axios.post(url, data);
+      if (res.data.success) {
+        if (booking_type === "2") {
           setBusLayoutData(res.data.data);
-        } else {
-          toast.error(res.data.message || "Invalid Message");
+          console.log(busLayoutData, "busLayoutData")
+          const secondRes = await axios.post("bus_layout", data);
+          if (secondRes.data.success) {
+            setBusLayoutData2(secondRes.data.data);
+            console.log(busLayoutData2, "busLayoutData2")
+
+          } else {
+            toast.error(secondRes.data.message || "Invalid second layout message");
+          }
+        } else if (booking_type === "1") {
+          const layoutData = res.data.data.BusLayoutData[0].layout; // Ensure that layout data exists
+
+          setBusLayoutData(layoutData)
+          console.log(busLayoutData, "busLayoutData1")
+
+
+
         }
-      });
-    } catch (res) {
-      toast.error(res.data.message);
+      } else {
+        toast.error(res.data.message || "Invalid Message");
+      }
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -539,7 +598,7 @@ const BusList = (seat) => {
     main_droping_point_id,
     booking_type,
     main_boarding_point_id_arr,
-    main_droping_point_id_arr,
+    main_droping_point_id_arr
   ) => {
     setLoading(true);
 
@@ -560,14 +619,11 @@ const BusList = (seat) => {
         }
       });
       setLoading(false);
-
     } catch (res) {
       toast.error(res.data.message);
       setLoading(false);
-
     } finally {
       setLoading(false);
-
     }
   };
 
@@ -581,16 +637,10 @@ const BusList = (seat) => {
         setBusType(res.data.data?.bus_types);
         setPrice(res.data.data?.price_range_type);
         setTime(res.data.data?.arrival_time);
-
       });
-
     } catch (error) {
       toast.error(error.data.message);
-
-
     } finally {
-
-
     }
   };
 
@@ -609,7 +659,6 @@ const BusList = (seat) => {
     }, 0);
     setTotalPrice(newTotalPrice);
     localStorage.setItem("totalPrice", newTotalPrice);
-
   };
 
   const findSeatByNumber = (seatNumber) => {
@@ -660,9 +709,10 @@ const BusList = (seat) => {
       const newSelectedSeats = isSelected
         ? prevSelectedSeats.filter((seat) => seat !== seatNumber)
         : [...prevSelectedSeats, seatNumber];
-
       const allSelectedSeats = [...newSelectedSeats, ...selectedUpperSeats];
       setSelectedLowerSeat(newSelectedSeats);
+
+
       updateTotalPrice(allSelectedSeats);
 
       setImageSrcLower((prevImageSrc) => ({
@@ -677,6 +727,7 @@ const BusList = (seat) => {
   };
 
   const handleClickUpperSeat = (seatNumber) => {
+
     setSelectedUpperSeats((prevSelectedSeats) => {
       const isSelected = prevSelectedSeats.includes(seatNumber);
       const newSelectedSeats = isSelected
@@ -699,6 +750,11 @@ const BusList = (seat) => {
   };
 
   const [busLayoutData, setBusLayoutData] = useState([]);
+  const [busLayoutData1, setBusLayoutData1] = useState([]);
+  const [busLayoutData2, setBusLayoutData2] = useState([]);
+
+
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -707,23 +763,23 @@ const BusList = (seat) => {
   useEffect(() => {
     const savedRedirectPath = localStorage.getItem("redirectPath");
 
-    if (savedRedirectPath === '/login') {
+    if (savedRedirectPath === "/login") {
       setFrom(initialFrom);
       setTo(initialTo);
       setSelectedDate(formattedDate);
       localStorage.removeItem("redirectPath");
     }
-
   }, [location.state]);
 
   const handleShowBusSeat = (
+
     busType,
     busId,
     main_boarding_point_id,
     main_droping_point_id,
     booking_type,
     main_boarding_point_id_arr,
-    main_droping_point_id_arr,
+    main_droping_point_id_arr
   ) => {
     const userID = JSON.parse(localStorage.getItem("UserID"));
     if (!userID) {
@@ -742,8 +798,8 @@ const BusList = (seat) => {
         });
       }, 2000);
     } else {
+
       localStorage.setItem("bus_type", JSON.stringify(busType));
-      // localStorage.setItem("bus_id", JSON.stringify(busId));
       localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
       localStorage.setItem("main_droping_point_id", JSON.stringify(main_droping_point_id));
       localStorage.setItem("booking_type", JSON.stringify(booking_type));
@@ -784,6 +840,7 @@ const BusList = (seat) => {
       setBookingPolicies(false);
       setAmenitiesOpen(false);
       setBusID(busId);
+      setBookingType(booking_type);
       busLayoutAPI(busId, booking_type);
       BusWiseBoardingDroppingPoints(
         busId,
@@ -791,7 +848,7 @@ const BusList = (seat) => {
         main_droping_point_id,
         booking_type,
         main_boarding_point_id_arr,
-        main_droping_point_id_arr,
+        main_droping_point_id_arr
       );
     }
   };
@@ -813,34 +870,6 @@ const BusList = (seat) => {
     setSelectedBoardingValue({});
   };
 
-  const handleShowAmenities = (busId) => {
-    setReviewOpen(false);
-    setBookingPolicies(false);
-    setShowSeats(false);
-    setAmenitiesOpen(true);
-    setSelectedBusId(busId);
-    setSelectedAmenitiesBusId(busId);
-  };
-
-  const handleHideAmenities = (busId) => {
-    setAmenitiesOpen(false);
-    setSelectedBusId(busId);
-    setSelectedAmenitiesBusId(null);
-  };
-  const handleShowReview = (busId) => {
-    setBookingPolicies(false);
-    setAmenitiesOpen(false);
-    setShowSeats(false);
-    setReviewOpen(true);
-    setSelectedReviewBusId(busId);
-    setSelectedBusId(busId);
-  };
-
-  const handleHideReview = (busId) => {
-    setReviewOpen(false);
-    setSelectedReviewBusId(null);
-    setSelectedBusId(busId);
-  };
   const handleShowBookingPolicies = (busId) => {
     setReviewOpen(false);
     setAmenitiesOpen(false);
@@ -855,38 +884,6 @@ const BusList = (seat) => {
     setSelectedBusId(busId);
     setSelectedPoliciesBusId(null);
   };
-
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-    handleHideBusSeat();
-  };
-
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`tabpanel-${index}`}
-        aria-labelledby={`tab-${index}`}
-        {...other}
-        style={{
-          overflowY: "auto",
-          maxHeight: "400px",
-          scrollbarWidth: "thin",
-          scrollbarColor: "#1333a7 white",
-        }}
-      >
-        {value === index && (
-          <Box p={3}>
-            <Typography>{children}</Typography>
-          </Box>
-        )}
-      </div>
-    );
-  }
-
   const [filters, setFilters] = useState({
     departureTime: {
       before6am: false,
@@ -909,7 +906,6 @@ const BusList = (seat) => {
       earlyMorning: false,
       morning: false,
     },
-
   });
 
   const cityList = async (searchTerm = "", start = 0) => {
@@ -932,22 +928,13 @@ const BusList = (seat) => {
       } else {
         setCities((prevCities) => [...prevCities, ...newCities]);
       }
-
-
-
     } catch (error) {
       console.error("Error fetching city list:", error);
-
-
-
     } finally {
-
-
     }
   };
 
   const cityToList = async (searchTerm, start = 0) => {
-
     let data = new FormData();
     data.append("city_name", searchTerm);
     data.append("start", start);
@@ -964,11 +951,9 @@ const BusList = (seat) => {
       } else {
         setToCities((prevCities) => [...prevCities, ...newCities]);
       }
-
     } catch (error) {
       console.error("Error fetching filtered city list:", error);
     } finally {
-
     }
   };
 
@@ -1052,7 +1037,6 @@ const BusList = (seat) => {
         return [...prevSelected, { id: facilityId }];
       }
     });
-
   };
 
   const handleCheckboxBusTypeAc = (type) => {
@@ -1071,7 +1055,6 @@ const BusList = (seat) => {
   };
 
   const seatHoldAPI = async (item) => {
-
     setLoading(true);
     const selectedTotalSeat = selectedUpperSeats.concat(selectedLowerSeats);
     let data = new FormData();
@@ -1093,17 +1076,25 @@ const BusList = (seat) => {
 
     for (let i = 0; i < selectedTotalSeat.length; i++) {
       const seatNumber = selectedTotalSeat[i];
-      const seatPrice = findSeatPriceByNumber(seatNumber);
-      const serviceTax = findServiceTaxByNumber(seatNumber);
+      let seatPrice ;
+      let serviceTax ;
+      seatPrice = findSeatPriceByNumber1(seatNumber);
+      serviceTax = findServiceTaxByNumber1(seatNumber);
+
+      // if (bookingType === "1") {
+      //    seatPrice = findSeatPriceByNumber1(seatNumber);
+      //    serviceTax = findServiceTaxByNumber1(seatNumber);
+      // }else if (bookingType === "2"){
+      //   seatPrice = findSeatPriceByNumber2(seatNumber);
+      //   serviceTax = findServiceTaxByNumber2(seatNumber);
+      // }
       tempServiceTaxArray.push(serviceTax); // collect service tax values
 
       data.append(`seat_number[${i}]`, seatNumber);
       data.append(`seat_price[${i}]`, seatPrice);
       data.append(`service_tax[${i}]`, serviceTax);
-
     }
     setServiceTax(tempServiceTaxArray);
-
 
     try {
       await axios.post("ticket_booking_hold_data", data, {}).then((res) => {
@@ -1117,10 +1108,12 @@ const BusList = (seat) => {
             history.push({
               pathname: "/passange-details",
               state: {
+                selectedUpperSeat,
+                selectedLowerSeat,
                 selectedUpperSeats,
                 selectedLowerSeats,
                 totalPrice,
-                serviceTax: tempServiceTaxArray, // ✅ Use the freshly created array here
+                serviceTax: tempServiceTaxArray,
                 selectedUpperSeatPrice,
                 selectedLowerSeatPrice,
                 bus_id: item?.id,
@@ -1149,7 +1142,6 @@ const BusList = (seat) => {
             });
           } else {
             toast.success(res.data.message);
-
           }
         } else {
           toast.error(res.data.message || "Invalid Message");
@@ -1159,42 +1151,150 @@ const BusList = (seat) => {
       toast.error(res.data.message);
     } finally {
       setLoading(false);
-
-
     }
   };
 
-  const findSeatPriceByNumber = (seatNumber) => {
-    const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout.flat().find(seat => seat.seat_number === seatNumber);
-    const upperSeat = busLayoutData.BusLayoutData[0].upper_layout.flat().find(seat => seat.seat_number === seatNumber);
+  const findSeatPriceByNumber1 = (seatNumber) => {
+    if (bookingType === "2") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
 
+      if (lowerSeat) {
+        return lowerSeat.seat_price;
+      } else if (upperSeat) {
+        return upperSeat.seat_price;
+      }
 
-    if (lowerSeat) {
-      return lowerSeat.seat_price;
-    } else if (upperSeat) {
-      return upperSeat.seat_price;
+      return 0;
+    } else if (bookingType === "1") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+
+      if (lowerSeat) {
+        return lowerSeat.seat_price;
+      } else if (upperSeat) {
+        return upperSeat.seat_price;
+      }
+
+      return 0;
     }
 
-    return 0;
   };
 
 
-  const findServiceTaxByNumber = (seatNumber) => {
-    const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout.flat().find(seat => seat.seat_number === seatNumber);
-    const upperSeat = busLayoutData.BusLayoutData[0].upper_layout.flat().find(seat => seat.seat_number === seatNumber);
+  const findServiceTaxByNumber1 = (seatNumber) => {
+    if (bookingType === "1") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
 
-    if (lowerSeat) {
-      console.log("lowerSeat", lowerSeat.service_tax);
+      if (lowerSeat) {
+        return lowerSeat.service_tax;
+      } else if (upperSeat) {
+        return upperSeat.service_tax;
+      }
 
-      return lowerSeat.service_tax;
-    } else if (upperSeat) {
-      console.log("lowerSeat", upperSeat.service_tax);
+      return 0;
+    }
+    else if (bookingType === "1") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
 
-      return upperSeat.service_tax;
+      if (lowerSeat) {
+        return lowerSeat.service_tax;
+      } else if (upperSeat) {
+        return upperSeat.service_tax;
+      }
 
+      return 0;
+    }
+  };
+
+
+  const findSeatPriceByNumber2 = (seatNumber) => {
+    if (bookingType === "2") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+
+      if (lowerSeat) {
+        return lowerSeat.seat_price;
+      } else if (upperSeat) {
+        return upperSeat.seat_price;
+      }
+
+      return 0;
+    } else if (bookingType === "1") {
+      const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+
+      if (lowerSeat) {
+        return lowerSeat.seat_price;
+      } else if (upperSeat) {
+        return upperSeat.seat_price;
+      }
+
+      return 0;
     }
 
-    return 0;
+  };
+
+
+  const findServiceTaxByNumber2 = (seatNumber) => {
+    if (bookingType === "2") {
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+
+      if (lowerSeat) {
+        return lowerSeat.service_tax;
+      } else if (upperSeat) {
+        return upperSeat.service_tax;
+      }
+
+      return 0;
+    }
+    else if (bookingType === "1") {
+      const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+      const upperSeat = busLayoutData.BusLayoutData[0].upper_layout
+        .flat()
+        .find((seat) => seat.seat_number === seatNumber);
+
+      if (lowerSeat) {
+        return lowerSeat.service_tax;
+      } else if (upperSeat) {
+        return upperSeat.service_tax;
+      }
+
+      return 0;
+    }
   };
 
   const swapLocations = () => {
@@ -1204,8 +1304,9 @@ const BusList = (seat) => {
   };
 
   const handleConfirmSeat = (item) => {
+
     const newErrors = {};
-    if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0) {
+    if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0 && selectedSeatLayout2.length == 0) {
       newErrors.selectedLowerSeats = "Select any Seat";
       toast.error("Select any Seat");
     } else if (!selectedboardingValue?.boarding_id) {
@@ -1263,7 +1364,6 @@ const BusList = (seat) => {
     }
   };
 
-
   return (
     <>
       <div>
@@ -1281,24 +1381,25 @@ const BusList = (seat) => {
         />
         <div className="breadcrumbs--div">
           <div className="container">
-            <div
-              className="breadcrumb flex-sm-nowrap justify-content-between align-items-center my-3 text-capitalize"
-              style={{ gap: "30px" }}
-            >
+            <div className="breadcrumb flex-sm-nowrap justify-content-between align-items-center my-3 text-capitalize" style={{ gap: "30px" }}>
               <div className="datedestination flex-fill">
                 <span>{format(tempDate, "d MMM yyyy")}</span>
-                <h5>
-                  <ul className="list-unstyled d-flex gap-2 align-items-center m-0" ref={firstInputRef} tabIndex={-1} style={{ outline: "none" }}>
-                    <li style={{ whiteSpace: "nowrap" }}>
-                      {displayFrom?.city_name}
-                    </li>
-                    <li>
-                      <MdOutlineArrowForwardIos />
-                    </li>
-                    <li style={{ whiteSpace: "nowrap" }}>
-                      {displayTo?.city_name}
-                    </li>
-                  </ul>
+                <h5><ul
+                  className="list-unstyled d-flex gap-2 align-items-center m-0"
+                  ref={firstInputRef}
+                  tabIndex={-1}
+                  style={{ outline: "none" }}
+                >
+                  <li style={{ whiteSpace: "nowrap" }}>
+                    {displayFrom?.city_name}
+                  </li>
+                  <li>
+                    <MdOutlineArrowForwardIos />
+                  </li>
+                  <li style={{ whiteSpace: "nowrap" }}>
+                    {displayTo?.city_name}
+                  </li>
+                </ul>
                 </h5>
               </div>
 
@@ -1323,9 +1424,8 @@ const BusList = (seat) => {
                             color: "rgb(121 44 143)",
                           }}
                         >
-                          <FaFilter />    Filter
+                          <FaFilter /> Filter
                         </Button>
-
                       </div>
                     </div>
                   </Navbar>
@@ -1339,7 +1439,7 @@ const BusList = (seat) => {
                     data-target="#exampleModal"
                     className="h-100 px-4 py-1 w-100 gap-2"
                   >
-                    <FontAwesomeIcon icon={faPenNib} />   Modify
+                    <FontAwesomeIcon icon={faPenNib} /> Modify
                   </Button>
                 </div>
                 {showModal && (
@@ -1373,7 +1473,6 @@ const BusList = (seat) => {
                                 <Autocomplete
                                   id="from-city"
                                   options={cities}
-
                                   getOptionLabel={(option) => {
                                     const labels = [
                                       option.city_name,
@@ -1384,7 +1483,6 @@ const BusList = (seat) => {
 
                                     return labels.join(", ");
                                   }}
-
                                   value={from}
                                   onChange={(event, newValue) => {
                                     setFrom(newValue);
@@ -1439,10 +1537,13 @@ const BusList = (seat) => {
                                             color: "#666",
                                           }}
                                         >
-                                          {[option.taluka_name, option.jilla_name, option.state_name]
+                                          {[
+                                            option.taluka_name,
+                                            option.jilla_name,
+                                            option.state_name,
+                                          ]
                                             .filter(Boolean)
                                             .join(", ")}
-
                                         </span>
                                       </li>
 
@@ -1481,7 +1582,6 @@ const BusList = (seat) => {
                                 <Autocomplete
                                   id="from-city"
                                   options={toCities}
-
                                   getOptionLabel={(option) => {
                                     const labels = [
                                       option.city_name,
@@ -1492,7 +1592,6 @@ const BusList = (seat) => {
 
                                     return labels.join(", ");
                                   }}
-
                                   value={to}
                                   onChange={(event, newValue) => {
                                     setTo(newValue);
@@ -1548,10 +1647,13 @@ const BusList = (seat) => {
                                             color: "#666",
                                           }}
                                         >
-                                          {[option.taluka_name, option.jilla_name, option.state_name]
+                                          {[
+                                            option.taluka_name,
+                                            option.jilla_name,
+                                            option.state_name,
+                                          ]
                                             .filter(Boolean)
                                             .join(", ")}
-
                                         </span>
                                       </li>
 
@@ -1633,9 +1735,7 @@ const BusList = (seat) => {
                               width: "40%",
                               backgroundColor: "rgb(121 44 143)",
                             }}
-                            onClick={
-                              handleSearch
-                            }
+                            onClick={handleSearch}
                           >
                             Search
                           </Button>
@@ -1648,6 +1748,7 @@ const BusList = (seat) => {
             </div>
           </div>
         </div>
+
         <div className="searchpage--main mt-2 card-border">
           <div className="searchpagediv">
             <div className="container-md container-sm container-xl">
@@ -1668,80 +1769,24 @@ const BusList = (seat) => {
                           <h5 className="fw-bolder text-capitalize">filters</h5>
                         </div>
                         <div className="filter--main">
-                          {/* <div className="fltrtitle my-4">
-                            <h5 className="text-capitalize mb-2 fw-semibold">
-                              Amenities
-                            </h5>
-                            <ul className="filterul list-unstyled d-flex flex-wrap column-gap-2 align-items-center">
-                              {amenities.map((label, index) => (
-                                <li className="fltrli mb-2" key={index}>
-                                  <div>
-                                    <input
-                                      type="checkbox"
-                                      id={`amenity-${index}`}
-                                      className="btn-check"
-                                      autoComplete="off"
-                                      checked={selectedAmenities.includes(
-                                        label.facility_name
-                                      )}
-                                      onChange={() =>
-                                        handleCheckboxChange(
-                                          label.facility_name,
-                                          label.id
-                                        )
-                                      }
-                                      style={{ display: "none" }}
-                                    />
-                                    <label
-                                      htmlFor={`amenity-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
-                                      style={{
-                                        border: "1px solid gray",
-                                        cursor: "pointer",
-                                        alignItems: "center",
-                                      }}
-                                    >
-                                      {label.image && (
-                                        <img
-                                          src={
-                                            busList?.image_url + label?.image
-                                          }
-                                          alt={label.facility_name}
-                                          style={{
-                                            maxHeight: "20px",
-                                            maxWidth: "20px",
-                                            width: "20px",
-                                            objectFit: "contain",
-                                          }}
-                                        />
-                                      )}
-                                      <span style={{ fontSize: "16px" }}>
-                                        {label.facility_name}
-                                      </span>
-                                    </label>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div> */}
+
 
                           <div className="fltrtitle my-4">
-                            <h5
-                              className="text-capitalize fw-semibold d-flex"
-                            >
+                            <h5 className="text-capitalize fw-semibold d-flex">
                               bus ac
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {busAcType.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
+                                <li
+                                  className="fltrli mb-2 col-md-6 p-2 pt-0"
+                                  key={index}
+                                >
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1775,7 +1820,7 @@ const BusList = (seat) => {
                                             height: "20px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -1789,22 +1834,21 @@ const BusList = (seat) => {
                             </ul>
                           </div>
                           <div className="fltrtitle my-4">
-                            <h5
-                              className="text-capitalize fw-semibold d-flex"
-                            >
+                            <h5 className="text-capitalize fw-semibold d-flex">
                               bus type
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {busType.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
+                                <li
+                                  className="fltrli mb-2 col-md-6 p-2 pt-0"
+                                  key={index}
+                                >
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1838,7 +1882,7 @@ const BusList = (seat) => {
                                             height: "20px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -1852,22 +1896,21 @@ const BusList = (seat) => {
                             </ul>
                           </div>
                           <div className="fltrtitle my-4">
-                            <h5
-                              className="text-capitalize fw-semibold d-flex"
-                            >
+                            <h5 className="text-capitalize fw-semibold d-flex">
                               Sort By Price
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {price.map((label, index) => (
-                                <li className="fltrli mb-2 col-md-6 p-2 pt-0" key={index}>
+                                <li
+                                  className="fltrli mb-2 col-md-6 p-2 pt-0"
+                                  key={index}
+                                >
                                   <div>
                                     <input
                                       type="checkbox"
@@ -1901,7 +1944,7 @@ const BusList = (seat) => {
                                             height: "20px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -1916,18 +1959,14 @@ const BusList = (seat) => {
                             </ul>
                           </div>
                           <div className="fltrtitle my-4">
-                            <h5
-                              className="text-capitalize fw-semibold d-flex"
-                            >
+                            <h5 className="text-capitalize fw-semibold d-flex">
                               Arrival Time
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {time.map((label, index) => (
@@ -1968,7 +2007,7 @@ const BusList = (seat) => {
                                             height: "20px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -1982,8 +2021,6 @@ const BusList = (seat) => {
                               ))}
                             </ul>
                           </div>
-
-
 
                           <div
                             className="gap-2"
@@ -2112,9 +2149,7 @@ const BusList = (seat) => {
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row">
                               {busAcType.map((label, index) => (
@@ -2140,7 +2175,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
-                                        justifyContent: "center"
+                                        justifyContent: "center",
                                       }}
                                     >
                                       {label.image && (
@@ -2152,7 +2187,7 @@ const BusList = (seat) => {
                                             height: "30px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -2176,9 +2211,7 @@ const BusList = (seat) => {
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {busType.map((label, index) => (
@@ -2204,7 +2237,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
-                                        justifyContent: "center"
+                                        justifyContent: "center",
                                       }}
                                     >
                                       {label.image && (
@@ -2216,7 +2249,7 @@ const BusList = (seat) => {
                                             height: "30px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -2235,15 +2268,12 @@ const BusList = (seat) => {
                               style={{ alignItems: "baseline" }}
                             >
                               Sort By Price
-
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {price.map((label, index) => (
@@ -2269,9 +2299,8 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
-                                        justifyContent: "center"
+                                        justifyContent: "center",
                                       }}
-
                                     >
                                       {label.image && (
                                         <img
@@ -2282,7 +2311,7 @@ const BusList = (seat) => {
                                             height: "30px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -2301,15 +2330,12 @@ const BusList = (seat) => {
                               style={{ alignItems: "baseline" }}
                             >
                               Arrival Time
-
                               <p
                                 style={{
                                   fontSize: "medium",
                                   paddingLeft: "8px",
                                 }}
-                              >
-
-                              </p>
+                              ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
                               {time.map((label, index) => (
@@ -2335,7 +2361,7 @@ const BusList = (seat) => {
                                         border: "1px solid gray",
                                         cursor: "pointer",
                                         alignItems: "center",
-                                        justifyContent: "center"
+                                        justifyContent: "center",
                                       }}
                                     >
                                       {label.image && (
@@ -2347,7 +2373,7 @@ const BusList = (seat) => {
                                             height: "30px",
                                             objectFit: "cover",
                                             padding: "0px",
-                                            margin: "0px"
+                                            margin: "0px",
                                           }}
                                         />
                                       )}
@@ -2360,7 +2386,6 @@ const BusList = (seat) => {
                               ))}
                             </ul>
                           </div>
-
 
                           <div
                             className="gap-2"
@@ -2438,7 +2463,6 @@ const BusList = (seat) => {
                       style={{ color: "rgb(121 44 143)", fontSize: "x-large" }}
                       className="text-center mt-5"
                     >
-
                       {"Logout"}
                     </DialogTitle>
                     <DialogContent>
@@ -2506,10 +2530,10 @@ const BusList = (seat) => {
                               As of now this route is offline.
                             </h5>
                             <h5 className="text-capitalize d-flex gap-2 align-items-baseline">
-                              For booking, request to call on <h4 className="fw-bold text-black">9930031000</h4>
+                              For booking, request to call on{" "}
+                              <h4 className="fw-bold text-black">9930031000</h4>
                             </h5>
                           </Alert>
-
                         </div>
                       </div>
                     </div>
@@ -2558,9 +2582,11 @@ const BusList = (seat) => {
                                         paddingRight: "10px",
                                         marginRight: "10px",
                                         cursor: "pointer",
-                                        color: "rgb(108, 42, 127)"
+                                        color: "rgb(108, 42, 127)",
                                       }}
-                                      onClick={() => handleBusPhotosShow(item.id)}
+                                      onClick={() =>
+                                        handleBusPhotosShow(item.id)
+                                      }
                                     >
                                       Bus Photos
                                     </p>
@@ -2577,7 +2603,6 @@ const BusList = (seat) => {
                                       {item.review_summary.total_reviews}
                                     </p>
                                     <span style={{ display: "flex" }}>
-
                                       <IoStarSharp
                                         style={{
                                           color: "rgb(108, 42, 127)",
@@ -2656,49 +2681,55 @@ const BusList = (seat) => {
                                       </div>
                                     </div>
                                   </div>
-                                  {/* <div className="col-lg-4 ">
-                                    <div className="tcktpricediv text-end">
-                                      <h4 className="fw-bold m-0 bus_list_price">
-                                        ₹{item?.bus_price}
-                                      </h4>
-                                    </div>
-                                  </div> */}
+
                                 </div>
 
                                 <div className="features--div">
                                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap mt-2">
                                     <div className="d-flex flex-wrap gap-2 px-3 w-100 pb-3">
                                       {item?.amenities?.map((ami, index) => (
-
-                                        <div key={index} style={{ whiteSpace: "pre" }} className="d-flex gap-2 align-items-center" >
-
+                                        <div
+                                          key={index}
+                                          style={{ whiteSpace: "pre" }}
+                                          className="d-flex gap-2 align-items-center"
+                                        >
                                           <Tooltip title={ami?.ameniti_name}>
-                                           <div style={{border:"1.5px solid purple", padding:'5px', borderRadius:"50%"}}>
-                                           <img
-                                              src={busList?.image_url + ami?.image}
-                                              alt=""
-                                              className="img-fluid filter_icon_bus"
+                                            <div
                                               style={{
-                                                width: "16px",
-                                                height: "16px",
-                                                objectFit: "contain",
-                                                marginInline: "5px",
+                                                border: "1.5px solid purple",
+                                                padding: "5px",
+                                                borderRadius: "50%",
                                               }}
-                                            />
-                                           </div>
+                                            >
+                                              <img
+                                                src={
+                                                  busList?.image_url +
+                                                  ami?.image
+                                                }
+                                                alt=""
+                                                className="img-fluid filter_icon_bus"
+                                                style={{
+                                                  width: "16px",
+                                                  height: "16px",
+                                                  objectFit: "contain",
+                                                  marginInline: "5px",
+                                                }}
+                                              />
+                                            </div>
                                           </Tooltip>
                                           {/* <h5 className="d-md-block d-none d-sm-none m-0 me-4 amenities_filter_bus_list">
                                               {ami?.ameniti_name}
                                             </h5> */}
                                         </div>
                                       ))}
-
                                     </div>
                                     <ul
                                       className="align-items-lg-center capitalize d-flex row-gap-2 featurenav flex-lg-row flex-md-column justify-content-end text-end list-unstyled px-3 text- w-100 bus_cancellation_view"
-                                      style={{ whiteSpace: "pre", margin: "0px" }}
+                                      style={{
+                                        whiteSpace: "pre",
+                                        margin: "0px",
+                                      }}
                                     >
-
                                       <li
                                         className="nav-item cancellation_policy_bus"
                                         style={{
@@ -2706,39 +2737,14 @@ const BusList = (seat) => {
                                           color: "rgb(108, 42, 127)",
                                         }}
                                       >
-                                        <h4 className="fw-bold bus_list_price mx-3 my-2" style={{ color: 'black' }}>
+                                        <h4
+                                          className="fw-bold bus_list_price mx-3 my-2"
+                                          style={{ color: "black" }}
+                                        >
                                           ₹{item?.bus_price}
                                         </h4>
                                       </li>
-                                      {/* <li
-                                        className="nav-item cancellation_policy_bus"
-                                        style={{
-                                          cursor: "pointer",
-                                          color: "rgb(108, 42, 127)",
-                                        }}
-                                      >
-                                        {bookingPolicies &&
-                                          selectedPoliciesBusId === item.id ? (
-                                          <a
-                                            onClick={() =>
-                                              handleHideBookingPolicies(item.id)
-                                            }
-                                          >
-                                            Cancellation Policy
-                                            <MdOutlineKeyboardArrowUp className="fs-3" />
-                                          </a>
-                                        ) : (
-                                          <a
-                                            onClick={() =>
-                                              handleShowBookingPolicies(item.id)
-                                            }
-                                            style={{ minHeight: "10px" }}
-                                          >
-                                            Cancellation Policy
-                                            <MdOutlineKeyboardArrowDown className="fs-3" />
-                                          </a>
-                                        )}
-                                      </li> */}
+
                                       <li className="d-flex justify-content-end nav-item ">
                                         {selectedSeatBusId !== item.id ? (
                                           <Button
@@ -2750,14 +2756,14 @@ const BusList = (seat) => {
                                                 item.main_droping_point_id,
                                                 item.booking_type,
                                                 item.main_boarding_point_id_arr,
-                                                item.main_droping_point_id_arr,
+                                                item.main_droping_point_id_arr
                                               )
                                             }
                                             variant="contained"
                                             style={{
                                               backgroundColor:
                                                 "rgb(121 44 143)",
-                                                textTransform:"capitalize"
+                                              textTransform: "capitalize",
                                             }}
                                             className="seat_view_bus_list_txt h-100 w-100 m-0"
                                           >
@@ -2774,7 +2780,6 @@ const BusList = (seat) => {
                                           </Button>
                                         )}
                                       </li>
-
                                     </ul>
                                   </div>
                                   <div
@@ -2782,7 +2787,7 @@ const BusList = (seat) => {
                                     style={{
                                       cursor: "pointer",
                                       color: "rgb(108, 42, 127)",
-                                      padding: "0px 10px 5px 10px"
+                                      padding: "0px 10px 5px 10px",
                                     }}
                                   >
                                     {bookingPolicies &&
@@ -2823,1391 +2828,106 @@ const BusList = (seat) => {
                                         </div>
                                       </div>
                                     )}
+                                  {/*==================================================================== layout ====================================================================*/}
+
                                   <div className="tab-content">
                                     {selectedBusId === item.id &&
-                                      showSeats &&
-                                      busLayoutData?.BusLayoutData?.length >
-                                      0 && (
+                                      showSeats && (
                                         <>
                                           <div className="mt-4 p-4">
                                             <div>
                                               <div className="roww">
                                                 <div className="column11">
-                                                  <div className="row">
-                                                    {busTypeID == 2 &&
-                                                      busLayoutData?.BusLayoutData &&
-                                                      busLayoutData
-                                                        .BusLayoutData.length >
-                                                      0 && (
-                                                        <>
-                                                          {/* seat sofa */}
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-3"
-                                                                style={{
-                                                                  maxHeight:
-                                                                    "60px",
-                                                                }}
-                                                              >
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  1 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                                <li>
+                                                  {bookingType === "1" ?
+                                                    <SeatLayout1
+                                                      busLayoutData={busLayoutData}
+                                                      selectedSeatsFromParent={selectedSeatLayout1} // <-- pass it
 
-                                                                  <span className="fs-3">
+                                                      onSeatsChange={(seats) => {
 
-                                                                    Lower Deck
-                                                                  </span>
-                                                                </li>
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  0 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                              </div>
-                                                              {busLayoutData?.BusLayoutData[0].lower_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex "
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                      textAlign:
-                                                                        "center",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seating-none "></span>
-                                                                          ) : (
-                                                                            <span
-                                                                              className="d-block"
-                                                                              title={
-                                                                                isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
+                                                        setSelectedSeatLayout1(seats);
 
-                                                                              <div
-                                                                                className={`seat-container ${isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickLowerSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <span
+                                                        const upperSeats = seats
+                                                          .filter(seat => seat.seat_type === 'UB')
+                                                          .map(seat => seat.seat_number);
 
-                                                                                  style={{
-                                                                                    color:
-                                                                                      !isBookedLower(
-                                                                                        seat
-                                                                                      )
-                                                                                        ? "black"
-                                                                                        : "white",
+                                                        const lowerSeats = seats
+                                                          .filter(seat => seat.seat_type === 'LB')
+                                                          .map(seat => seat.seat_number);
 
-                                                                                  }}
-                                                                                >
-                                                                                  ₹
-                                                                                  {!isBookedLower(
-                                                                                    seat
-                                                                                  )
-                                                                                    ? seat.seat_price
-                                                                                    : ""}
-                                                                                </span>
-                                                                                <div>
-                                                                                  <img
-                                                                                    src={
-                                                                                      seat.gender ===
-                                                                                        "FEMALE"
-                                                                                        ? seatPink
-                                                                                        : isBookedLower(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? seatBlack
-                                                                                          : isBookedLower(
-                                                                                            seat
-                                                                                          )
-                                                                                            ? seatBlack
-                                                                                            : imageSrcLower[
-                                                                                            seat
-                                                                                              .seat_number
-                                                                                            ] ||
-                                                                                            seatEmpty
-                                                                                    }
-                                                                                    width="10%"
-                                                                                    height="10%"
-                                                                                    className="seating-seat-lower"
-                                                                                    style={{
-                                                                                      cursor:
-                                                                                        seat.gender ===
-                                                                                          "FEMALE" ||
-                                                                                          isBookedLower(
-                                                                                            seat
-                                                                                          )
-                                                                                          ? "not-allowed"
-                                                                                          : "pointer",
-                                                                                    }}
-                                                                                  ></img>
-                                                                                  <span className="seat-number-onlyseat">
-                                                                                    {
-                                                                                      seat.seat_number
-                                                                                    }
-                                                                                  </span>
-                                                                                </div>
-                                                                              </div>
-                                                                            </span>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-4 mr-4 "
-                                                                style={{
-                                                                  maxHeight:
-                                                                    "90px",
-                                                                }}
-                                                              >
-                                                                <li>
 
-                                                                  <span className="fs-3">
+                                                        const upperSeatPrices = seats
+                                                          .filter(seat => seat.seat_type === 'UB')
+                                                          .map(seat => parseInt(seat.seat_price) || 0);
 
-                                                                    Upper Deck
-                                                                  </span>
-                                                                </li>
-                                                              </div>
-                                                              {busLayoutData?.BusLayoutData[0].upper_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex justify-content-center gap-3 mb-3"
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seat-none"></span>
-                                                                          ) : (
-                                                                            <Tooltip
-                                                                              title={
-                                                                                isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
-                                                                              <div
-                                                                                className={`seat ${isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                style={{
-                                                                                  border:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" &&
-                                                                                      isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "2px solid pink"
-                                                                                      : isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                        ? "2px solid black"
-                                                                                        : selectedUpperSeats.includes(
-                                                                                          seat.seat_number
-                                                                                        )
-                                                                                          ? "2px solid #792C8F"
-                                                                                          : "",
-                                                                                  cursor:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" ||
-                                                                                      isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "not-allowed"
-                                                                                      : "pointer",
-                                                                                }}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickUpperSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <span className="text-black fs-6">
-                                                                                  {
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                </span>
-                                                                                <label
-                                                                                  htmlFor={
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                  className="text-white  d-flex align-items-center text-center"
-                                                                                  style={{
-                                                                                    fontSize:
-                                                                                      "0.70rem",
-                                                                                    backgroundColor:
-                                                                                      seat.gender ===
-                                                                                        "FEMALE" &&
-                                                                                        isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                        ? "pink"
-                                                                                        : isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black "
-                                                                                          : selectedUpperSeats.includes(
-                                                                                            seat.seat_number
-                                                                                          )
-                                                                                            ? "#792C8F"
-                                                                                            : "",
-                                                                                    cursor:
-                                                                                      "pointer",
-                                                                                  }}
-                                                                                  aria-disabled={isBookedUpper(
-                                                                                    seat
-                                                                                  )}
-                                                                                >
+                                                        const lowerSeatPrices = seats
+                                                          .filter(seat => seat.seat_type === 'LB')
+                                                          .map(seat => parseInt(seat.seat_price) || 0);
 
-                                                                                  <span
-                                                                                    style={{
-                                                                                      color:
-                                                                                        isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black"
-                                                                                          : "white",
-                                                                                    }}
-                                                                                  >
-                                                                                    ₹
-                                                                                    {!isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? seat.seat_price
-                                                                                      : ""}
-                                                                                  </span>
-                                                                                </label>
-                                                                              </div>
-                                                                            </Tooltip>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          <div className="col-xxl-4">
+                                                        const totalPrice = seats.reduce((total, seat) => {
+                                                          return total + (parseInt(seat.seat_price) || 0);
+                                                        }, 0);
 
-                                                            <div className="w-100 justify-content-between knowabt1">
-                                                              <h5 className="my-4">
-                                                                Know About Seats
-                                                                Type
-                                                              </h5>
-                                                              <div className="row justify-content-center">
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
-                                                                      Not
-                                                                      Available
-                                                                    </h6>
-                                                                    <div className="d-flex">
-                                                                      <img
-                                                                        src={
-                                                                          seatBlack
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                      <div className="seat-gray mb-3">
-                                                                        <span className="text-black fs-6"></span>
-                                                                        <label></label>
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
+                                                        setSelectedUpperSeat(upperSeats);
+                                                        setSelectedUpperSeats(upperSeats)
+                                                        setSelectedLowerSeat(lowerSeats);
+                                                        setSelectedLowerSeats(lowerSeats);
+                                                        setSelectedUpperSeatPrice(upperSeatPrices);
+                                                        setSelectedLowerSeatPrice(lowerSeatPrices);
+                                                        setTotalPrice(totalPrice);
+                                                      }}
 
-                                                                      Available
-                                                                    </h6>
-                                                                    <div className="d-flex">
-                                                                      <img
-                                                                        src={
-                                                                          seatEmpty
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                      <div className="seat-available mb-3">
-                                                                        <span className="text-black fs-6"></span>
-                                                                        <label></label>
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
 
-                                                                      Selected
-                                                                    </h6>
-                                                                    <div className="d-flex">
-                                                                      <img
-                                                                        src={
-                                                                          seatBlue
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                      <div className="seat-selected mb-3">
-                                                                        <span className="text-black fs-6"></span>
-                                                                        <label></label>
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                              </div>
-                                                              <div>
 
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </>
-                                                      )}
-                                                    {busTypeID == 0 &&
-                                                      busLayoutData?.BusLayoutData &&
-                                                      busLayoutData
-                                                        .BusLayoutData.length >
-                                                      0 && (
-                                                        <>
-                                                          {/* only seat */}
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-3"
-                                                                style={{
-                                                                  maxHeight:
-                                                                    "60px",
-                                                                }}
-                                                              >
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  1 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                                <li>
+                                                    />
+                                                    : <SeatLayout2
+                                                      busLayoutData={busLayoutData}
+                                                      selectedSeatsFromParent={selectedSeatLayout2} // <-- pass it
 
-                                                                  <span className="fs-3">
+                                                      onSeatsChange={(seats) => {
 
-                                                                    Lower Deck
-                                                                  </span>
-                                                                </li>
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  0 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                              </div>
-                                                              {busLayoutData.BusLayoutData[0].lower_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex"
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                      textAlign:
-                                                                        "center",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seating-none"></span>
-                                                                          ) : (
-                                                                            <Tooltip
-                                                                              title={
-                                                                                isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
-                                                                              <span
-                                                                                style={{
-                                                                                  color:
-                                                                                    !isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? "black"
-                                                                                      : "white",
-                                                                                }}
-                                                                              >
-                                                                                ₹
-                                                                                {!isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? seat.seat_price
-                                                                                  : ""}
-                                                                              </span>
-                                                                              <div
-                                                                                className={`seat-container ${isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickLowerSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <div>
-                                                                                  <img
-                                                                                    src={
-                                                                                      seat.gender ===
-                                                                                        "FEMALE"
-                                                                                        ? seatPink
-                                                                                        : isBookedLower(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? seatBlack
-                                                                                          : isBookedLower(
-                                                                                            seat
-                                                                                          )
-                                                                                            ? seatBlack
-                                                                                            : imageSrcLower[
-                                                                                            seat
-                                                                                              .seat_number
-                                                                                            ] ||
-                                                                                            seatEmpty
-                                                                                    }
-                                                                                    width="10%"
-                                                                                    height="10%"
-                                                                                    className="seating-seat"
-                                                                                    style={{
-                                                                                      cursor:
-                                                                                        seat.gender ===
-                                                                                          "FEMALE" ||
-                                                                                          isBookedLower(
-                                                                                            seat
-                                                                                          )
-                                                                                          ? "not-allowed"
-                                                                                          : "pointer",
-                                                                                    }}
-                                                                                  ></img>
-                                                                                  <span className="seat-number-onlyseat text-center">
-                                                                                    {
-                                                                                      seat.seat_number
-                                                                                    }
-                                                                                  </span>
-                                                                                </div>
-                                                                              </div>
-                                                                            </Tooltip>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-3"
-                                                                style={{
-                                                                  minHeight:
-                                                                    "55px",
-                                                                }}
-                                                              >
-                                                                <li>
+                                                        setSelectedSeatLayout2(seats);
 
-                                                                  <span className="fs-3">
+                                                        const upperSeats = seats
+                                                          .filter(seat => seat.UpLowBerth === 'UB')
+                                                          .map(seat => seat.SeatNo);
 
-                                                                    Upper Deck
-                                                                  </span>
-                                                                </li>
-                                                              </div>
-                                                              {busLayoutData.BusLayoutData[0].upper_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex"
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                      textAlign:
-                                                                        "center",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seating-none"></span>
-                                                                          ) : (
-                                                                            <Tooltip
-                                                                              title={
-                                                                                isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
-                                                                              <span
-                                                                                style={{
-                                                                                  color:
-                                                                                    !isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? "black"
-                                                                                      : "white",
-                                                                                }}
-                                                                              >
-                                                                                ₹
-                                                                                {!isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? seat.seat_price
-                                                                                  : ""}
-                                                                              </span>
-                                                                              <div
-                                                                                className={`seat-container ${isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickUpperSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <div>
-                                                                                  <img
-                                                                                    src={
-                                                                                      seat.gender ===
-                                                                                        "FEMALE" &&
-                                                                                        isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                        ? seatPink
-                                                                                        : isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? seatBlack
-                                                                                          : imageSrcUpper[
-                                                                                          seat
-                                                                                            .seat_number
-                                                                                          ] ||
-                                                                                          seatEmpty
-                                                                                    }
-                                                                                    width="10%"
-                                                                                    height="10%"
-                                                                                    className="seating-seat"
-                                                                                    style={{
-                                                                                      cursor:
-                                                                                        seat.gender ===
-                                                                                          "FEMALE" ||
-                                                                                          isBookedLower(
-                                                                                            seat
-                                                                                          )
-                                                                                          ? "not-allowed"
-                                                                                          : "pointer",
-                                                                                    }}
-                                                                                  ></img>
-                                                                                  <span className="seat-number-onlyseat text-center">
-                                                                                    {
-                                                                                      seat.seat_number
-                                                                                    }
-                                                                                  </span>
-                                                                                </div>
-                                                                              </div>
-                                                                            </Tooltip>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          <div className="col-xxl-4">
+                                                        const lowerSeats = seats
+                                                          .filter(seat => seat.UpLowBerth === 'LB')
+                                                          .map(seat => seat.SeatNo);
 
-                                                            <div className="w-100 justify-content-between knowabt2">
-                                                              <h5 className="my-4">
-                                                                Know About Seats
-                                                                Type
-                                                              </h5>
-                                                              <div className="row justify-content-center">
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
-                                                                      Not
-                                                                      Available
-                                                                    </h6>
-                                                                    <div>
-                                                                      <img
-                                                                        src={
-                                                                          seatBlack
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
 
-                                                                      Available
-                                                                    </h6>
-                                                                    <div>
-                                                                      <img
-                                                                        src={
-                                                                          seatEmpty
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
+                                                        const upperSeatPrices = seats
+                                                          .filter(seat => seat.UpLowBerth === 'UB')
+                                                          .map(seat => parseInt(seat.seat_price) || 0);
 
-                                                                      Selected
-                                                                    </h6>
-                                                                    <div>
-                                                                      <img
-                                                                        src={
-                                                                          seatBlue
-                                                                        }
-                                                                        width="10%"
-                                                                        height="10%"
-                                                                        color="white"
-                                                                        className="seating-seat"
-                                                                      ></img>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                              </div>
+                                                        const lowerSeatPrices = seats
+                                                          .filter(seat => seat.UpLowBerth === 'LB')
+                                                          .map(seat => parseInt(seat.seat_price) || 0);
 
-                                                            </div>
-                                                          </div>
-                                                        </>
-                                                      )}
-                                                    {busTypeID == 1 &&
-                                                      busLayoutData?.BusLayoutData &&
-                                                      busLayoutData
-                                                        .BusLayoutData.length >
-                                                      0 && (
-                                                        <>
-                                                          {/* only sofa  */}
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-3"
-                                                                style={{
-                                                                  maxHeight:
-                                                                    "60px",
-                                                                }}
-                                                              >
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  1 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                                <li>
+                                                        const totalPrice = seats.reduce((total, seat) => {
+                                                          return total + (parseInt(seat.seat_price) || 0);
+                                                        }, 0);
 
-                                                                  <span className="fs-3">
+                                                        setSelectedUpperSeat(upperSeats);
+                                                        setSelectedUpperSeats(upperSeats)
+                                                        setSelectedLowerSeat(lowerSeats);
+                                                        setSelectedLowerSeats(lowerSeats);
+                                                        setSelectedUpperSeatPrice(upperSeatPrices);
+                                                        setSelectedLowerSeatPrice(lowerSeatPrices);
+                                                        setTotalPrice(totalPrice);
+                                                      }}
+                                                    />
 
-                                                                    Lower Deck
-                                                                  </span>
-                                                                </li>
-                                                                {busLayoutData
-                                                                  ?.BusLayoutData[0]
-                                                                  ?.driver_direction ==
-                                                                  0 && (
-                                                                    <GiSteeringWheel
-                                                                      style={{
-                                                                        fontSize:
-                                                                          "3.5rem",
-                                                                        color:
-                                                                          "rgb(121 44 143)",
-                                                                      }}
-                                                                    />
-                                                                  )}
-                                                              </div>
-                                                              {busLayoutData.BusLayoutData[0].lower_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex justify-content-center gap-3 mb-3"
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seat-none"></span>
-                                                                          ) : (
-                                                                            <Tooltip
-                                                                              title={
-                                                                                isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
-                                                                              <div
-                                                                                className={`seat ${isBookedLower(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                style={{
-                                                                                  border:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" &&
-                                                                                      isBookedLower(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "2px solid pink"
-                                                                                      : isBookedLower(
-                                                                                        seat
-                                                                                      )
-                                                                                        ? "2px solid black"
-                                                                                        : selectedLowerSeats.includes(
-                                                                                          seat.seat_number
-                                                                                        )
-                                                                                          ? "2px solid #792C8F"
-                                                                                          : "",
-                                                                                  cursor:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" ||
-                                                                                      isBookedLower(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "not-allowed"
-                                                                                      : "pointer",
-                                                                                }}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickLowerSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <span className="text-black fs-6">
-                                                                                  {
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                </span>
-                                                                                <label
-                                                                                  htmlFor={
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                  className="text-white  d-flex align-items-center text-center"
-                                                                                  style={{
-                                                                                    fontSize:
-                                                                                      "0.70rem",
-                                                                                    backgroundColor:
-                                                                                      seat.gender ===
-                                                                                        "FEMALE" &&
-                                                                                        isBookedLower(
-                                                                                          seat
-                                                                                        )
-                                                                                        ? "pink"
-                                                                                        : isBookedLower(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black "
-                                                                                          : selectedLowerSeats.includes(
-                                                                                            seat.seat_number
-                                                                                          )
-                                                                                            ? "#792C8F"
-                                                                                            : "",
-                                                                                    cursor:
-                                                                                      "pointer",
-                                                                                  }}
-                                                                                  aria-disabled={isBookedLower(
-                                                                                    seat
-                                                                                  )}
-                                                                                >
-                                                                                  <span
-                                                                                    style={{
-                                                                                      color:
-                                                                                        isBookedLower(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black"
-                                                                                          : "white",
-                                                                                    }}
-                                                                                  >
-                                                                                    ₹
-                                                                                    {!isBookedLower(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? seat.seat_price
-                                                                                      : ""}
-                                                                                  </span>
-                                                                                </label>
-                                                                              </div>
-                                                                            </Tooltip>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          {/* Upper Deck */}
-                                                          <form
-                                                            onChange={(e) =>
-                                                              busLayoutData(e)
-                                                            }
-                                                            className="col-xxl-4 col-xl-5 col-lg-6"
-                                                          >
-                                                            <ol
-                                                              className="cabin fuselage px-3"
-                                                              style={{
-                                                                padding: "0",
-                                                              }}
-                                                            >
-                                                              <div
-                                                                className="d-flex justify-content-center gap-4 align-items-center my-4 mr-4 "
-                                                                style={{
-                                                                  maxHeight:
-                                                                    "90px",
-                                                                }}
-                                                              >
-                                                                <li>
+                                                  }
 
-                                                                  <span className="fs-3">
-
-                                                                    Upper Deck
-                                                                  </span>
-                                                                </li>
-                                                              </div>
-
-                                                              {busLayoutData.BusLayoutData[0].upper_layout.map(
-                                                                (
-                                                                  row,
-                                                                  rowIndex
-                                                                ) => (
-                                                                  <div
-                                                                    key={
-                                                                      rowIndex
-                                                                    }
-                                                                    className="d-flex justify-content-center gap-3 mb-3"
-                                                                    style={{
-                                                                      cursor:
-                                                                        "pointer",
-                                                                    }}
-                                                                  >
-                                                                    {row.map(
-                                                                      (
-                                                                        seat,
-                                                                        seatIndex
-                                                                      ) => (
-                                                                        <React.Fragment
-                                                                          key={
-                                                                            seatIndex
-                                                                          }
-                                                                        >
-                                                                          {seat.seat_number ===
-                                                                            "" ? (
-                                                                            <span className="seat-none"></span>
-                                                                          ) : (
-                                                                            <Tooltip
-                                                                              title={
-                                                                                isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? ""
-                                                                                  : `₹${seat.seat_price}`
-                                                                              }
-                                                                              placement="top-start"
-                                                                              arrow
-                                                                            >
-                                                                              <div
-                                                                                className={`seat ${isBookedUpper(
-                                                                                  seat
-                                                                                )
-                                                                                  ? "disabled"
-                                                                                  : ""
-                                                                                  }`}
-                                                                                style={{
-                                                                                  border:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" &&
-                                                                                      isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "2px solid pink"
-                                                                                      : isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                        ? "2px solid black"
-                                                                                        : selectedUpperSeats.includes(
-                                                                                          seat.seat_number
-                                                                                        )
-                                                                                          ? "2px solid #792C8F"
-                                                                                          : "",
-                                                                                  cursor:
-                                                                                    seat.gender ===
-                                                                                      "FEMALE" ||
-                                                                                      isBookedUpper(
-                                                                                        seat
-                                                                                      )
-                                                                                      ? "not-allowed"
-                                                                                      : "pointer",
-                                                                                }}
-                                                                                onClick={() => {
-                                                                                  if (
-                                                                                    !isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                  ) {
-                                                                                    handleClickUpperSeat(
-                                                                                      seat.seat_number
-                                                                                    );
-                                                                                  }
-                                                                                }}
-                                                                              >
-                                                                                <span className="text-black fs-6">
-                                                                                  {
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                </span>
-                                                                                <label
-                                                                                  htmlFor={
-                                                                                    seat.seat_number
-                                                                                  }
-                                                                                  className="text-white  d-flex align-items-center text-center"
-                                                                                  style={{
-                                                                                    fontSize:
-                                                                                      "0.70rem",
-                                                                                    backgroundColor:
-                                                                                      seat.gender ===
-                                                                                        "FEMALE" &&
-                                                                                        isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                        ? "pink"
-                                                                                        : isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black "
-                                                                                          : selectedUpperSeats.includes(
-                                                                                            seat.seat_number
-                                                                                          )
-                                                                                            ? "#792C8F"
-                                                                                            : "",
-                                                                                    cursor:
-                                                                                      "pointer",
-                                                                                  }}
-                                                                                  aria-disabled={isBookedUpper(
-                                                                                    seat
-                                                                                  )}
-                                                                                >
-
-                                                                                  <span
-                                                                                    style={{
-                                                                                      color:
-                                                                                        isBookedUpper(
-                                                                                          seat
-                                                                                        )
-                                                                                          ? "black"
-                                                                                          : "white",
-                                                                                    }}
-                                                                                  >
-                                                                                    ₹
-                                                                                    {!isBookedUpper(
-                                                                                      seat
-                                                                                    )
-                                                                                      ? seat.seat_price
-                                                                                      : ""}
-                                                                                  </span>
-                                                                                </label>
-                                                                              </div>
-                                                                            </Tooltip>
-                                                                          )}
-                                                                        </React.Fragment>
-                                                                      )
-                                                                    )}
-                                                                  </div>
-                                                                )
-                                                              )}
-                                                            </ol>
-                                                          </form>
-                                                          <div className="col-xxl-4">
-
-                                                            <div className="w-100 justify-content-between knowabt3">
-                                                              <h5 className="my-4">
-                                                                Know About Seats
-                                                                Type
-                                                              </h5>
-                                                              <div className="row justify-content-center">
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
-                                                                      Not
-                                                                      Available
-                                                                    </h6>
-                                                                    <div className="seat-gray mb-3">
-                                                                      <span className="text-black fs-6"></span>
-                                                                      <label></label>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
-
-                                                                      Available
-                                                                    </h6>
-                                                                    <div className="seat-available mb-3">
-                                                                      <span className="text-black fs-6"></span>
-                                                                      <label></label>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div className="col-xxl-12 col-4">
-                                                                  <div
-                                                                    className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
-                                                                    style={{
-                                                                      alignItems:
-                                                                        "center"
-                                                                    }}
-                                                                  >
-                                                                    <h6 className="text-secondary">
-
-                                                                      Selected
-                                                                    </h6>
-                                                                    <div className="seat-selected mb-3">
-                                                                      <span className="text-black fs-6"></span>
-                                                                      <label></label>
-                                                                    </div>
-                                                                  </div>
-                                                                </div>
-                                                              </div>
-
-                                                            </div>
-                                                          </div>
-                                                        </>
-                                                      )}
-                                                  </div>
                                                 </div>
                                               </div>
                                             </div>
                                           </div>
-                                          <div className="row">
+                                          <div className="row ">
                                             <Box className="board-droppagerow">
                                               <Box className="borddrop--div">
-
                                                 <div className="d-flex justify-content-around rounded-4 border-theme-opacity flex-lg-row w-100 flex-column">
                                                   <div className="w-100 main_bording_dropping">
                                                     <div
@@ -4232,34 +2952,63 @@ const BusList = (seat) => {
                                                       index={0}
                                                     >
                                                       <RadioGroup
-                                                        value={selectedboardingValue?.boarding_id}
-                                                        onChange={handleSelectBoardingPoint}
+                                                        value={
+                                                          selectedboardingValue?.boarding_id
+                                                        }
+                                                        onChange={
+                                                          handleSelectBoardingPoint
+                                                        }
                                                         className="d-block"
-                                                        style={{ whiteSpace: 'pre' }}
+                                                        style={{
+                                                          whiteSpace: "pre",
+                                                        }}
                                                       >
-                                                        {busWisePickupDropPoints?.boarding_array?.map((point, index) => {
-                                                          const isDisabled = isBoardingTimePassed(point?.boarding_time);
-                                                          return (
-                                                            <Box key={index} className="bpdplist_item mb-2 d-flex justify-content-between">
-                                                              <FormControlLabel
-                                                                value={point?.boarding_id}
-                                                                control={<Radio className="form-radio-input" disabled={isDisabled} />}
-                                                                label={
-                                                                  <Box className="fw-medium form-checkk fs-20 d-flex justify-content-between align-items-center">
-                                                                    <Box className="me-4">
-                                                                      <strong className="fs-6 time">{point?.boarding_time}</strong>
+                                                        {busWisePickupDropPoints?.boarding_array?.map(
+                                                          (point, index) => {
+                                                            const isDisabled =
+                                                              isBoardingTimePassed(
+                                                                point?.boarding_time
+                                                              );
+                                                            return (
+                                                              <Box
+                                                                key={index}
+                                                                className="bpdplist_item mb-2 d-flex justify-content-between"
+                                                              >
+                                                                <FormControlLabel
+                                                                  value={
+                                                                    point?.boarding_id
+                                                                  }
+                                                                  control={
+                                                                    <Radio
+                                                                      className="form-radio-input"
+                                                                      disabled={
+                                                                        isDisabled
+                                                                      }
+                                                                    />
+                                                                  }
+                                                                  label={
+                                                                    <Box className="fw-medium form-checkk fs-20 d-flex justify-content-between align-items-center">
+                                                                      <Box className="me-4">
+                                                                        <strong className="fs-6 time">
+                                                                          {
+                                                                            point?.boarding_time
+                                                                          }
+                                                                        </strong>
+                                                                      </Box>
+                                                                      <Box className="pointnm mt-1">
+                                                                        <Typography className="text-wrap fw-semibold">
+                                                                          {
+                                                                            point?.boarding_sub_route_name
+                                                                          }
+                                                                        </Typography>
+                                                                      </Box>
                                                                     </Box>
-                                                                    <Box className="pointnm mt-1">
-                                                                      <Typography className="text-wrap fw-semibold">
-                                                                        {point?.boarding_sub_route_name}
-                                                                      </Typography>
-                                                                    </Box>
-                                                                  </Box>
-                                                                }
-                                                              />
-                                                            </Box>
-                                                          );
-                                                        })}
+                                                                  }
+                                                                />
+                                                              </Box>
+                                                            );
+                                                          }
+                                                        )}
                                                       </RadioGroup>
                                                     </Box>
                                                   </div>
@@ -4321,7 +3070,11 @@ const BusList = (seat) => {
                                                                         }
                                                                       </strong>
                                                                     </Box>
-                                                                    <Box clapointnm ssName="pointnm" className="mt-1">
+                                                                    <Box
+                                                                      clapointnm
+                                                                      ssName="pointnm"
+                                                                      className="mt-1"
+                                                                    >
                                                                       <Typography className=" text-wrap fw-semibold ">
                                                                         {
                                                                           point?.droping_sub_route_name
@@ -4383,7 +3136,6 @@ const BusList = (seat) => {
 
                                                     <Box className="pointnm">
                                                       <Typography className="fs-4 fw-bold">
-
                                                         Dropping
                                                       </Typography>
 
@@ -4419,7 +3171,8 @@ const BusList = (seat) => {
                                                         </Typography>
                                                         <ul className="d-flex gap-2 list-unstyled mt-3">
                                                           <p className="mb-0">
-                                                            Lower Seat <strong>
+                                                            Lower Seat{" "}
+                                                            <strong>
                                                               {`(${selectedLowerSeat?.length ||
                                                                 0
                                                                 })`}
@@ -4444,8 +3197,8 @@ const BusList = (seat) => {
 
                                                         <ul className="d-flex gap-2 list-unstyled mt-3">
                                                           <p className="mb-0">
-                                                            Upper Seat <strong>
-
+                                                            Upper Seat{" "}
+                                                            <strong>
                                                               {`(${selectedUpperSeat?.length ||
                                                                 0
                                                                 })`}
@@ -4499,6 +3252,7 @@ const BusList = (seat) => {
                                         </>
                                       )}
                                   </div>
+
                                 </div>
                               </div>
                             </div>
@@ -4515,7 +3269,9 @@ const BusList = (seat) => {
         <Footer />
       </div>
 
-      <Modal show={busShowModal} onHide={handleBusPhotosClose}
+      <Modal
+        show={busShowModal}
+        onHide={handleBusPhotosClose}
         dialogClassName="modal-dialog-centered"
       >
         <Modal.Header closeButton>
@@ -4527,7 +3283,12 @@ const BusList = (seat) => {
               <img
                 src={busPhotos[currentIndex]}
                 alt={`Bus Photo ${currentIndex + 1}`}
-                style={{ width: '100%', height: '300px', borderRadius: '8px', objectFit: 'contain' }}
+                style={{
+                  width: "100%",
+                  height: "300px",
+                  borderRadius: "8px",
+                  objectFit: "contain",
+                }}
               />
 
               {busPhotos.length > 1 && (
@@ -4535,15 +3296,15 @@ const BusList = (seat) => {
                   variant="link"
                   onClick={handlePrevImage}
                   style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '22px',
-                    transform: 'translateY(-50%)',
+                    position: "absolute",
+                    top: "50%",
+                    left: "22px",
+                    transform: "translateY(-50%)",
                     zIndex: 1,
-                    color: 'white',
-                    backgroundColor: '#8080802e',
-                    border: 'none',
-                    fontSize: '2rem',
+                    color: "white",
+                    backgroundColor: "#8080802e",
+                    border: "none",
+                    fontSize: "2rem",
                   }}
                   disabled={currentIndex === 0}
                 >
@@ -4556,15 +3317,15 @@ const BusList = (seat) => {
                   variant="link"
                   onClick={handleNextImage}
                   style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '22px',
-                    transform: 'translateY(-50%)',
+                    position: "absolute",
+                    top: "50%",
+                    right: "22px",
+                    transform: "translateY(-50%)",
                     zIndex: 1,
-                    color: 'white',
-                    backgroundColor: '#8080802e',
-                    border: 'none',
-                    fontSize: '2rem',
+                    color: "white",
+                    backgroundColor: "#8080802e",
+                    border: "none",
+                    fontSize: "2rem",
                   }}
                   disabled={currentIndex === busPhotos.length - 1}
                 >
@@ -4575,7 +3336,6 @@ const BusList = (seat) => {
           )}
         </Modal.Body>
         <Modal.Footer>
-
           <Button variant="secondary" onClick={handleBusPhotosClose}>
             Close
           </Button>
