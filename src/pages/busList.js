@@ -431,7 +431,9 @@ const BusList = (seat) => {
     const amenitiesJSON = JSON.stringify(selectedAmenitiesId);
 
     data.append("boarding_point", from?.city_id);
+    data.append("infinity_boarding_point", from?.infinity_id);
     data.append("droping_point", to?.city_id);
+    data.append("infinity_droping_point", to?.infinity_id);
     data.append("date", formattedDate);
     data.append("bus_name", inputValue ? inputValue : "");
     data.append(
@@ -507,9 +509,10 @@ const BusList = (seat) => {
     setLoading(true);
     let data = new FormData();
     const amenitiesJSON = JSON.stringify(selectedAmenitiesId);
-
     data.append("boarding_point", from?.city_id);
+    data.append("infinity_boarding_point", from?.infinity_id);
     data.append("droping_point", to?.city_id);
+    data.append("infinity_droping_point", to?.infinity_id);
     data.append("date", formattedDate);
     data.append("bus_name", inputValue ? inputValue : "");
 
@@ -564,21 +567,23 @@ const BusList = (seat) => {
       if (res.data.success) {
         if (booking_type === "2") {
           setBusLayoutData(res.data.data);
-          console.log(busLayoutData, "busLayoutData")
           const secondRes = await axios.post("bus_layout", data);
           if (secondRes.data.success) {
             setBusLayoutData2(secondRes.data.data);
-            console.log(busLayoutData2, "busLayoutData2")
 
           } else {
             toast.error(secondRes.data.message || "Invalid second layout message");
           }
         } else if (booking_type === "1") {
           const layoutData = res.data.data.BusLayoutData[0].layout; // Ensure that layout data exists
-
           setBusLayoutData(layoutData)
-          console.log(busLayoutData, "busLayoutData1")
+          const secondRes = await axios.post("bus_layout", data);
+          if (secondRes.data.success) {
+            setBusLayoutData2(secondRes.data.data);
 
+          } else {
+            toast.error(secondRes.data.message || "Invalid second layout message");
+          }
 
 
         }
@@ -750,7 +755,6 @@ const BusList = (seat) => {
   };
 
   const [busLayoutData, setBusLayoutData] = useState([]);
-  const [busLayoutData1, setBusLayoutData1] = useState([]);
   const [busLayoutData2, setBusLayoutData2] = useState([]);
 
 
@@ -1076,20 +1080,9 @@ const BusList = (seat) => {
 
     for (let i = 0; i < selectedTotalSeat.length; i++) {
       const seatNumber = selectedTotalSeat[i];
-      let seatPrice ;
-      let serviceTax ;
-      seatPrice = findSeatPriceByNumber1(seatNumber);
-      serviceTax = findServiceTaxByNumber1(seatNumber);
-
-      // if (bookingType === "1") {
-      //    seatPrice = findSeatPriceByNumber1(seatNumber);
-      //    serviceTax = findServiceTaxByNumber1(seatNumber);
-      // }else if (bookingType === "2"){
-      //   seatPrice = findSeatPriceByNumber2(seatNumber);
-      //   serviceTax = findServiceTaxByNumber2(seatNumber);
-      // }
-      tempServiceTaxArray.push(serviceTax); // collect service tax values
-
+      const seatPrice = findSeatPriceByNumber1(seatNumber);
+      const serviceTax = findServiceTaxByNumber1(seatNumber);
+      tempServiceTaxArray.push(serviceTax);
       data.append(`seat_number[${i}]`, seatNumber);
       data.append(`seat_price[${i}]`, seatPrice);
       data.append(`service_tax[${i}]`, serviceTax);
@@ -1191,78 +1184,6 @@ const BusList = (seat) => {
 
 
   const findServiceTaxByNumber1 = (seatNumber) => {
-    if (bookingType === "1") {
-      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-
-      if (lowerSeat) {
-        return lowerSeat.service_tax;
-      } else if (upperSeat) {
-        return upperSeat.service_tax;
-      }
-
-      return 0;
-    }
-    else if (bookingType === "1") {
-      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-
-      if (lowerSeat) {
-        return lowerSeat.service_tax;
-      } else if (upperSeat) {
-        return upperSeat.service_tax;
-      }
-
-      return 0;
-    }
-  };
-
-
-  const findSeatPriceByNumber2 = (seatNumber) => {
-    if (bookingType === "2") {
-      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-
-      if (lowerSeat) {
-        return lowerSeat.seat_price;
-      } else if (upperSeat) {
-        return upperSeat.seat_price;
-      }
-
-      return 0;
-    } else if (bookingType === "1") {
-      const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-      const upperSeat = busLayoutData.BusLayoutData[0].upper_layout
-        .flat()
-        .find((seat) => seat.seat_number === seatNumber);
-
-      if (lowerSeat) {
-        return lowerSeat.seat_price;
-      } else if (upperSeat) {
-        return upperSeat.seat_price;
-      }
-
-      return 0;
-    }
-
-  };
-
-
-  const findServiceTaxByNumber2 = (seatNumber) => {
     if (bookingType === "2") {
       const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
         .flat()
@@ -1280,10 +1201,10 @@ const BusList = (seat) => {
       return 0;
     }
     else if (bookingType === "1") {
-      const lowerSeat = busLayoutData.BusLayoutData[0].lower_layout
+      const lowerSeat = busLayoutData2.BusLayoutData[0].lower_layout
         .flat()
         .find((seat) => seat.seat_number === seatNumber);
-      const upperSeat = busLayoutData.BusLayoutData[0].upper_layout
+      const upperSeat = busLayoutData2.BusLayoutData[0].upper_layout
         .flat()
         .find((seat) => seat.seat_number === seatNumber);
 
@@ -1296,7 +1217,6 @@ const BusList = (seat) => {
       return 0;
     }
   };
-
   const swapLocations = () => {
     const temp = from;
     setFrom(to);
@@ -1787,7 +1707,9 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div>
+                                  <div onClick={() => {
+                                    searchwisebusList(formattedDate);
+                                  }}>
                                     <input
                                       type="checkbox"
                                       id={`bustype-ac-${index}`}
@@ -1816,11 +1738,15 @@ const BusList = (seat) => {
                                           src={label?.image}
                                           alt={label.type}
                                           style={{
-                                            width: "20px",
-                                            height: "20px",
+                                            width: "25px",
+                                            height: "25px",
                                             objectFit: "cover",
                                             padding: "0px",
                                             margin: "0px",
+                                            background:"white",
+                                            padding:"1px",
+                                            border:"2px solid white",
+                                            borderRadius:"2px"
                                           }}
                                         />
                                       )}
@@ -1849,7 +1775,9 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div>
+                                  <div onClick={() => {
+                                    searchwisebusList(formattedDate);
+                                  }}>
                                     <input
                                       type="checkbox"
                                       id={`bustype-${index}`}
@@ -1875,16 +1803,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "20px",
-                                            height: "20px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
                                       <span style={{ fontSize: "13px" }}>
                                         {label.type}
@@ -1911,7 +1843,9 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div>
+                                  <div onClick={() => {
+                                    searchwisebusList(formattedDate);
+                                  }}>
                                     <input
                                       type="checkbox"
                                       id={`price-${index}`}
@@ -1937,16 +1871,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "20px",
-                                            height: "20px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
 
                                       <span style={{ fontSize: "13px" }}>
@@ -1974,7 +1912,9 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div>
+                                  <div onClick={() => {
+                                    searchwisebusList(formattedDate);
+                                  }}>
                                     <input
                                       type="checkbox"
                                       id={`time-${index}`}
@@ -2000,16 +1940,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "20px",
-                                            height: "20px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
 
                                       <span style={{ fontSize: "12px" }}>
@@ -2116,17 +2060,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={
-                                            busList?.image_url + label?.image
-                                          }
-                                          alt={label.facility_name}
-                                          style={{
-                                            maxHeight: "20px",
-                                            maxWidth: "20px",
-                                            width: "20px",
-                                            objectFit: "contain",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.facility_name}
@@ -2179,17 +2126,21 @@ const BusList = (seat) => {
                                       }}
                                     >
                                       {label.image && (
-                                        <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                       <img
+                                       src={label?.image}
+                                       alt={label.type}
+                                       style={{
+                                         width: "25px",
+                                         height: "25px",
+                                         objectFit: "cover",
+                                         padding: "0px",
+                                         margin: "0px",
+                                         background:"white",
+                                         padding:"1px",
+                                         border:"2px solid white",
+                                         borderRadius:"2px"
+                                       }}
+                                     />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2242,16 +2193,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2304,16 +2259,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2366,16 +2325,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                          }}
-                                        />
+                                        src={label?.image}
+                                        alt={label.type}
+                                        style={{
+                                          width: "25px",
+                                          height: "25px",
+                                          objectFit: "cover",
+                                          padding: "0px",
+                                          margin: "0px",
+                                          background:"white",
+                                          padding:"1px",
+                                          border:"2px solid white",
+                                          borderRadius:"2px"
+                                        }}
+                                      />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2619,12 +2582,14 @@ const BusList = (seat) => {
                                         {item.review_summary.average_rating}
                                       </p>
                                     </span>
-                                    <div>
+                                    <div className=" px-2">
                                       <p
                                         className="fw-medium m-0"
                                         style={{
-                                          color: "rgb(108 42 127)",
-                                          paddingLeft: "10px",
+                                          backgroundColor : item?.total_seat === "0" ? "red" : "rgb(108 42 127)",
+                                          color : item?.total_seat === "0" ? "white" : "white",
+                                          paddingInline: "5px",
+                                          borderRadius:"5px"
                                         }}
                                       >
                                         {item?.total_seat} Seats Available
@@ -2943,7 +2908,7 @@ const BusList = (seat) => {
                                                           marginBottom: "5px",
                                                         }}
                                                       >
-                                                        Boarding Point
+                                                        Pickup Point
                                                       </span>
                                                     </div>
                                                     <Box
@@ -3027,7 +2992,7 @@ const BusList = (seat) => {
                                                           marginBottom: "5px",
                                                         }}
                                                       >
-                                                        Droping Point
+                                                        Drop Point
                                                       </span>
                                                     </div>
                                                     <Box
@@ -3114,7 +3079,7 @@ const BusList = (seat) => {
                                                   <Box className="d-flex flex-md-row gap-4 justify-content-between">
                                                     <Box className="pointnm">
                                                       <Typography className="fs-4 fw-bold">
-                                                        Boarding
+                                                        Pickup
                                                       </Typography>
 
                                                       <Typography className="loc text-gray fw-semibold">

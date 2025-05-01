@@ -12,6 +12,7 @@ import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.m
 import axios from 'axios';
 import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
 
+
 const PassengerDetails = () => {
     const location = useLocation();
     const [isChecked, setIsChecked] = useState(false);
@@ -501,12 +502,18 @@ const PassengerDetails = () => {
                                                                         id={`MALE-${index}`}
                                                                         checked={passengerData[index]?.gender === 'MALE'}
                                                                         onChange={() => handleGenderChange(index, 'MALE')}
+                                                                        style={{border:"2px solid  #792C8F"}}
                                                                     />
+                                                                    <img src='assets/images/male.png' style={{ height: "14px", marginInline: "5px" }} />
+
                                                                     <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`MALE-${index}`}>
                                                                         Male
                                                                     </label>
+
                                                                 </div>
                                                                 <div className="form-check">
+
+
                                                                     <input
                                                                         className="form-check-input"
                                                                         type="radio"
@@ -514,10 +521,15 @@ const PassengerDetails = () => {
                                                                         id={`FEMALE-${index}`}
                                                                         checked={passengerData[index]?.gender === 'FEMALE'}
                                                                         onChange={() => handleGenderChange(index, 'FEMALE')}
+                                                                        style={{border:"2px solid  #792C8F"}}
+
                                                                     />
+                                                                    <img src='assets/images/female.png' style={{ height: "14px", marginInline: "5px" }} />
+
                                                                     <label className="form-check-label fs-16 fw-medium text-capitalize text-gray" htmlFor={`FEMALE-${index}`}>
                                                                         Female
                                                                     </label>
+
                                                                 </div>
                                                             </div>
                                                         </div>

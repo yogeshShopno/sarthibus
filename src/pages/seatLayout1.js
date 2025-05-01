@@ -22,7 +22,6 @@ const SeatLayout1 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
   }, [selectedSeatsFromParent]);
 
   const handleSelect = (seat) => {
-    console.log(seat)
     if (seat.is_booked || seat.seat_type === "G") return;
 
     setSelectedSeats((prev) => {
@@ -33,7 +32,6 @@ const SeatLayout1 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
       if (onSeatsChange) {
         onSeatsChange(updatedSeats); // call parent's function with latest selected seats
       }
-      console.log(updatedSeats)
       return updatedSeats;
     });
   };

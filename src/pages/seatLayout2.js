@@ -6,7 +6,6 @@ import './layout.css';
 import SeatType from "../components/SeatTypes";
 
 const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChange }) => {
-  console.log(busLayoutData)
   const seatEmpty = process.env.PUBLIC_URL + "assets/images/imgpsh_fullsize_anim (3).png";
   const seatBlack = process.env.PUBLIC_URL + "assets/images/seat-black.png";
   const seatBlue = process.env.PUBLIC_URL + "assets/images/seat purpule.png";
@@ -28,7 +27,6 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
       const updatedSeats = prev.some((s) => s.SeatNo === seat.SeatNo)
         ? prev.filter((s) => s.SeatNo !== seat.SeatNo)
         : [...prev, seat];
-console.log(updatedSeats)
       if (onSeatsChange) {
         onSeatsChange(updatedSeats); // call parent's function with latest selected seats
       }
@@ -94,7 +92,7 @@ console.log(updatedSeats)
                 >
                   {className.includes("sleeper ") ? (
                     <div className="stacked-seat">
-                          <div className="deck">{seat.BlockType == 2? seat.SeatNo :  seat.UpLowBerth }</div>
+                          <div className="deck">{seat.BlockType == 2? seat.SeatNo :  seat.UpLowBerth ==="UB"? "Upper": seat.UpLowBerth ==="LB"?  "Lower" :seat.UpLowBerth}</div>
                           <div>{seat.SeatNo}</div>
                           <div className="seat-price">{seat.seat_price}</div>
                     </div>

@@ -26,11 +26,8 @@ table {
     padding: 6px;
   }
   
-
   .selected   .seat-price{
-
     background-color: #7a2c8f;
-
   }
   
   .sleeper {
@@ -49,12 +46,11 @@ table {
     overflow: hidden;
   }
 
-  
 .sleeper[colspan='2'] {
   width: 100%;  /* Make it span full width when colspan is 2 */
   height: 100px;  /* Adjust height if needed to fit the grid */
 }
-  
+ 
  .selected {
     border-color:#7a2c8f !important;
 

@@ -437,7 +437,6 @@ const Home = () => {
                                                             <label style={{ marginBottom: "12px" }} htmlFor="from" className="fw-semibold text-gray fs-6">
                                                                 <FaBusAlt />   From City
                                                             </label>
-
                                                             <Autocomplete
                                                                 id="from-city"
                                                                 options={cities}

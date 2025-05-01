@@ -29,7 +29,6 @@ const PaymentStatus = () => {
 
                 if (res.data.success) {
                     
-                    console.log("Payment Success:", res.data.success);
                     setLoading(false);
                     history.push("/success-ticket", { "status": true });
 
