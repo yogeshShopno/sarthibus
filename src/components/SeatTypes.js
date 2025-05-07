@@ -1,7 +1,7 @@
 import React from "react"
 const SeatType = () =>{
 return(<>
-<div className="col-xxl-4">
+<div className="flex1 m-auto w-75">
 
 <div className="w-100 justify-content-between knowabt3">
   <h5 className="my-4">
@@ -9,9 +9,9 @@ return(<>
     Type
   </h5>
   <div className="row justify-content-center">
-    <div className="col-xxl-12 col-4">
+    <div className="col-lg-12 col-4">
       <div
-        className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
+        className="d-flex flex-column-reverse flex-lg-row justify-content-between"
         style={{
           alignItems:
             "center"
@@ -27,9 +27,9 @@ return(<>
         </div>
       </div>
     </div>
-    <div className="col-xxl-12 col-4">
+    <div className="col-lg-12 col-4">
       <div
-        className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
+        className="d-flex flex-column-reverse flex-lg-row justify-content-between"
         style={{
           alignItems:
             "center"
@@ -45,9 +45,9 @@ return(<>
         </div>
       </div>
     </div>
-    <div className="col-xxl-12 col-4">
+    <div className="col-lg-12 col-4">
       <div
-        className="d-flex flex-column-reverse flex-xxl-row justify-content-between"
+        className="d-flex flex-column-reverse flex-lg-row justify-content-between"
         style={{
           alignItems:
             "center"

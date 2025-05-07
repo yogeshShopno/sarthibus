@@ -1,22 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Footer from "../components/footer";
 import Header from "../components/header";
-import {
-  MdLocationOn,
-  MdOutlineArrowForwardIos,
-  MdOutlineKeyboardArrowUp,
-} from "react-icons/md";
-import {
-  FaAngleDoubleDown,
-  FaAngleLeft,
-  FaAngleRight,
-  FaBusAlt,
-  FaChevronRight,
-  FaFilter,
-} from "react-icons/fa";
-
+import { MdLocationOn, MdOutlineArrowForwardIos, MdOutlineKeyboardArrowUp, } from "react-icons/md";
+import { FaAngleDoubleDown, FaAngleLeft, FaAngleRight, FaBusAlt, FaChevronRight, FaFilter, } from "react-icons/fa";
 import CloseIcon from "@mui/icons-material/Close";
 import { GiSteeringWheel } from "react-icons/gi";
+import { ImCross } from "react-icons/im";
 import Tooltip from "@mui/material/Tooltip";
 import {
   Alert,
@@ -147,8 +136,8 @@ const BusList = (seat) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
-    setFrom(displayFrom);
-    setTo(displayTo);
+    // setFrom(displayFrom);
+    // setTo(displayTo);
 
     setShowModal(true);
     handleHideBusSeat();
@@ -175,6 +164,7 @@ const BusList = (seat) => {
   const [busInputToValue, setBusInputToValue] = useState("");
   const dirIcon = process.env.PUBLIC_URL + "assets/images/direction.png";
   const [selectedDate, setSelectedDate] = useState(formattedDate);
+
   const [selectedboardingValue, setSelectedBoardingValue] = useState({});
   const [selecteddropingValue, setSelectedDropingValue] = useState({});
   const [gender, setGender] = useState([]);
@@ -423,7 +413,14 @@ const BusList = (seat) => {
 
     return false;
   };
+  useEffect(() => {
+    if (formattedDate) {
+    console.log("hi")
 
+      searchwisebusList(formattedDate);
+    }
+  }, [selectedBusTypeAc, selectedBusType, selectedPrice, selectedTime, formattedDate]);
+  
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
 
@@ -828,13 +825,13 @@ const BusList = (seat) => {
         setSelectedBoardingValue({});
         setTotalPrice(0);
 
-        if (busId == JSON.parse(localBusId) && localSeat) {
-          setSelectedLowerSeats(JSON.parse(localSeat));
-        }
+        // if (busId == JSON.parse(localBusId) && localSeat) {
+        //   setSelectedLowerSeats(JSON.parse(localSeat));
+        // }
 
-        if (busId == JSON.parse(localBusId) && localUpperSeat) {
-          setSelectedUpperSeats(JSON.parse(localUpperSeat));
-        }
+        // if (busId == JSON.parse(localBusId) && localUpperSeat) {
+        //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
+        // }
       }
 
       setSelectedBusId(busId);
@@ -982,6 +979,28 @@ const BusList = (seat) => {
     loadMoreCities();
   };
 
+  const isFirstLoad = useRef(true);
+
+  useEffect(() => {
+    if (isFirstLoad.current && location.state) {
+      const {
+        from: initialFrom,
+        to: initialTo,
+        formattedDate,
+        inputValue: intialInputValue,
+      } = location.state;
+
+      setFrom(initialFrom);
+      setTo(initialTo);
+      setDisplayFrom(initialFrom);
+      setDisplayTo(initialTo);
+      setSelectedDate(formattedDate);
+      setInputValue(intialInputValue);
+
+      isFirstLoad.current = false;
+    }
+  }, []);
+
   useEffect(() => {
     cityList("", 0);
     cityToList("", 0);
@@ -1044,18 +1063,27 @@ const BusList = (seat) => {
   };
 
   const handleCheckboxBusTypeAc = (type) => {
-    setSelectedBusTypeAc([type]);
+    setSelectedBusTypeAc((prev) =>
+      prev.includes(type) ? [] : [type]
+    );
   };
+
   const handleCheckboxBusType = (type) => {
-    setSelectedBusType([type]);
+    setSelectedBusType((prev) =>
+      prev.includes(type) ? [] : [type]
+    );
   };
 
   const handleCheckboxPriceType = (type) => {
-    setSelectedPrice([type]);
+    setSelectedPrice((prev) =>
+      prev.includes(type) ? [] : [type]
+    );
   };
 
   const handleCheckboxTimeType = (type) => {
-    setSelectedTime([type]);
+    setSelectedTime((prev) =>
+      prev.includes(type) ? [] : [type]
+    );
   };
 
   const seatHoldAPI = async (item) => {
@@ -1069,11 +1097,11 @@ const BusList = (seat) => {
     data.append("boarding_point_id", item?.main_boarding_point_id);
     data.append("booking_date", formattedDate);
 
-    localStorage.setItem("selectedSeats", JSON.stringify(selectedLowerSeats));
-    localStorage.setItem(
-      "selectedUpperSeats",
-      JSON.stringify(selectedUpperSeats)
-    );
+    // localStorage.setItem("selectedSeats", JSON.stringify(selectedLowerSeats));
+    // localStorage.setItem(
+    //   "selectedUpperSeats",
+    //   JSON.stringify(selectedUpperSeats)
+    // );
 
     localStorage.setItem("bus_id", JSON.stringify(item?.id));
     const tempServiceTaxArray = [];
@@ -1272,6 +1300,7 @@ const BusList = (seat) => {
     if (isValid) {
       setDisplayFrom(from);
       setDisplayTo(to);
+
       const formattedDate = format(selectedDate, "yyyy-MM-dd");
       setTempDate(formattedDate);
       setSelectedDate(formattedDate);
@@ -1608,7 +1637,7 @@ const BusList = (seat) => {
                                 >
                                   <FaCalendarDays /> Date
                                 </label>
-                                <div style={{ borderBottom: "1px solid gray" }}>
+                                <div style={{ borderBottom: "1px solid #cfcfcf" }}>
                                   <DatePicker
                                     selected={selectedDate}
                                     onChange={setSelectedDate}
@@ -1671,7 +1700,7 @@ const BusList = (seat) => {
 
         <div className="searchpage--main mt-2 card-border">
           <div className="searchpagediv">
-            <div className="container-md container-sm container-xl">
+            <div className="container-fluid container-xl">
               <div className="serchpagerow m-auto">
                 <div className="row">
                   <div
@@ -1694,11 +1723,10 @@ const BusList = (seat) => {
                           <div className="fltrtitle my-4">
                             <h5 className="text-capitalize fw-semibold d-flex">
                               bus ac
-                              <p
-                                style={{
-                                  fontSize: "medium",
-                                  paddingLeft: "8px",
-                                }}
+                              <p style={{
+                                fontSize: "medium",
+                                paddingLeft: "8px",
+                              }}
                               ></p>
                             </h5>
                             <ul className="filterul list-unstyled row align-items-center">
@@ -1707,9 +1735,7 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div onClick={() => {
-                                    searchwisebusList(formattedDate);
-                                  }}>
+                                  <div>
                                     <input
                                       type="checkbox"
                                       id={`bustype-ac-${index}`}
@@ -1725,9 +1751,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`bustype-ac-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex flex-between gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #dfdfdf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         // justifyContent: "center"
@@ -1743,16 +1769,34 @@ const BusList = (seat) => {
                                             objectFit: "cover",
                                             padding: "0px",
                                             margin: "0px",
-                                            background:"white",
-                                            padding:"1px",
-                                            border:"2px solid white",
-                                            borderRadius:"2px"
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
                                           }}
                                         />
                                       )}
-                                      <span style={{ fontSize: "13px" }}>
+                                      <span style={{ fontSize: "13px", display: "flex", alignItems: "center", gap: "4px", }}>
                                         {label.type}
+                                      
                                       </span>
+                                      {selectedBusTypeAc.includes(label.type) && (
+                                          <span
+
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#888",
+                                              fontWeight: "bold",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            <ImCross style={{
+                                              color: "white",
+                                              marginBottom: "2px",
+                                            }} />
+
+                                          </span>
+                                        )}
                                     </label>
                                   </div>
                                 </li>
@@ -1775,9 +1819,7 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div onClick={() => {
-                                    searchwisebusList(formattedDate);
-                                  }}>
+                                  <div>
                                     <input
                                       type="checkbox"
                                       id={`bustype-${index}`}
@@ -1793,9 +1835,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`bustype-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         // justifyContent: "center"
@@ -1803,24 +1845,41 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "13px" }}>
                                         {label.type}
                                       </span>
+                                      {selectedBusType.includes(label.type) && (
+                                          <span
+
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#888",
+                                              fontWeight: "bold",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            <ImCross style={{
+                                              color: "white",
+                                              marginBottom: "2px",
+                                            }} />
+
+                                          </span>
+                                        )}
                                     </label>
                                   </div>
                                 </li>
@@ -1843,9 +1902,7 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div onClick={() => {
-                                    searchwisebusList(formattedDate);
-                                  }}>
+                                  <div >
                                     <input
                                       type="checkbox"
                                       id={`price-${index}`}
@@ -1861,9 +1918,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`price-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         // justifyContent: "center"
@@ -1871,25 +1928,42 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
 
                                       <span style={{ fontSize: "13px" }}>
                                         {label.type}
                                       </span>
+                                      {selectedPrice.includes(label.type) && (
+                                          <span
+
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#888",
+                                              fontWeight: "bold",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            <ImCross style={{
+                                              color: "white",
+                                              marginBottom: "2px",
+                                            }} />
+
+                                          </span>
+                                        )}
                                     </label>
                                   </div>
                                 </li>
@@ -1912,9 +1986,7 @@ const BusList = (seat) => {
                                   className="fltrli mb-2 col-md-6 p-2 pt-0"
                                   key={index}
                                 >
-                                  <div onClick={() => {
-                                    searchwisebusList(formattedDate);
-                                  }}>
+                                  <div>
                                     <input
                                       type="checkbox"
                                       id={`time-${index}`}
@@ -1930,9 +2002,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`time-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         // justifyContent: "center"
@@ -1940,25 +2012,42 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
 
                                       <span style={{ fontSize: "12px" }}>
                                         {label.type}
                                       </span>
+                                      {selectedTime.includes(label.type) && (
+                                          <span
+
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#888",
+                                              fontWeight: "bold",
+                                              fontSize: "14px",
+                                            }}
+                                          >
+                                            <ImCross style={{
+                                              color: "white",
+                                              marginBottom: "2px",
+                                            }} />
+
+                                          </span>
+                                        )}
                                     </label>
                                   </div>
                                 </li>
@@ -1993,7 +2082,7 @@ const BusList = (seat) => {
                               Reset
                             </Button>
 
-                            <Button
+                            {/* <Button
                               variant="contained"
                               onClick={() => {
                                 searchwisebusList(formattedDate);
@@ -2007,7 +2096,7 @@ const BusList = (seat) => {
                               }}
                             >
                               Apply
-                            </Button>
+                            </Button> */}
                           </div>
                         </div>
                       </div>
@@ -2051,29 +2140,29 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`amenity-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                       }}
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.facility_name}
@@ -2117,30 +2206,30 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`bustype-ac-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         justifyContent: "center",
                                       }}
                                     >
                                       {label.image && (
-                                       <img
-                                       src={label?.image}
-                                       alt={label.type}
-                                       style={{
-                                         width: "25px",
-                                         height: "25px",
-                                         objectFit: "cover",
-                                         padding: "0px",
-                                         margin: "0px",
-                                         background:"white",
-                                         padding:"1px",
-                                         border:"2px solid white",
-                                         borderRadius:"2px"
-                                       }}
-                                     />
+                                        <img
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2183,9 +2272,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`bustype-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         justifyContent: "center",
@@ -2193,20 +2282,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2249,9 +2338,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`price-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         justifyContent: "center",
@@ -2259,20 +2348,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2315,9 +2404,9 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`time-${index}`}
-                                      className="btn-group d-flex gap-2 btn btn-light"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
-                                        border: "1px solid gray",
+                                        border: "1px solid #cfcfcf",
                                         cursor: "pointer",
                                         alignItems: "center",
                                         justifyContent: "center",
@@ -2325,20 +2414,20 @@ const BusList = (seat) => {
                                     >
                                       {label.image && (
                                         <img
-                                        src={label?.image}
-                                        alt={label.type}
-                                        style={{
-                                          width: "25px",
-                                          height: "25px",
-                                          objectFit: "cover",
-                                          padding: "0px",
-                                          margin: "0px",
-                                          background:"white",
-                                          padding:"1px",
-                                          border:"2px solid white",
-                                          borderRadius:"2px"
-                                        }}
-                                      />
+                                          src={label?.image}
+                                          alt={label.type}
+                                          style={{
+                                            width: "25px",
+                                            height: "25px",
+                                            objectFit: "cover",
+                                            padding: "0px",
+                                            margin: "0px",
+                                            background: "white",
+                                            padding: "1px",
+                                            border: "2px solid white",
+                                            borderRadius: "2px"
+                                          }}
+                                        />
                                       )}
                                       <span style={{ fontSize: "16px" }}>
                                         {label.type}
@@ -2377,7 +2466,7 @@ const BusList = (seat) => {
                               Reset
                             </Button>
 
-                            <Button
+                            {/* <Button
                               variant="contained"
                               onClick={() => {
                                 handleClose();
@@ -2392,7 +2481,7 @@ const BusList = (seat) => {
                               }}
                             >
                               Apply
-                            </Button>
+                            </Button> */}
                           </div>
                         </div>
                       </Nav>
@@ -2464,7 +2553,7 @@ const BusList = (seat) => {
                           Reset
                         </Button>
 
-                        <Button
+                        {/* <Button
                           variant="contained"
                           onClick={() => {
                             searchwisebusList(formattedDate);
@@ -2478,7 +2567,7 @@ const BusList = (seat) => {
                           }}
                         >
                           Apply
-                        </Button>
+                        </Button> */}
                       </div>
                     </DialogActions>
                   </Dialog>
@@ -2507,7 +2596,7 @@ const BusList = (seat) => {
                           <div className="busrcrd--rows d-flex flex-column mt-4 row-gap-4">
                             <div className="buslist--card card shadow-hover border-hover-none pt-3">
                               <div className="d-flex flex-column gap-2">
-                                <div className="d-flex justify-content-between align-items-center busnmflex px-4 flex-wrap flex-md-nowrap">
+                                <div className="d-flex justify-content-between align-items-center busnmflex px-4 flex-wrap flex-lg-nowrap row-gap-2">
                                   <div className="busname--icons">
                                     <div className="d-flex align-items-center gap-2">
                                       <img
@@ -2536,12 +2625,12 @@ const BusList = (seat) => {
                                     </div>
                                   </div>
                                   <div
-                                    className="d-flex rating_but_list"
+                                    className="d-flex flex-wrap justify-content-center mt-1 rating_but_list"
                                     style={{ whiteSpace: "pre" }}
                                   >
                                     <p
                                       style={{
-                                        borderRight: "1px solid gray",
+                                        borderRight: "1px solid #cfcfcf",
                                         paddingRight: "10px",
                                         marginRight: "10px",
                                         cursor: "pointer",
@@ -2555,7 +2644,7 @@ const BusList = (seat) => {
                                     </p>
                                     <p
                                       style={{
-                                        borderRight: "1px solid gray",
+                                        borderRight: "1px solid #cfcfcf",
                                         paddingRight: "10px",
                                         marginRight: "10px",
                                       }}
@@ -2574,7 +2663,7 @@ const BusList = (seat) => {
                                       />
                                       <p
                                         style={{
-                                          borderRight: "1px solid gray",
+                                          borderRight: "1px solid #cfcfcf",
                                           paddingRight: "10px",
                                           paddingLeft: "3px",
                                         }}
@@ -2586,10 +2675,10 @@ const BusList = (seat) => {
                                       <p
                                         className="fw-medium m-0"
                                         style={{
-                                          backgroundColor : item?.total_seat === "0" ? "red" : "rgb(108 42 127)",
-                                          color : item?.total_seat === "0" ? "white" : "white",
+                                          backgroundColor: item?.total_seat === "0" ? "red" : "rgb(108 42 127)",
+                                          color: item?.total_seat === "0" ? "white" : "white",
                                           paddingInline: "5px",
-                                          borderRadius:"5px"
+                                          borderRadius: "5px"
                                         }}
                                       >
                                         {item?.total_seat} Seats Available
@@ -2799,7 +2888,7 @@ const BusList = (seat) => {
                                     {selectedBusId === item.id &&
                                       showSeats && (
                                         <>
-                                          <div className="mt-4 p-4">
+                                          <div className="mt-4 py-4 px-2 px-xl-4">
                                             <div>
                                               <div className="roww">
                                                 <div className="column11">

@@ -168,7 +168,6 @@ const Home = () => {
 
     const handleBusShow = () => {
         const newErrors = {};
-
         if (!from) {
             newErrors.from = 'Please enter the Boarding point';
             toast.error('Please enter the Boarding point');
@@ -179,7 +178,6 @@ const Home = () => {
             newErrors.to = 'Please enter different Boarding and Dropping point';
             toast.error('Please enter different Boarding and Dropping point');
         }
-
         setErrors(newErrors);
 
         const isValid = Object.keys(newErrors).length === 0;

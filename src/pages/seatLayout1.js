@@ -110,7 +110,7 @@ const SeatLayout1 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
                         </>
                       )}
                     </div>
-                  ) : (
+                  ) : (   
                     <div className="seater">
                       <img
                         className="seatLayout2"
@@ -131,8 +131,8 @@ const SeatLayout1 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
 
   return (
     <>
-      <div className="layout">
-        <table className="main-table">
+      <div className="layout gap-2 flex-column flex-lg-row customrow">
+        <table className="main-table rrrr">
           <GiSteeringWheel
             style={{
               fontSize: "5.5rem",
