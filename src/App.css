@@ -224,6 +224,7 @@ body {
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   border: 1px solid #6c2a7f !important;
+  overflow: hidden;
 }
 .card-border .card a{
   color: #6c2a7f;
