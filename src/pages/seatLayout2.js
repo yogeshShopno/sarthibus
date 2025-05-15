@@ -37,31 +37,30 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
   const renderTable = () => {
     return Object.keys(busLayoutData).map((rowKey) => {
       const row = busLayoutData[rowKey];
-
+  
       // Check if all seats in the row have BlockType === 3
       const isAllGallery = Object.keys(row).every((colKey) => {
         const seat = row[colKey];
-        return seat.BlockType === 3;
+        return seat && seat.BlockType === 3; // Add null check for seat
       });
-
+  
       // Skip rendering this row if all seats have BlockType 3
       if (isAllGallery) return null;
-
+  
       return (
         <tr key={rowKey} className="flex flex-row bg-lime-600">
           {Object.keys(row).map((colKey) => {
             const seat = row[colKey];
+            if (!seat || occupied[`${rowKey}-${colKey}`] || seat === "_occupied_") return null; // Skip null seat or occupied ones
+  
             const rowIndex = parseInt(rowKey);
             const colIndex = parseInt(colKey);
-
-            if (occupied[`${rowIndex}-${colIndex}`] || seat === "_occupied_") return null;
-            if (!seat) return <td key={colKey}></td>;
-
+  
             let rs = parseInt(seat.RowSpan || 1);
             let cs = parseInt(seat.ColumnSpan || 1);
             if (rs === 0) rs = 1;
             if (cs === 0) cs = 1;
-
+  
             // Mark occupied cells
             for (let r = 0; r < rs; r++) {
               for (let c = 0; c < cs; c++) {
@@ -69,13 +68,15 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
                 occupied[`${rowIndex + r}-${colIndex + c}`] = true;
               }
             }
-            let className = " ";
+  
+            let className = "";
             if (seat.BlockType === 3) className += " gallery";
             else if (seat.BlockType === 0 && seat.SeatType === 1) {
               className += " sleeper ";
-            } else if (seat.BlockType === 2 ) {
+            } else if (seat.BlockType === 2) {
               className += " sleeper ";
             }
+  
             return (
               <td
                 key={colKey}
@@ -84,23 +85,39 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
                 onClick={() => handleSelect(seat)}
               >
                 <div
-                  className={className +
+                  className={
+                    className +
                     (seat.is_booked ? " booked " : " available ") +
                     (selectedSeats.includes(seat) ? " selected" : "") +
-                    (seat.ColumnSpan == 2 ? " rotate-seat" : "") +
-                    (seat.BlockType == 2 ? " booked" : "") }
+                    (seat.ColumnSpan === 2 ? " rotate-seat" : "") +
+                    (seat.BlockType === 2 ? " booked" : "")
+                  }
                 >
                   {className.includes("sleeper ") ? (
                     <div className="stacked-seat">
-                          <div className="deck">{seat.BlockType == 2? seat.SeatNo :  seat.UpLowBerth ==="UB"? "Upper": seat.UpLowBerth ==="LB"?  "Lower" :seat.UpLowBerth}</div>
-                          <div>{seat.SeatNo}</div>
-                          <div className="seat-price">{seat.seat_price}</div>
+                      <div className="deck">
+                        {seat.BlockType === 2
+                          ? seat.SeatNo
+                          : seat.UpLowBerth === "UB"
+                          ? "Upper"
+                          : seat.UpLowBerth === "LB"
+                          ? "Lower"
+                          : seat.UpLowBerth}
+                      </div>
+                      <div>{seat.SeatNo}</div>
+                      <div className="seat-price">{seat.seat_price}</div>
                     </div>
                   ) : (
                     <div className="seater">
                       <img
                         className="seatLayout2"
-                        src={seat.is_booked ? seatBlack : selectedSeats.includes(seat) ? seatBlue : seatEmpty}
+                        src={
+                          seat.is_booked
+                            ? seatBlack
+                            : selectedSeats.includes(seat)
+                            ? seatBlue
+                            : seatEmpty
+                        }
                       />
                       <div>{seat.SeatNo}</div>
                       <div className="seat-price">{seat.seat_price}</div>
@@ -114,6 +131,8 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
       );
     });
   };
+  
+  
 
   return (
     <>

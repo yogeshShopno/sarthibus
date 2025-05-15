@@ -2,10 +2,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-
-  @media (max-width: 390px) {
-    display: block;
-  }
 }
 
 table {
@@ -21,29 +17,21 @@ table {
   align-self: center;
   flex: 1;
   border-collapse: separate;
-
   @media (max-width:575px) {
     border-spacing: 3px !important;
-  }
-
-  @media (max-width:390px) {
-    tbody {
-      overflow: auto;
-    }
   }
 }
 
 td {
-  width: 24px;
-  height: 30px;
+  width: 40px;
+  height: 60px;
   border-radius: 10px;
   gap: 40px;
   align-items: center;
   background-color: white;
   padding: 6px;
-
   @media (max-width: 575px) {
-    padding: 0;
+      padding: 0;
   }
 }
 
@@ -67,10 +55,9 @@ td {
   overflow: hidden;
 
   @media (max-width: 991px) {
-    width: 45px;
-    height: 75px;
+    width: 45px; 
+    height: 75px; 
   }
-
   @media (max-width: 575px) {
     border-radius: 5px;
     width: 40px;
@@ -111,10 +98,6 @@ td {
   height: 50px;
   width: 50px;
   z-index: 10;
-  @media (max-width:575px) {
-    height: 30px;
-    width: 30px;    
-  }
   /* Adjust the size as needed for seater and sleeper */
 }
 
@@ -160,9 +143,8 @@ td {
   text-align: center;
   padding: 2px 0;
   z-index: 100;
-
   @media (max-width: 575px) {
-    font-size: 10px;
+    font-size: 10px;  
   }
 }
 
@@ -170,7 +152,6 @@ td {
   font-size: 14px;
   font-weight: 600;
   color: #000000;
-
   @media (max-width:575px) {
     font-size: 11px;
   }
@@ -187,27 +168,7 @@ td {
 
 .rating_but_list {
   row-gap: 8px;
-
-  p {
-    margin: 0;
-  }
-}
-
-.show4features > .d-flex:nth-child(n+5) {
-  display: none !important;
-}
-
-.pointnm p {
-  font-size: 14px;
-  font-weight: 500 !important;
-  letter-spacing: .5px;
-}
-
-.viewseatbtndiv {
-  @media (min-width:500px) {
-    max-width: 170px;
-    margin-left: auto;
-    margin-right: 0;
-
+  p{
+      margin: 0;
   }
 }

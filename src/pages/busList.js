@@ -7,7 +7,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import { GiSteeringWheel } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import Tooltip from "@mui/material/Tooltip";
-import {Alert,AlertTitle,Autocomplete,Button,CircularProgress,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle,IconButton,selectClasses,TextField,FormControl,InputLabel,MenuItem,Select,} from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Autocomplete,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  selectClasses,
+  TextField,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import {
   useHistory,
   useLocation,
@@ -125,8 +143,7 @@ const BusList = (seat) => {
     handleHideBusSeat();
   };
   const handleCloseModal = () => {
-    setFrom(displayFrom);
-    setTo(displayTo);
+
     setShowModal(false);
   };
 
@@ -140,6 +157,7 @@ const BusList = (seat) => {
   const [to, setTo] = useState(initialTo);
   const [displayFrom, setDisplayFrom] = useState(initialFrom);
   const [displayTo, setDisplayTo] = useState(initialTo);
+
 
   const [inputValue, setInputValue] = useState(intialInputValue);
   const [busInputValue, setBusInputValue] = useState("");
@@ -224,8 +242,7 @@ const BusList = (seat) => {
   const [start, setStart] = useState(0);
   const [bookingType, setBookingType] = useState("");
 
-  const [unholdSeat, setUnholdSeat] = useState([]);
-  const [unholdBus, setUnholdBus] = useState();
+const [filterSearch, setFilterSearch] = useState(false);
 
   const resetAddDialogReview = () => {
     setOpen(false);
@@ -281,11 +298,16 @@ const BusList = (seat) => {
   };
 
   useEffect(() => {
-    localStorage.setItem("redirectPath", location.pathname);
-
-    busFilterData();
-    ResetFilter(formattedDate);
+    const init = async () => {
+      localStorage.setItem("redirectPath", location.pathname);
+  
+      busFilterData();
+      await ResetFilter(formattedDate);
+    };
+  
+    init();
   }, []);
+  
 
   useEffect(() => {
     const userID = JSON.parse(localStorage.getItem("UserID"));
@@ -298,14 +320,14 @@ const BusList = (seat) => {
     const localMainDropingPointIdArr = JSON.parse(localStorage.getItem("main_droping_point_id_arr"));
     const SelectedDroping = JSON.parse(localStorage.getItem("SelectedDropingValue"));
     const SelectedBoarding = JSON.parse(localStorage.getItem("SelectedBoardingValue"));
-    const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats"));
-    const servicetax = JSON.parse(localStorage.getItem("serviceTax"));
+    // const selectedSeats = JSON.parse(localStorage.getItem("selectedSeats"));
+    // const servicetax = JSON.parse(localStorage.getItem("serviceTax"));
     const selectedUpperSeats = JSON.parse(localStorage.getItem("selectedUpperSeats"));
     const totalPriceLocal = localStorage.getItem("totalPrice");
-    setSelectedLowerSeat(selectedSeats);
-    setSelectedUpperSeat(selectedUpperSeats);
-    setSelectedLowerSeats(selectedSeats);
-    setSelectedUpperSeats(selectedUpperSeats);
+    // setSelectedLowerSeat(selectedSeats);
+    // setSelectedUpperSeat(selectedUpperSeats);
+    // setSelectedLowerSeats(selectedSeats);
+    // setSelectedUpperSeats(selectedUpperSeats);
     if (
       userID &&
       localBusType &&
@@ -329,11 +351,11 @@ const BusList = (seat) => {
       setSelectedDropingValue(SelectedDroping);
       setSelectedBoardingValue(SelectedBoarding);
       setTotalPrice(totalPriceLocal);
-      setSelectedLowerSeat(selectedSeats);
+      // setSelectedLowerSeat(selectedSeats);
       setSelectedUpperSeat(selectedUpperSeats);
-      setSelectedLowerSeats(selectedSeats);
+      // setSelectedLowerSeats(selectedSeats);
       setSelectedUpperSeats(selectedUpperSeats);
-      setServiceTax(servicetax);
+      // setServiceTax(servicetax);
     } else {
       console.error(
         "Some parameters are missing in local storage. Skipping API call."
@@ -397,12 +419,12 @@ const BusList = (seat) => {
   };
   useEffect(() => {
     if (formattedDate) {
-    console.log("hi")
-
-      searchwisebusList(formattedDate);
+      if (filterSearch == true) {
+        searchwisebusList(formattedDate);
+      }
     }
   }, [selectedBusTypeAc, selectedBusType, selectedPrice, selectedTime, formattedDate]);
-  
+
   const searchwisebusList = async (formattedDate) => {
     setLoading(true);
 
@@ -484,7 +506,46 @@ const BusList = (seat) => {
     }
   };
 
+  const intialBus = async (formattedDate) => {
+    setFilterSearch(false)
+    setLoading(true);
+    let data = new FormData();
+    const amenitiesJSON = JSON.stringify(selectedAmenitiesId);
+    data.append("boarding_point", from?.city_id);
+    data.append("infinity_boarding_point", from?.infinity_id);
+    data.append("droping_point", to?.city_id);
+    data.append("infinity_droping_point", to?.infinity_id);
+    data.append("date", formattedDate);
+    data.append("bus_name", inputValue ? inputValue : "");
+
+    try {
+      await axios.post("search_bus", data, {}).then((res) => {
+        setBusList(res.data.data);
+        setOpenDialog(false);
+
+        setSelectedBusTypeAc([]);
+        setBusPhotos(res.data.data.bus_array);
+        setSelectedBusType([]);
+        setSelectedPrice([]);
+        setSelectedTime([]);
+        setFromTime();
+        setToTime();
+        setSelectedBusTypeAc("");
+        setSelectedBusType("");
+        setPriceRange([500, 5000]);
+        setSelectedAmenities([]);
+        setSelectedAmenitiesId([]);
+        firstInputRef.current?.focus();
+      });
+    } catch (error) {
+      toast.error(error.data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const ResetFilter = async (formattedDate) => {
+    setFilterSearch(false)
     setLoading(true);
     let data = new FormData();
     const amenitiesJSON = JSON.stringify(selectedAmenitiesId);
@@ -790,8 +851,8 @@ const BusList = (seat) => {
       localStorage.setItem("main_droping_point_id_arr", JSON.stringify(main_droping_point_id_arr));
 
       const localBusId = localStorage.getItem("bus_id");
-      const localSeat = localStorage.getItem("selectedSeats");
-      const localUpperSeat = localStorage.getItem("selectedUpperSeats");
+      // const localSeat = localStorage.getItem("selectedSeats");
+      // const localUpperSeat = localStorage.getItem("selectedUpperSeats");
 
       if (selectedBusId !== busId) {
         setSelectedLowerSeats([]);
@@ -1076,7 +1137,7 @@ const BusList = (seat) => {
     data.append("bus_id", item?.id);
     data.append("booking_type", item?.booking_type);
     data.append("booking_date", formattedDate);
-    data.append("boarding_point_id", item?.main_boarding_point_id);
+    data.append("boarding_point_id", selectedboardingValue.boarding_id);
     data.append("booking_date", formattedDate);
 
     // localStorage.setItem("selectedSeats", JSON.stringify(selectedLowerSeats));
@@ -1264,6 +1325,7 @@ const BusList = (seat) => {
   );
 
   const handleSearch = () => {
+
     const newErrors = {};
 
     if (!from) {
@@ -1280,9 +1342,9 @@ const BusList = (seat) => {
     const isValid = Object.keys(newErrors).length === 0;
 
     if (isValid) {
-      setDisplayFrom(from);
-      setDisplayTo(to);
-
+      // setDisplayFrom(from);
+      // setDisplayTo(to);
+      setFilterSearch(false)
       const formattedDate = format(selectedDate, "yyyy-MM-dd");
       setTempDate(formattedDate);
       setSelectedDate(formattedDate);
@@ -1726,8 +1788,10 @@ const BusList = (seat) => {
                                       checked={selectedBusTypeAc.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxBusTypeAc(label.type)
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -1760,25 +1824,25 @@ const BusList = (seat) => {
                                       )}
                                       <span style={{ fontSize: "13px", display: "flex", alignItems: "center", gap: "4px", }}>
                                         {label.type}
-                                      
+
                                       </span>
                                       {selectedBusTypeAc.includes(label.type) && (
-                                          <span
+                                        <span
 
-                                            style={{
-                                              cursor: "pointer",
-                                              color: "#888",
-                                              fontWeight: "bold",
-                                              fontSize: "14px",
-                                            }}
-                                          >
-                                            <ImCross style={{
-                                              color: "white",
-                                              marginBottom: "2px",
-                                            }} />
+                                          style={{
+                                            cursor: "pointer",
+                                            color: "#888",
+                                            fontWeight: "bold",
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          <ImCross style={{
+                                            color: "white",
+                                            marginBottom: "2px",
+                                          }} />
 
-                                          </span>
-                                        )}
+                                        </span>
+                                      )}
                                     </label>
                                   </div>
                                 </li>
@@ -1810,9 +1874,10 @@ const BusList = (seat) => {
                                       checked={selectedBusType.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxBusType(label.type)
-                                      }
+                                        setFilterSearch(true)
+                                      }}
                                       style={{ display: "none" }}
                                     />
                                     <label
@@ -1846,22 +1911,22 @@ const BusList = (seat) => {
                                         {label.type}
                                       </span>
                                       {selectedBusType.includes(label.type) && (
-                                          <span
+                                        <span
 
-                                            style={{
-                                              cursor: "pointer",
-                                              color: "#888",
-                                              fontWeight: "bold",
-                                              fontSize: "14px",
-                                            }}
-                                          >
-                                            <ImCross style={{
-                                              color: "white",
-                                              marginBottom: "2px",
-                                            }} />
+                                          style={{
+                                            cursor: "pointer",
+                                            color: "#888",
+                                            fontWeight: "bold",
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          <ImCross style={{
+                                            color: "white",
+                                            marginBottom: "2px",
+                                          }} />
 
-                                          </span>
-                                        )}
+                                        </span>
+                                      )}
                                     </label>
                                   </div>
                                 </li>
@@ -1893,8 +1958,10 @@ const BusList = (seat) => {
                                       checked={selectedPrice.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxPriceType(label.type)
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -1930,22 +1997,22 @@ const BusList = (seat) => {
                                         {label.type}
                                       </span>
                                       {selectedPrice.includes(label.type) && (
-                                          <span
+                                        <span
 
-                                            style={{
-                                              cursor: "pointer",
-                                              color: "#888",
-                                              fontWeight: "bold",
-                                              fontSize: "14px",
-                                            }}
-                                          >
-                                            <ImCross style={{
-                                              color: "white",
-                                              marginBottom: "2px",
-                                            }} />
+                                          style={{
+                                            cursor: "pointer",
+                                            color: "#888",
+                                            fontWeight: "bold",
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          <ImCross style={{
+                                            color: "white",
+                                            marginBottom: "2px",
+                                          }} />
 
-                                          </span>
-                                        )}
+                                        </span>
+                                      )}
                                     </label>
                                   </div>
                                 </li>
@@ -1977,8 +2044,11 @@ const BusList = (seat) => {
                                       checked={selectedTime.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxTimeType(label.type)
+                                        setFilterSearch(true)
+
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -2014,22 +2084,22 @@ const BusList = (seat) => {
                                         {label.type}
                                       </span>
                                       {selectedTime.includes(label.type) && (
-                                          <span
+                                        <span
 
-                                            style={{
-                                              cursor: "pointer",
-                                              color: "#888",
-                                              fontWeight: "bold",
-                                              fontSize: "14px",
-                                            }}
-                                          >
-                                            <ImCross style={{
-                                              color: "white",
-                                              marginBottom: "2px",
-                                            }} />
+                                          style={{
+                                            cursor: "pointer",
+                                            color: "#888",
+                                            fontWeight: "bold",
+                                            fontSize: "14px",
+                                          }}
+                                        >
+                                          <ImCross style={{
+                                            color: "white",
+                                            marginBottom: "2px",
+                                          }} />
 
-                                          </span>
-                                        )}
+                                        </span>
+                                      )}
                                     </label>
                                   </div>
                                 </li>
@@ -2112,11 +2182,13 @@ const BusList = (seat) => {
                                       checked={selectedAmenities.includes(
                                         label.facility_name
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxChange(
                                           label.facility_name,
                                           label.id
                                         )
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -2181,8 +2253,11 @@ const BusList = (seat) => {
                                       checked={selectedBusTypeAc.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxBusTypeAc(label.type)
+                                        setFilterSearch(true)
+                                      }
+
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -2247,8 +2322,10 @@ const BusList = (seat) => {
                                       checked={selectedBusType.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxBusType(label.type)
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -2313,8 +2390,10 @@ const BusList = (seat) => {
                                       checked={selectedPrice.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxPriceType(label.type)
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
@@ -2379,8 +2458,10 @@ const BusList = (seat) => {
                                       checked={selectedTime.includes(
                                         label.type
                                       )}
-                                      onChange={() =>
+                                      onChange={() => {
                                         handleCheckboxTimeType(label.type)
+                                        setFilterSearch(true)
+                                      }
                                       }
                                       style={{ display: "none" }}
                                     />
