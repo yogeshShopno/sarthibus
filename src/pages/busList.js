@@ -352,9 +352,9 @@ const [filterSearch, setFilterSearch] = useState(false);
       setSelectedBoardingValue(SelectedBoarding);
       setTotalPrice(totalPriceLocal);
       // setSelectedLowerSeat(selectedSeats);
-      setSelectedUpperSeat(selectedUpperSeats);
+      // setSelectedUpperSeat(selectedUpperSeats);
       // setSelectedLowerSeats(selectedSeats);
-      setSelectedUpperSeats(selectedUpperSeats);
+      // setSelectedUpperSeats(selectedUpperSeats);
       // setServiceTax(servicetax);
     } else {
       console.error(
@@ -842,6 +842,7 @@ const [filterSearch, setFilterSearch] = useState(false);
         });
       }, 2000);
     } else {
+      
 
       localStorage.setItem("bus_type", JSON.stringify(busType));
       localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
@@ -854,7 +855,7 @@ const [filterSearch, setFilterSearch] = useState(false);
       // const localSeat = localStorage.getItem("selectedSeats");
       // const localUpperSeat = localStorage.getItem("selectedUpperSeats");
 
-      if (selectedBusId !== busId) {
+      // if (selectedBusId !== busId) {
         setSelectedLowerSeats([]);
         setSelectedSeatBusId(busId);
         setSelectedUpperSeats([]);
@@ -875,7 +876,7 @@ const [filterSearch, setFilterSearch] = useState(false);
         // if (busId == JSON.parse(localBusId) && localUpperSeat) {
         //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
         // }
-      }
+      // }
 
       setSelectedBusId(busId);
       setBusTypeID(busType);

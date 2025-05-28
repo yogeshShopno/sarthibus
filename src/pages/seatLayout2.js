@@ -14,11 +14,11 @@ const SeatLayout2 = ({ busLayoutData, selectedSeatsFromParent = [], onSeatsChang
   const occupied = {};
   const [selectedSeats, setSelectedSeats] = useState([]);
 
-  useEffect(() => {
-    if (selectedSeatsFromParent && selectedSeatsFromParent.length > 0) {
-      setSelectedSeats(selectedSeatsFromParent);
-    }
-  }, [selectedSeatsFromParent]);
+  // useEffect(() => {
+  //   if (selectedSeatsFromParent && selectedSeatsFromParent.length > 0) {
+  //     setSelectedSeats(selectedSeatsFromParent);
+  //   }
+  // }, [selectedSeatsFromParent]);
 
   const handleSelect = (seat) => {
     if (seat.is_booked || seat.BlockType !== 0) return;
