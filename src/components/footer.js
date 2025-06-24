@@ -172,8 +172,8 @@ const Footer = () => {
                   </a>
                   <a href={youtube} target="_blank" rel="noopener noreferrer">
                     <img
-                      src="/assets/icons/linkedin.png"
-                      alt="LinkedIn"
+                      src="/assets/icons/youtube.png"
+                      alt="Youtube"
                       style={{
                         width: "25px",
                         transition: "transform 0.3s",
