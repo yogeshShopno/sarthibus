@@ -8,24 +8,28 @@ const Footer = () => {
   const logo = process.env.PUBLIC_URL + '../assets/images/sarthi bus logo.png';
   const history = useHistory();
 
-  const [facebook, setFacebook] = useState('')
-  const [linkedin, setLinkedin] = useState('')
-  const [twitter, setTwitter] = useState('')
-  const [instagram, setInstagram] = useState('')
+  const [facebook, setFacebook] = useState('https://www.facebook.com/share/1AnQmqwbuA/?mibextid=wwXIfr')
+  const [linkedin, setLinkedin] = useState('https://www.linkedin.com/company/sarthibusofficial/')
+  const [twitter, setTwitter] = useState('https://x.com/sarthibus?s=11')
+  const [instagram, setInstagram] = useState('https://www.instagram.com/sarthibus')
+  const [youtube, setYoutube] = useState('https://youtube.com/@sarthibusofficial?si=mFhxkKTfCuEBXBr4')
+
 
   useEffect(() => {
-    successTicket();
+    // successTicket();
   }, [])
-  const successTicket = async () => {
-    const res = await axios.get("social_media_link");
-    if (res.data.success === true) {
-      setFacebook(res.data.data.facebook_link);
-      setTwitter(res.data.data.twitter_link);
-      setLinkedin(res.data.data.linkedin_link);
-      setInstagram(res.data.data.instagram_link);
+  // const successTicket = async () => {
+  //   const res = await axios.get("social_media_link");
+  //   if (res.data.success === true) {
+  //     setFacebook(res.data.data.facebook_link);
+  //     setTwitter(res.data.data.twitter_link);
+  //     setLinkedin(res.data.data.linkedin_link);
+  //     setInstagram(res.data.data.instagram_link);
+  //     setYoutube(res.data.data.instagram_link);
 
-    }
-  }
+
+  //   }
+  // }
 
   return (
     <footer>
@@ -155,6 +159,18 @@ const Footer = () => {
                     />
                   </a>
                   <a href={linkedin} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src="/assets/icons/linkedin.png"
+                      alt="LinkedIn"
+                      style={{
+                        width: "25px",
+                        transition: "transform 0.3s",
+                      }}
+                      onMouseOver={(e) => (e.target.style.transform = "scale(1.2)")}
+                      onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+                    />
+                  </a>
+                  <a href={youtube} target="_blank" rel="noopener noreferrer">
                     <img
                       src="/assets/icons/linkedin.png"
                       alt="LinkedIn"

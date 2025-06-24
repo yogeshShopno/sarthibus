@@ -51,18 +51,18 @@ const SathiBanner = () => {
                                                     <h4 className="fw-bold mb-0">4.5</h4>
                                                     <GiRoundStar size={20} />
                                                 </div>
-                                                <small>50M+ downloads</small>
+                                                <small>1K+ downloads</small>
                                                 <p>Play Store</p>
                                             </div>
-                                            <hr style={{ border: "1px solid" }} />
-                                            <div>
+                                            {/* <hr style={{ border: "1px solid" }} /> */}
+                                            {/* <div>
                                                 <div className="d-flex align-items-center gap-2">
                                                     <h4 className="fw-bold mb-0">4.6</h4>
                                                     <GiRoundStar size={20} />
                                                 </div>
-                                                <small>50M+ downloads</small>
+                                                <small>1K+ downloads</small>
                                                 <p>App Store</p>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>

@@ -9,7 +9,7 @@ const whyUsData = [
     // { icon: "assets/icons/mny.svg", title: "1,00,000+ Bus Routes", description: "Providing unmatched options to cater to all your travel requirements." },
     // { icon: "assets/icons/busblue.svg", title: "1,00,000+ Bus Routes", description: "Providing unmatched options to cater to all your travel requirements." },
 
-    { icon: "assets/icons/path.svg", title: "1,00,000+ Bus Routes", description: "Providing unmatched options to cater to all your travel requirements." },
+    { icon: "assets/icons/path.svg", title: "2,500 + Bus Routes", description: "Providing unmatched options to cater to all your travel requirements." },
     { icon: "assets/icons/affordable.svg", title: "Affordable Fares", description: "Enjoy competitive prices for every journey, ensuring the best value for your travel." },
     { icon: "assets/icons/mny.svg", title: "Secure Payments", description: "We prioritize your safety with secure and trusted payment methods." },
     { icon: "assets/icons/tckt.svg", title: "Easy Booking", description: "Book your tickets in just a few simple steps, anytime, anywhere." },
