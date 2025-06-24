@@ -48,7 +48,7 @@ const SathiBanner = () => {
                                         <div className="d-flex justify-content-between mt-5">
                                             <div>
                                                 <div className="d-flex align-items-center gap-2">
-                                                    <h4 className="fw-bold mb-0">4.5</h4>
+                                                    <h4 className="fw-bold mb-0">4.9</h4>
                                                     <GiRoundStar size={20} />
                                                 </div>
                                                 <small>1K+ downloads</small>
