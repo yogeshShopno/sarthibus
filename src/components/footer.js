@@ -197,7 +197,7 @@ const Footer = () => {
               fontWeight: '700',
               cursor: 'pointer',
 
-            }} href="https://webvisioninfotech.com/">Copyright © 2024 Sarthi Bus Developed By Webvision Infotech</a>
+            }} >Copyright © 2024 Sarthi Bus Developed By Sarthi bus</a>
           </p>
         </div>
       </div>
