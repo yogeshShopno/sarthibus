@@ -63,7 +63,7 @@ const Footer = () => {
                   <li className="footerli mb-2">
                     <a href="/contact-us" style={{ textDecoration: "none" }}>contact</a>
                   </li>
-                  {localStorage.getItem('UserID') ? <li className="footerli mb-2" onClick={() => history.push('/profile')}>
+                  {localStorage.getItem('UserID') ? <li className="footerli mb-2" onClick={() => history.push('/profile/edit-profile')}>
                     <a >Account</a>
                   </li> : <li className="footerli mb-2" onClick={() => history.push('/login')}>
                     <a >Login</a>

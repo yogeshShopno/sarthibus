@@ -18,6 +18,7 @@ import App from "../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
 import { FaCheckCircle } from "react-icons/fa";
+import LoginPopup from "../components/LoginPopup";
 
 const PassengerView = () => {
     const busIconCoupon = process.env.PUBLIC_URL + 'assets/images/bus icon coupon.png';
@@ -70,6 +71,7 @@ const PassengerView = () => {
         main_droping_point_id = '',
         booking_type
     } = location.state || {};
+              const [openLogin, setOpenLogin] = useState(true)
 
 
     const history = useHistory();
@@ -211,40 +213,42 @@ const PassengerView = () => {
             localStorage.setItem('redirectPath', location.pathname);
             toast.error('Please Login To Book Ticket');
 
-            setTimeout(() => {
-                history.push({
-                    pathname: '/login',
-                    state: {
-                        passengerData,
-                        name,
-                        emailId,
-                        mobileNo,
-                        selectedTotalSeat,
-                        totalPrice,
-                        serviceTax,
-                        selectedTotalSeatPrice,
-                        bus_id,
-                        bus_name,
-                        boarding_point_name,
-                        droping_point_name,
-                        selectedboardingValue,
-                        selecteddropingValue,
-                        bus_ac,
-                        droping_time,
-                        boarding_time,
-                        droping_date,
-                        boarding_date,
-                        busIcon,
-                        time_different,
-                        formattedDate,
-                        to,
-                        from,
-                        inputValue,
-                        main_boarding_point_id,
-                        main_droping_point_id,
-                    }
-                });
-            }, 2000);
+            // setTimeout(() => {
+            //     history.push({
+            //         pathname: '/login',
+            //         state: {
+            //             passengerData,
+            //             name,
+            //             emailId,
+            //             mobileNo,
+            //             selectedTotalSeat,
+            //             totalPrice,
+            //             serviceTax,
+            //             selectedTotalSeatPrice,
+            //             bus_id,
+            //             bus_name,
+            //             boarding_point_name,
+            //             droping_point_name,
+            //             selectedboardingValue,
+            //             selecteddropingValue,
+            //             bus_ac,
+            //             droping_time,
+            //             boarding_time,
+            //             droping_date,
+            //             boarding_date,
+            //             busIcon,
+            //             time_different,
+            //             formattedDate,
+            //             to,
+            //             from,
+            //             inputValue,
+            //             main_boarding_point_id,
+            //             main_droping_point_id,
+            //         }
+            //     });
+            // }, 2000);
+                  setOpenLogin(true)
+
             return;
         }
 
@@ -941,6 +945,7 @@ const PassengerView = () => {
 
             {loading && <Loader />}
 
+               {openLogin && <LoginPopup onClose={()=>setOpenLogin(false)} />}
 
 
         </div>
