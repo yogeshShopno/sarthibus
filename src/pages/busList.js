@@ -84,6 +84,7 @@ import { useRef } from "react";
 import SeatType from "../components/SeatTypes";
 import SeatLayout2 from "./seatLayout2";
 import SeatLayout1 from "./seatLayout1";
+import LoginPopup from "../components/LoginPopup";
 
 const BusList = (seat) => {
   const firstInputRef = useRef("");
@@ -242,7 +243,9 @@ const BusList = (seat) => {
   const [start, setStart] = useState(0);
   const [bookingType, setBookingType] = useState("");
 
-const [filterSearch, setFilterSearch] = useState(false);
+  const [filterSearch, setFilterSearch] = useState(false);
+
+  const [openLogin, setOpenLogin] = useState(true)
 
   const resetAddDialogReview = () => {
     setOpen(false);
@@ -300,14 +303,14 @@ const [filterSearch, setFilterSearch] = useState(false);
   useEffect(() => {
     const init = async () => {
       localStorage.setItem("redirectPath", location.pathname);
-  
+
       busFilterData();
       await ResetFilter(formattedDate);
     };
-  
+
     init();
   }, []);
-  
+
 
   useEffect(() => {
     const userID = JSON.parse(localStorage.getItem("UserID"));
@@ -829,20 +832,21 @@ const [filterSearch, setFilterSearch] = useState(false);
     if (!userID) {
       const redirectPath = localStorage.getItem("redirectPath");
       toast.error("Please Login To Book Ticket");
-      setTimeout(() => {
-        history.push({
-          pathname: "/login",
-          state: {
-            formattedDate,
-            to,
-            from,
-            inputValue,
-            redirectPath,
-          },
-        });
-      }, 2000);
+      // setTimeout(() => {
+      //   history.push({
+      //     pathname: "/login",
+      //     state: {
+      //       formattedDate,
+      //       to,
+      //       from,
+      //       inputValue,
+      //       redirectPath,
+      //     },
+      //   });
+      // }, 2000);
+      setOpenLogin(true)
     } else {
-      
+
 
       localStorage.setItem("bus_type", JSON.stringify(busType));
       localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
@@ -856,26 +860,26 @@ const [filterSearch, setFilterSearch] = useState(false);
       // const localUpperSeat = localStorage.getItem("selectedUpperSeats");
 
       // if (selectedBusId !== busId) {
-        setSelectedLowerSeats([]);
-        setSelectedSeatBusId(busId);
-        setSelectedUpperSeats([]);
-        setSelectedLowerSeatPrice([]);
-        setSelectedUpperSeatPrice([]);
-        setSelectedUpperSeat([]);
-        setSelectedLowerSeat([]);
-        setImageSrcLower({});
-        setImageSrcUpper({});
-        setSelectedDropingValue({});
-        setSelectedBoardingValue({});
-        setTotalPrice(0);
+      setSelectedLowerSeats([]);
+      setSelectedSeatBusId(busId);
+      setSelectedUpperSeats([]);
+      setSelectedLowerSeatPrice([]);
+      setSelectedUpperSeatPrice([]);
+      setSelectedUpperSeat([]);
+      setSelectedLowerSeat([]);
+      setImageSrcLower({});
+      setImageSrcUpper({});
+      setSelectedDropingValue({});
+      setSelectedBoardingValue({});
+      setTotalPrice(0);
 
-        // if (busId == JSON.parse(localBusId) && localSeat) {
-        //   setSelectedLowerSeats(JSON.parse(localSeat));
-        // }
+      // if (busId == JSON.parse(localBusId) && localSeat) {
+      //   setSelectedLowerSeats(JSON.parse(localSeat));
+      // }
 
-        // if (busId == JSON.parse(localBusId) && localUpperSeat) {
-        //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
-        // }
+      // if (busId == JSON.parse(localBusId) && localUpperSeat) {
+      //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
+      // }
       // }
 
       setSelectedBusId(busId);
@@ -3384,6 +3388,9 @@ const [filterSearch, setFilterSearch] = useState(false);
             </div>
           </div>
         </div>
+              {openLogin && <LoginPopup onClose={()=>setOpenLogin(false)} />}
+
+
         <Footer />
       </div>
 
@@ -3459,6 +3466,7 @@ const [filterSearch, setFilterSearch] = useState(false);
           </Button>
         </Modal.Footer>
       </Modal>
+
       {loading && <Loader />}
     </>
   );
