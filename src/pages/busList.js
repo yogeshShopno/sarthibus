@@ -245,7 +245,7 @@ const BusList = (seat) => {
 
   const [filterSearch, setFilterSearch] = useState(false);
 
-  const [openLogin, setOpenLogin] = useState(true)
+  const [openLogin, setOpenLogin] = useState(false)
 
   const resetAddDialogReview = () => {
     setOpen(false);
@@ -3388,8 +3388,7 @@ const BusList = (seat) => {
             </div>
           </div>
         </div>
-              {openLogin && <LoginPopup onClose={()=>setOpenLogin(false)} />}
-
+        {openLogin && <LoginPopup onClose={() => setOpenLogin(false)} />}
 
         <Footer />
       </div>

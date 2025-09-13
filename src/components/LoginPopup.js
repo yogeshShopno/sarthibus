@@ -20,6 +20,7 @@ const LoginPopup = ({ onClose }) => {
     const [loading, setLoading] = useState(false);
     const [start, setStart] = useState(0);
     const [open, setOpen] = useState(false)
+    const [name, setName] = useState("")
 
 
     useEffect(() => {
@@ -28,8 +29,6 @@ const LoginPopup = ({ onClose }) => {
         window.scrollTo(0, 0);
 
     }, []);
-
-
 
 
     const cityList = async (searchTerm = '', start = 0) => {
@@ -144,13 +143,13 @@ const LoginPopup = ({ onClose }) => {
         setStep(2);
 
         let data = new FormData();
-        data.append('number', mobileNo || "")
+        data.append('number', mobileNo || "");
+
         try {
             await axios.post("customer_web_login", data, {
             }).then((res) => {
                 if (res.data.success == true) {
                     toast.success(res.data.message);
-                    // localStorage.setItem('UserID', res?.data?.user_data?.id)
 
                 } else {
                     toast.error(res.data.message || 'Invalid Message');
@@ -181,19 +180,13 @@ const LoginPopup = ({ onClose }) => {
                 if (res.data.success === true) {
                     toast.success(res?.data?.message);
                     const userId = res?.data?.user_data?.id;
-                    console.log(res?.data?.user_data, res?.data?.user_data?.id); // Logs the UserID for debugging
-                    localStorage.setItem('UserID', res?.data?.user_data?.id);
-
-                    if (userId) {
-                        localStorage.setItem('UserID', userId);
-
-
-
-
-                    }
+                   
+                  
                     // Condition for 'type 1'
                     if (res?.data?.user_data?.type == "1") {
                         onClose(); // Fixed typo from 'onclose'
+                        localStorage.setItem('UserID', res?.data?.user_data?.id);
+
                     }
                     setStep(3);
 
@@ -217,7 +210,8 @@ const LoginPopup = ({ onClose }) => {
         let data = new FormData();
         data.append('referral_code', referralCode || "")
         data.append('number', mobileNo || "")
-
+        data.append('name', name || "")
+        data.append('otp', otp.join("") || "")
         data.append('city_id', from?.city_id || "")
         data.append('type', "2" || "")
 
@@ -225,12 +219,14 @@ const LoginPopup = ({ onClose }) => {
         try {
             await axios.post("customer_web_login", data, {
             }).then((res) => {
-                if (res.data.success == true) {
-                    toast.success(res.data.message);
+                if (res?.data?.success == true) {
+                    toast.success(res?.data?.message);
+                    const userId = res?.data?.user_data?.id;
+
                     if (res?.data?.user_data?.type == "1") {
-                        onClose() 
+                        localStorage.setItem('UserID', userId);
+                        onClose()
                     }
-                    setStep(3);
                 } else {
                     toast.error(res.data.message || 'Invalid Message');
                 }
@@ -578,6 +574,42 @@ const LoginPopup = ({ onClose }) => {
                                                         />
                                                     </div>
                                                 </div>
+                                                <div className="mb-3">
+                                                    <div className="input-group">
+                                                        <span
+                                                            className="input-group-text bg-white border-end-0 rounded-start-3"
+                                                            style={{
+                                                                borderColor: "#e0e0e0",
+                                                                padding: "10px 12px"
+                                                            }}
+                                                        >
+                                                            <MdPersonAdd size={18} className="text-muted" />
+                                                        </span>
+                                                        <input
+                                                            type="text"
+                                                            className="form-control border-start-0 rounded-end-3"
+                                                            value={name}
+                                                            onChange={(e) => setName(e.target.value)}
+                                                            placeholder="Name"
+                                                            style={{
+                                                                borderColor: "#e0e0e0",
+                                                                fontSize: "0.95rem",
+                                                                padding: "10px 14px"
+                                                            }}
+                                                            onFocus={(e) => {
+                                                                e.target.style.borderColor = "#6c2a7f";
+                                                                e.target.style.boxShadow = "0 0 0 0.15rem rgba(108, 42, 127, 0.25)";
+                                                                e.target.previousElementSibling.style.borderColor = "#6c2a7f";
+                                                            }}
+                                                            onBlur={(e) => {
+                                                                e.target.style.borderColor = "#e0e0e0";
+                                                                e.target.style.boxShadow = "none";
+                                                                e.target.previousElementSibling.style.borderColor = "#e0e0e0";
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+
 
                                                 <div className="mb-4">
 
