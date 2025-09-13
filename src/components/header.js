@@ -8,6 +8,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, I
 import { toast, ToastContainer } from 'react-toastify';
 import GoogleTranslate from '../components/GoogleTranslate.js'
 import '../styles/style.css';
+import LoginPopup from './LoginPopup.js';
 
 
 const Header = () => {
@@ -17,6 +18,7 @@ const Header = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [open, setOpen] = useState(false);
+    const [openLogin, setOpenLogin] = useState(false)
 
     const handleLogOut = () => {
         localStorage.removeItem('UserName')
@@ -47,12 +49,12 @@ const Header = () => {
     }
 
     const logoClick = () => {
-              localStorage.removeItem('busState')
+        localStorage.removeItem('busState')
     }
 
     return (
         <>
-           
+
             <header className="shadow-sm">
                 <Navbar expand="lg" >
                     <Container>
@@ -70,7 +72,7 @@ const Header = () => {
                             <Nav className="m-auto mb-2 mb-lg-0">
                                 <Nav.Link href="/" onClick={logoClick()}>Home</Nav.Link>
                                 <Nav.Link href="/about-us" >About</Nav.Link>
-                             
+
                                 <Nav.Link href="/contact-us">Contact</Nav.Link>
                             </Nav>
 
@@ -88,14 +90,18 @@ const Header = () => {
                                         <CgProfile size={25} /> Account
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        {!localStorage.getItem('UserID') ?
-                                            <Dropdown.Item onClick={() => window.location.href = '/sign-up'}>Register</Dropdown.Item> :
-                                            <Dropdown.Item onClick={handleOpenProfile}>Profile</Dropdown.Item>
-                                        }
-                                        {!localStorage.getItem('UserID') ?
-                                            <Dropdown.Item onClick={() => window.location.href = '/login'}>Login</Dropdown.Item> :
-                                            <Dropdown.Item onClick={handleClickOpen}>Logout</Dropdown.Item>
-                                        }
+                                        {!localStorage.getItem('UserID') ? (
+                                            <>
+                                                <Dropdown.Item onClick={() => setOpenLogin(true)}>Register</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => setOpenLogin(true)}>Login</Dropdown.Item>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Dropdown.Item onClick={handleOpenProfile}>Profile</Dropdown.Item>
+                                                <Dropdown.Item onClick={handleClickOpen}>Logout</Dropdown.Item>
+                                            </>
+                                        )}
+
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Nav>
@@ -113,7 +119,7 @@ const Header = () => {
                                 <Nav.Link href="/" >Home</Nav.Link>
                             </Nav.Item>
                             <Nav.Link href="/about-us" >About</Nav.Link>
-                          
+
                             <Nav.Item>
                                 <Nav.Link href="/contact-us">Contact</Nav.Link>
                             </Nav.Item>
@@ -128,14 +134,15 @@ const Header = () => {
                                     <Nav.Item>
                                         <Dropdown.Item onClick={() => history.push('/profile')}>Profile</Dropdown.Item>
                                     </Nav.Item>
-                                    {!localStorage.getItem('UserID') ?
+                                    {!localStorage.getItem('UserID') ? (
                                         <Nav.Item className='mt-3'>
-                                            <Dropdown.Item onClick={() => window.location.href = '/login'}>Login</Dropdown.Item>
-                                        </Nav.Item> :
+                                            <Dropdown.Item onClick={() => setOpenLogin(true)}>Login</Dropdown.Item>
+                                        </Nav.Item>
+                                    ) : (
                                         <Nav.Item className='mt-3'>
                                             <Dropdown.Item onClick={handleClickOpen}>Logout</Dropdown.Item>
                                         </Nav.Item>
-                                    }
+                                    )}
                                 </Nav>
                             </Dropdown>
                         </Nav>
@@ -180,7 +187,9 @@ const Header = () => {
                         <Button color="error" onClick={() => setOpen(false)} style={{ width: "40%", border: "2px solid rgb(121 44 143)", backgroundColor: "white", backgroundColor: "rgb(121 44 143)" }}>Cancel</Button>
                     </DialogActions>
                 </Dialog>
+                {openLogin && <LoginPopup onClose={() => setOpenLogin(false)} />}
             </header>
+
         </>
     );
 };

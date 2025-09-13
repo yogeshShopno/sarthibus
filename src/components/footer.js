@@ -3,10 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
+import LoginPopup from './LoginPopup';
 
 const Footer = () => {
   const logo = process.env.PUBLIC_URL + '../assets/images/sarthi bus logo.png';
   const history = useHistory();
+
+  const [openLogin, setOpenLogin] = useState(false)
+
 
   const [facebook, setFacebook] = useState('https://www.facebook.com/share/1AnQmqwbuA/?mibextid=wwXIfr')
   const [linkedin, setLinkedin] = useState('https://www.linkedin.com/company/sarthibusofficial/')
@@ -65,9 +69,11 @@ const Footer = () => {
                   </li>
                   {localStorage.getItem('UserID') ? <li className="footerli mb-2" onClick={() => history.push('/profile/edit-profile')}>
                     <a >Account</a>
-                  </li> : <li className="footerli mb-2" onClick={() => history.push('/login')}>
-                    <a >Login</a>
-                  </li>}
+                  </li> :
+                    <li className="footerli mb-2" onClick={() => setOpenLogin(true)}>
+                      <a >Login</a>
+                    </li>
+                  }
                 </ul>
               </div>
             </div>
@@ -201,6 +207,8 @@ const Footer = () => {
           </p>
         </div>
       </div>
+      {openLogin && <LoginPopup onClose={() => setOpenLogin(false)} />}
+
     </footer>
   );
 };

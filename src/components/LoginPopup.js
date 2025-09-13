@@ -3,7 +3,7 @@ import { FaBusAlt } from "react-icons/fa";
 import { IoMdClose, IoMdArrowBack } from "react-icons/io";
 import { MdLocationCity, MdPersonAdd } from "react-icons/md";
 import { AiOutlineMobile } from "react-icons/ai";
-import { BsShieldCheck } from "react-icons/bs";
+import { BsGift, BsShieldCheck, BsPerson, BsGeoAlt } from 'react-icons/bs';
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
@@ -180,8 +180,8 @@ const LoginPopup = ({ onClose }) => {
                 if (res.data.success === true) {
                     toast.success(res?.data?.message);
                     const userId = res?.data?.user_data?.id;
-                   
-                  
+
+
                     // Condition for 'type 1'
                     if (res?.data?.user_data?.type == "1") {
                         onClose(); // Fixed typo from 'onclose'
@@ -289,7 +289,6 @@ const LoginPopup = ({ onClose }) => {
                                     <div className="d-flex justify-content-between align-items-center mb-3">
                                         {step > 1 ? (
 
-
                                             <div className="text-center text-white d-flex justify-content-center align-items-center gap-2">
 
 
@@ -351,85 +350,163 @@ const LoginPopup = ({ onClose }) => {
 
                                     {/* Step 1: Mobile Number */}
                                     {step === 1 && (
-                                        <div className="d-flex flex-column" style={{ minHeight: "180px" }}>
-                                            <div className="mb-4">
-                                                <div className="input-group">
+                                        <div className="d-flex flex-column position-relative" style={{ minHeight: "320px" }}>
+                                            {/* Background decoration */}
+                                            <div
+                                                className="position-absolute"
+                                                style={{
+                                                    top: "25%",
+                                                    right: "-10px",
+                                                    width: "80px",
+                                                    height: "80px",
+                                                    background: "linear-gradient(135deg, rgba(108, 42, 127, 0.1), rgba(108, 42, 127, 0.05))",
+                                                    borderRadius: "50%",
+                                                    zIndex: 0
+                                                }}
+                                            ></div>
+                                            <div className="text-center mb-4">
+                                                <AiOutlineMobile size={40} style={{ color: "#6c2a7f" }} className="mb-3" />
+                                            </div>
+
+                                            <div className="mb-4 position-relative" style={{ zIndex: 1 }}>
+                                                <label
+                                                    className="form-label fw-medium mb-3 text-left"
+                                                    style={{
+                                                        color: "#6c2a7f",
+                                                        fontSize: "0.9rem",
+                                                        letterSpacing: "0.3px"
+                                                    }}
+                                                >
+                                                    Mobile Number
+                                                </label>
+
+                                                <div className="input-group shadow-sm" style={{ maxWidth: "350px", width: "100%" }}>
                                                     <span
-                                                        className="input-group-text bg-white border-end-0 rounded-start-3"
+                                                        className="input-group-text bg-gradient border-end-0"
                                                         style={{
-                                                            borderColor: "#e0e0e0",
-                                                            padding: "10px 12px",
-                                                            fontSize: "0.9rem"
+                                                            background: "linear-gradient(135deg, #f8f9fa, #e9ecef)",
+                                                            borderColor: "#dee2e6",
+                                                            padding: "14px 16px",
+                                                            fontSize: "0.9rem",
+                                                            borderRadius: "12px 0 0 12px",
+                                                            borderWidth: "1.5px"
                                                         }}
                                                     >
-                                                        <AiOutlineMobile size={18} className="text-muted me-1" />
-                                                        +91
+                                                        <AiOutlineMobile size={20} className="#6c2a7f me-2" />
+                                                        <span style={{ color: "#6c2a7f", fontWeight: "500" }}>+91</span>
                                                     </span>
                                                     <input
                                                         type="tel"
-                                                        className="form-control border-start-0 rounded-end-3"
+                                                        className="form-control border-start-0 fw-medium"
                                                         value={mobileNo}
                                                         onChange={handleMobileChange}
-                                                        placeholder="Enter mobile number"
+                                                        placeholder="Enter your mobile number"
                                                         style={{
-                                                            borderColor: "#e0e0e0",
+                                                            borderColor: "#dee2e6",
                                                             fontSize: "0.95rem",
-                                                            padding: "10px 14px"
-                                                        }}
-                                                        onFocus={(e) => {
-                                                            e.target.style.borderColor = "#6c2a7f";
-                                                            e.target.style.boxShadow = "0 0 0 0.15rem rgba(108, 42, 127, 0.25)";
-                                                            e.target.previousElementSibling.style.borderColor = "#6c2a7f";
+                                                            padding: "14px 16px",
+                                                            borderRadius: "0 12px 12px 0",
+                                                            borderWidth: "1.5px",
+                                                            backgroundColor: "#fefefe",
+                                                            color: "#2c3e50"
                                                         }}
                                                         onBlur={(e) => {
-                                                            e.target.style.borderColor = "#e0e0e0";
+                                                            e.target.style.borderColor = "#dee2e6";
                                                             e.target.style.boxShadow = "none";
-                                                            e.target.previousElementSibling.style.borderColor = "#e0e0e0";
+                                                            e.target.style.backgroundColor = "#fefefe";
+                                                            e.target.previousElementSibling.style.borderColor = "#dee2e6";
+                                                            e.target.previousElementSibling.style.background = "linear-gradient(135deg, #f8f9fa, #e9ecef)";
                                                         }}
                                                         maxLength={10}
                                                     />
                                                 </div>
+
+                                                {/* Validation indicator */}
+                                                {mobileNo.length === 10 && (
+                                                    <div className="mt-2 d-flex align-items-center">
+                                                        <div
+                                                            className="rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                                            style={{
+                                                                width: "18px",
+                                                                height: "18px",
+                                                                backgroundColor: "#28a745"
+                                                            }}
+                                                        >
+                                                            <i className="bi bi-check" style={{ color: "white", fontSize: "10px" }}></i>
+                                                        </div>
+                                                        <span className="text-success" style={{ fontSize: "0.8rem", fontWeight: "500" }}>
+                                                            Valid number
+                                                        </span>
+                                                    </div>
+                                                )}
+
                                                 {mobileNo.length > 0 && mobileNo.length < 10 && (
-                                                    <div className="text-danger mt-2" style={{ fontSize: "0.8rem" }}>
-                                                        Please enter a valid 10-digit mobile number
+                                                    <div className="mt-2 d-flex align-items-center">
+                                                        <div
+                                                            className="rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                                            style={{
+                                                                width: "18px",
+                                                                height: "18px",
+                                                                backgroundColor: "#dc3545"
+                                                            }}
+                                                        >
+                                                            <i className="bi bi-exclamation" style={{ color: "white", fontSize: "10px" }}></i>
+                                                        </div>
+                                                        <span className="text-danger" style={{ fontSize: "0.8rem", fontWeight: "500" }}>
+                                                            Please enter a valid 10-digit mobile number
+                                                        </span>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            <div className="mt-auto">
+                                            <div style={{ position: "absolute", bottom: "20px", left: "0px", right: "0px", zIndex: 1 }}>
                                                 <button
-                                                    className="btn w-100 rounded-3 fw-semibold"
+                                                    className="btn w-100 fw-semibold shadow-sm position-relative overflow-hidden"
                                                     onClick={handleLogin}
                                                     disabled={mobileNo.length !== 10 || isLoading}
                                                     style={{
-                                                        backgroundColor: "#6c2a7f",
+                                                        background: mobileNo.length === 10 && !isLoading
+                                                            ? "linear-gradient(135deg, #6c2a7f, #8e44ad)"
+                                                            : "#6c2a7f",
                                                         borderColor: "#6c2a7f",
                                                         color: "white",
-                                                        padding: "10px 20px",
+                                                        padding: "14px 24px",
                                                         fontSize: "0.95rem",
-                                                        opacity: mobileNo.length !== 10 || isLoading ? 0.6 : 1,
-                                                        transition: "all 0.2s ease"
+                                                        borderRadius: "12px",
+                                                        opacity: mobileNo.length !== 10 || isLoading ? 0.65 : 1,
+                                                        transition: "all 0.3s ease",
+                                                        letterSpacing: "0.5px",
+                                                        borderWidth: "0"
                                                     }}
                                                     onMouseEnter={(e) => {
                                                         if (!e.target.disabled) {
-                                                            e.target.style.backgroundColor = "#5a2369";
-                                                            e.target.style.transform = "translateY(-1px)";
+                                                            e.target.style.background = "linear-gradient(135deg, #5a2369, #7d3c98)";
+                                                            e.target.style.transform = "translateY(-2px)";
+                                                            e.target.style.boxShadow = "0 8px 25px rgba(108, 42, 127, 0.3)";
                                                         }
                                                     }}
                                                     onMouseLeave={(e) => {
                                                         if (!e.target.disabled) {
-                                                            e.target.style.backgroundColor = "#6c2a7f";
+                                                            e.target.style.background = "linear-gradient(135deg, #6c2a7f, #8e44ad)";
                                                             e.target.style.transform = "translateY(0)";
+                                                            e.target.style.boxShadow = "none";
                                                         }
                                                     }}
                                                 >
                                                     {isLoading ? (
-                                                        <>
-                                                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                                            Sending OTP...
-                                                        </>
+                                                        <div className="d-flex align-items-center justify-content-center">
+                                                            <div
+                                                                className="spinner-border spinner-border-sm me-2"
+                                                                role="status"
+                                                                style={{ width: "16px", height: "16px" }}
+                                                            ></div>
+                                                            <span>Sending OTP...</span>
+                                                        </div>
                                                     ) : (
-                                                        "Continue"
+                                                        <div className="d-flex align-items-center justify-content-center">
+                                                            <span>Continue</span>
+                                                            <i className="bi bi-arrow-right ms-2" style={{ fontSize: "14px" }}></i>
+                                                        </div>
                                                     )}
                                                 </button>
                                             </div>
@@ -495,7 +572,7 @@ const LoginPopup = ({ onClose }) => {
                                                 </div>
                                             </div>
 
-                                            <div className="mt-auto">
+                                            <div style={{ position: "absolute", bottom: "20px", left: "20px", right: "20px", zIndex: 1 }}>
                                                 <button
                                                     className="btn w-100 rounded-3 fw-semibold"
                                                     onClick={handleOtpSubmit}
@@ -548,7 +625,7 @@ const LoginPopup = ({ onClose }) => {
                                                                 padding: "10px 12px"
                                                             }}
                                                         >
-                                                            <MdPersonAdd size={18} className="text-muted" />
+                                                            <BsGift size={18} className="text-muted" />
                                                         </span>
                                                         <input
                                                             type="text"
@@ -583,7 +660,7 @@ const LoginPopup = ({ onClose }) => {
                                                                 padding: "10px 12px"
                                                             }}
                                                         >
-                                                            <MdPersonAdd size={18} className="text-muted" />
+                                                            <BsPerson size={18} className="text-muted" />
                                                         </span>
                                                         <input
                                                             type="text"
@@ -609,15 +686,9 @@ const LoginPopup = ({ onClose }) => {
                                                         />
                                                     </div>
                                                 </div>
-
-
                                                 <div className="mb-4">
-
-
                                                     <form className="fromtoform">
-
                                                         <div className=" flex-grow-1 form-group">
-
                                                             <Autocomplete
                                                                 id="from-city"
                                                                 options={cities}
@@ -633,10 +704,9 @@ const LoginPopup = ({ onClose }) => {
                                                                 value={from}
                                                                 onChange={(event, newValue) => {
                                                                     console.log(newValue)
-                                                                    setFrom(newValue); // Set the selected city
-                                                                    setOpen(false); // Close the dropdown after selection
+                                                                    setFrom(newValue);
+                                                                    setOpen(false);
                                                                 }}
-
                                                                 onInputChange={(event, newInputValue) => {
                                                                     handleInputChange(newInputValue);
                                                                 }}
@@ -647,8 +717,8 @@ const LoginPopup = ({ onClose }) => {
                                                                 onScroll={handleScroll}
                                                                 onKeyDown={(event) => {
                                                                     if (event.key === 'Enter' && cities.length > 0) {
-                                                                        setFrom(cities[0]); // Automatically select the first city on Enter
-                                                                        setOpen(false); // Close dropdown on selection
+                                                                        setFrom(cities[0]);
+                                                                        setOpen(false);
                                                                     }
                                                                 }}
                                                                 ListboxProps={{
@@ -661,7 +731,7 @@ const LoginPopup = ({ onClose }) => {
                                                                             style={{ display: 'grid', padding: '8px', cursor: 'pointer' }}
                                                                             onClick={() => {
                                                                                 setFrom(option);
-                                                                                setOpen(false); // Close the dropdown when an option is clicked
+                                                                                setOpen(false);
                                                                             }}
                                                                         >
                                                                             <span style={{ fontSize: '1rem', fontWeight: 'bold' }}>
@@ -682,25 +752,29 @@ const LoginPopup = ({ onClose }) => {
                                                                     <TextField
                                                                         {...params}
                                                                         size="small"
-                                                                        onFocus={() => setOpen(true)} // Make sure to open the dropdown on focus
+                                                                        placeholder="Select departure city"
+                                                                        InputProps={{
+                                                                            ...params.InputProps,
+                                                                            startAdornment: (
+                                                                                <>
+                                                                                    <BsGeoAlt style={{ color: '#6c2a7f', marginRight: '8px', fontSize: '16px' }} />
+                                                                                    {params.InputProps.startAdornment}
+                                                                                </>
+                                                                            ),
+                                                                        }}
+                                                                        onFocus={() => setOpen(true)}
                                                                     />
                                                                 )}
                                                             />
-
-
                                                         </div>
-
                                                     </form>
-
-
-                                                    {!from && (
+                                                    {/* {!from && (
                                                         <div className="text-danger mt-2" style={{ fontSize: "0.8rem" }}>
                                                             City selection is required
                                                         </div>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </div>
-
                                             <div className="mt-auto">
                                                 <button
                                                     className="btn w-100 rounded-3 fw-semibold"
