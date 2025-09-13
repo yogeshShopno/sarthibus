@@ -32,6 +32,7 @@ const PassengerView = () => {
     const [finalSarthiDis, setFinalSarthiDis] = useState(0);
     const [discount, setDiscount] = useState(0);
     const [couponData, setCouponData] = useState([])
+    const [couponID, setCouponID] = useState([])
     const [openPopupBoxConfirm, setOpenPopUpBoxConfirm] = useState(false)
     const [errors, setErrors] = useState({});
     const [couponOpen, setCouponOpen] = useState(false)
@@ -41,6 +42,7 @@ const PassengerView = () => {
     const [linkedin, setLinkedin] = useState('')
     const [twitter, setTwitter] = useState('')
     const [instagram, setInstagram] = useState('')
+    const [amountData, setAmountData] = useState(null)
     const {
         passengerData = [],
         name = '',
@@ -48,7 +50,7 @@ const PassengerView = () => {
         mobileNo = '',
         selectedTotalSeat = [],
         totalPrice = 0,
-        serviceTax= [],
+        serviceTax = [],
         selectedTotalSeatPrice = [],
         bus_id = null,
         bus_name = '',
@@ -71,7 +73,7 @@ const PassengerView = () => {
         main_droping_point_id = '',
         booking_type
     } = location.state || {};
-              const [openLogin, setOpenLogin] = useState(true)
+    const [openLogin, setOpenLogin] = useState(false)
 
 
     const history = useHistory();
@@ -164,7 +166,7 @@ const PassengerView = () => {
         if (data !== null) {
             getWalletAmount();
         }
-    }, [discount])
+    }, [couponID])
 
 
     useEffect(() => {
@@ -247,7 +249,7 @@ const PassengerView = () => {
             //         }
             //     });
             // }, 2000);
-                  setOpenLogin(true)
+            setOpenLogin(true)
 
             return;
         }
@@ -417,14 +419,14 @@ const PassengerView = () => {
         data.append('contact_name', name);
         data.append('contact_email_id', emailId);
         data.append('contact_details', mobileNo);
-        data.append('sub_total', totalPrice);
+        data.append('sub_total', amountData?.sub_total);
         data.append('tax_amount', 0);
-        data.append('discount', parseInt(discount));
-        data.append('sarthibus_discount', finalSarthiDis);
-        data.append('total_gst_amount', GSTAmountApi);
-        data.append('total_service_charge', serviceChargeAPI);
-        data.append('wallet', walletAmount);
-        data.append('final_price', finalAmountApi);
+        data.append('discount', amountData?.coupon_amount);
+        data.append('sarthibus_discount', amountData?.sarthi_discount);
+        data.append('total_gst_amount', amountData?.total_gst_amount);
+        data.append('total_service_charge', amountData?.total_service_charge);
+        data.append('wallet', amountData?.wallet_used);
+        data.append('final_price', amountData?.payable_amount || "0");
         data.append('payment_method', '1');
         data.append('transaction_id', '');
         data.append('main_boarding_point_id', main_boarding_point_id);
@@ -460,14 +462,14 @@ const PassengerView = () => {
                 setOpenPopUpBoxConfirm(true);
 
                 if (res.data.data) {
-                
+
                     const tempDiv = document.createElement("div");
                     tempDiv.innerHTML = res.data.data;
 
                     const form = tempDiv.querySelector("form");
                     if (form) {
-                        document.body.appendChild(form); 
-                        form.submit(); 
+                        document.body.appendChild(form);
+                        form.submit();
                     }
                 }
             } else {
@@ -575,14 +577,12 @@ const PassengerView = () => {
             let data = new FormData();
 
             data.append('user_id', localStorage.getItem('UserID'))
-            data.append('coupon_amount', parseInt(discount))
-            data.append('total_amount', totalPrice)
             data.append('booking_date', formattedDate)
             data.append('booking_type', booking_type)
-
+            data.append('coupon_id', couponID || "")
 
             try {
-                await axios.post("ticket_wallet_amount_data", data, {
+                await axios.post("ticket_wallet_amount_web_data", data, {
                 }).then((res) => {
                     setFinalAmountApi(res.data.data.total_main_price)
                     setWalletAmount(res.data.data.total_wallet)
@@ -590,6 +590,7 @@ const PassengerView = () => {
                     setOrderId(res.data.data.orderId)
                     setServiceChargeAPI(res.data.data.total_service_charge)
                     setGSTAmountApi(res.data.data.total_gst_amount)
+                    setAmountData(res.data.data)
                 })
             }
             catch (error) {
@@ -602,28 +603,20 @@ const PassengerView = () => {
 
     }
 
-    const handleApplyOffer = (dis, amount) => {
-        if (amount <= totalPrice) {
-            setDiscount(totalPrice * (dis / 100));
-            const taxAmount = totalPrice * (dis / 100);
-            const x = totalPrice - taxAmount;
-            setFinalAmount(x);
-            setIsCouponApplied(true);
-            handleHideCoupon();
-            toast.success('Apply Coupon successfully.')
-        } else {
-            setDiscount(0)
-            const x = totalPrice - 0;
-            setFinalAmount(x);
-            toast.error(`can not Apply this Coupon.`)
-        }
+    const handleApplyOffer = (coupon_id) => {
+        getWalletAmount()
+        setCouponID(coupon_id)
+        setIsCouponApplied(true);
+        handleHideCoupon();
+        toast.success('Apply Coupon successfully.')
+
     }
 
     const handleRemoveOffer = () => {
-        setDiscount(0);
-        const x = totalPrice - walletAmount;
-        setFinalAmount(x);
+
+        getWalletAmount()
         setIsCouponApplied(false);
+        setCouponID('')
         handleHideCoupon();
         toast.success('Coupon removed successfully.');
     };
@@ -850,7 +843,7 @@ const PassengerView = () => {
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="ml-auto d-flex gap-2 align-items-center">
-                                                                                        <Button variant="contained" onClick={() => handleApplyOffer(coupon.c_discount, coupon.min_total_amount)} style={{ backgroundColor: "rgb(121  44 143)" }}>
+                                                                                        <Button variant="contained" onClick={() => handleApplyOffer(coupon?.coupon_id)} style={{ backgroundColor: "rgb(121  44 143)" }}>
                                                                                             Apply
                                                                                         </Button>
                                                                                     </div>
@@ -875,43 +868,29 @@ const PassengerView = () => {
                                                     <div>
                                                         <div className="d-flex justify-content-between align-items-center bustimeflex">
                                                             <div className="bustimediv">
-                                                                <h6 className="fw-semibold mb-2" >Price</h6>
-                                                                <h6 className="fw-semibold mb-2" >Discount</h6>
-                                                                {finalSarthiDis && (finalSarthiDis !== "0" && finalSarthiDis !== null && finalSarthiDis !== "") && (
-                                                                    <h6 className="fw-semibold mb-2">Sarthi Discount</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.sub_total_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.coupon_amount_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.sarthi_discount_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.amount_after_discounts_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.total_gst_amount_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.amount_after_gst_name}</h6>
+                                                                {/* <h6 className="fw-semibold mb-2" >{amountData?.payable_amount_name}</h6> */}
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.total_service_charge_name}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.wallet_used_name}</h6>
 
-                                                                )}
-                                                                <h6 className="fw-semibold mb-2" >Wallet</h6>
 
-                                                                {GSTAmountApi && (GSTAmountApi !== "0" && GSTAmountApi !== null && GSTAmountApi !== "") && (
-                                                                    <h6 className="fw-semibold mb-2" >GST</h6>
-
-                                                                )}
-                                                                {serviceChargeAPI && (serviceChargeAPI !== "0" && serviceChargeAPI !== null && serviceChargeAPI !== "") && (
-                                                                    <h6 className="fw-semibold mb-2" >Service Charge</h6>
-
-                                                                )}
-
-                                                                <h6 className="fw-semibold mb-2 fs-5" >Total Price</h6>
                                                             </div>
                                                             <div className="bustimediv  d-flex flex-column align-items-end">
-                                                                <h6 className="fw-semibold mb-2">{totalPrice}</h6>
-                                                                <h6 className="fw-semibold mb-2">-{parseInt(discount)}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.sub_total}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.coupon_amount}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.sarthi_discount}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.amount_after_discounts}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.total_gst_amount}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.amount_after_gst}</h6>
+                                                                {/* <h6 className="fw-semibold mb-2" >{amountData?.payable_amount}</h6> */}
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.total_service_charge}</h6>
+                                                                <h6 className="fw-semibold mb-2" >{amountData?.wallet_used}</h6>
 
-                                                                {finalSarthiDis && (finalSarthiDis !== "0" && finalSarthiDis !== null && finalSarthiDis !== "") && (
-                                                                    <h6 className="fw-semibold mb-2">-{finalSarthiDis}</h6>)}
-                                                                <h6 className="fw-semibold mb-2">-{walletAmount}</h6>
-
-                                                                {GSTAmountApi && (GSTAmountApi !== "0" && GSTAmountApi !== null && GSTAmountApi !== "") && (
-                                                                    <h6 className="fw-semibold mb-2">+{GSTAmountApi}</h6>
-
-                                                                )}
-                                                                {serviceChargeAPI && (serviceChargeAPI !== "0" && serviceChargeAPI !== null && serviceChargeAPI !== "") && (
-                                                                    <h6 className="fw-semibold mb-2">+{serviceChargeAPI}</h6>
-
-                                                                )}
-
-                                                                <h6 className="fw-semibold mb-2 fs-5 ">{finalAmountApi ? finalAmountApi : finalAmount}</h6>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -923,7 +902,7 @@ const PassengerView = () => {
                                                 <div className="col-12 align-items-center">
                                                     <div className="d-flex justify-content-between align-items-center bustimeflex">
                                                         <div className="bustimediv">
-                                                            <h5 className="fw-bold " >Total Payment : {finalAmountApi ? finalAmountApi : finalAmount}</h5>
+                                                            <h5 className="fw-bold " >{amountData?.payable_amount_name} : {amountData?.payable_amount}</h5>
                                                         </div>
                                                         <div className="bustimediv">
                                                             <Button variant="contained" onClick={processToPayment} style={{ backgroundColor: "rgb(121 44 143)" }}>Proceed</Button>
@@ -945,7 +924,7 @@ const PassengerView = () => {
 
             {loading && <Loader />}
 
-               {openLogin && <LoginPopup onClose={()=>setOpenLogin(false)} />}
+            {openLogin && <LoginPopup onClose={() => setOpenLogin(false)} />}
 
 
         </div>
