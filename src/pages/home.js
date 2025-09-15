@@ -47,13 +47,13 @@ const Home = () => {
         return cities.find(city => city.city_name === cityName) || null;
 
     };
-    const [from, setFrom] = useState(null);
-    const [to, setTo] = useState(null);
-    const [inputValue, setInputValue] = useState('');
+    const [from, setFrom] = useState(JSON.parse(localStorage.getItem('from')));
+    const [to, setTo] = useState(JSON.parse(localStorage.getItem('to')));
+    const [inputValue, setInputValue] = useState(JSON.parse(localStorage.getItem('inputValue')));
     const [busInputValue, setBusInputValue] = useState('');
     const [busInputToValue, setBusInputToValue] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedDate, setSelectedDate] = useState(new Date());  
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const formattedDate = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : localStorage.getItem('formattedDate') || '';
 
     const history = useHistory()
@@ -63,15 +63,27 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        const busState = JSON.parse(localStorage.getItem('busState'));
+        try {
+            const raw = localStorage.getItem('busState');
+            if (!raw) return;
+            const busState = JSON.parse(raw);
 
-        if (busState) {
-            setFrom(busState.from);
-            setTo(busState.to);
-            setSelectedDate(busState.formattedDate);
-            setInputValue(busState.inputValue);
+            // busState expected shape: { from, to, selectedDateISO, inputValue }
+            if (busState.from) setFrom(busState.from);
+            if (busState.to) setTo(busState.to);
+
+            if (busState.selectedDateISO) {
+                const d = new Date(busState.selectedDateISO);
+                if (!isNaN(d)) setSelectedDate(d);
+            }
+
+            if (busState.inputValue) setInputValue(busState.inputValue);
+        } catch (err) {
+            // ignore parse errors
+            console.warn('Unable to restore busState', err);
         }
     }, []);
+
 
 
     useEffect(() => {
@@ -198,7 +210,7 @@ const Home = () => {
 
     const cityList = async (searchTerm = '', start = 0) => {
         if (loading) return; // Prevent multiple simultaneous API calls
-      
+
         const data = new FormData();
         data.append('city_name', searchTerm);
         data.append('start', start);
@@ -221,13 +233,13 @@ const Home = () => {
         } catch (error) {
             console.error('Error fetching city list:', error);
         } finally {
-      
+
         }
     };
 
     const cityToList = async (searchTerm, start = 0) => {
         if (loading) return; // Prevent multiple simultaneous API calls
-       
+
         let data = new FormData();
         data.append('city_name', searchTerm);
         data.append('start', start);
@@ -334,6 +346,7 @@ const Home = () => {
         if (newInputValue) {
             debouncedCityList(newInputValue);
         }
+        localStorage.setItem("from", JSON.stringify(from))
     };
 
     const handleInputToChange = (newInputValue) => {
@@ -341,6 +354,8 @@ const Home = () => {
         if (newInputValue) {
             debouncedToCityList(newInputValue);
         }
+        localStorage.setItem("to", JSON.stringify(to))
+
     };
 
     const fetchCityListInstant = async () => {
@@ -410,7 +425,7 @@ const Home = () => {
                         <div className="py-5 hero--content">
                             <div className="hero--contentdiv py-2">
                                 <div className="herotitlediv text-center">
-                                    <h2 className="fw-bolder mb-4 text-danger" style={{fontSize:'2.6rem'}}>
+                                    <h2 className="fw-bolder mb-4 text-danger" style={{ fontSize: '2.6rem' }}>
                                         Call now Book now 99300 31000
                                     </h2>
                                     <h1 className="fw-bolder fs-1a mb-4 text-capitalize">
@@ -519,7 +534,7 @@ const Home = () => {
 
                                                         </div>
                                                         <div className="directimg-g text-opacity-50 fs-2 text-dark">
-                                                            
+
                                                             <AiOutlineSwap onClick={swapLocations} />
 
                                                         </div>
@@ -531,7 +546,7 @@ const Home = () => {
                                                             <Autocomplete
                                                                 id="from-city"
                                                                 options={toCities}
-                                                                 
+
                                                                 getOptionLabel={(option) => {
                                                                     const labels = [
                                                                         option.city_name,
@@ -548,7 +563,7 @@ const Home = () => {
                                                                 onChange={(event, newValue) => {
                                                                     setTo(newValue);
                                                                 }}
-                                                                
+
                                                                 onInputChange={(event, newInputValue) => { handleInputToChange(newInputValue); }}
                                                                 onFocus={() => { if (toCities.length === 0) cityToList('', 0); fetchToCityListInstant(''); }}
                                                                 onScroll={handleScroll}
@@ -583,7 +598,7 @@ const Home = () => {
                                                                             </span>
                                                                             <span style={{ fontSize: '0.7rem', color: '#666' }}>
                                                                                 {[option.taluka_name, option.jilla_name, option.state_name]
-                                                                                    .filter(Boolean) 
+                                                                                    .filter(Boolean)
                                                                                     .join(", ")}
                                                                             </span>
                                                                         </li>
@@ -632,7 +647,11 @@ const Home = () => {
                                                                     variant="standard"
                                                                     value={inputValue}
                                                                     fullWidth
-                                                                    onChange={(e) => setInputValue(e.target.value)}
+                                                                    onChange={(e) => {
+                                                                        setInputValue(e.target.value)
+                                                                        localStorage.setItem("inputValue",JSON.stringify(e.target.value))
+
+                                                                    }}
                                                                 />
                                                             </div>
                                                         </div>

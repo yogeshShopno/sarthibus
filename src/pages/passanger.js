@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import "../../src/pages/busList.css";
 import { FaUser } from 'react-icons/fa';
 import { IoMdWarning } from "react-icons/io";
 import Header from '../components/header';
 import Footer from '../components/footer';
-import { Button, TextField } from '@mui/material';
+import { Autocomplete, Button, TextField } from '@mui/material';
 import { PiPhoneCallFill } from "react-icons/pi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
 import { cleanDigitSectionValue } from '@mui/x-date-pickers/internals/hooks/useField/useField.utils';
+import debounce from "lodash.debounce";
 
 
 const PassengerDetails = () => {
@@ -18,7 +19,9 @@ const PassengerDetails = () => {
     const [isChecked, setIsChecked] = useState(false);
     const [showCheckbox, setShowCheckbox] = useState(false);
     const history = useHistory()
-
+    const [fromCity, setFromCity] = useState("");
+    const [busInputValue, setBusInputValue] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const {
         selectedUpperSeat,
@@ -98,6 +101,8 @@ const PassengerDetails = () => {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
     const [checkboxToggle, setCheckboxToggle] = useState(false);
 
+    const [cities, setCities] = useState([]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
 
@@ -129,6 +134,7 @@ const PassengerDetails = () => {
             const mob = JSON.parse(localStorage.getItem('Mobile'))
             const passengerData = JSON.parse(localStorage.getItem('passengerData'))
 
+
             if (passengerData) {
                 setPassengerData(passengerData)
             }
@@ -146,6 +152,56 @@ const PassengerDetails = () => {
 
         }
     }, []);
+
+
+    const fetchCityListInstant = async () => {
+        await cityList("");
+    };
+    const debouncedCityList = useCallback(
+        debounce((searchTerm) => {
+            setCities([]);
+            cityList(searchTerm, 0);
+        }, 300),
+        []
+    );
+
+    const handleInputChange = (newInputValue) => {
+
+        setBusInputValue(newInputValue);
+        if (newInputValue) {
+            debouncedCityList(newInputValue);
+        }
+
+
+    }
+
+
+    const cityList = async (searchTerm = "", start = 0) => {
+        if (loading) return;
+
+        const data = new FormData();
+        data.append("city_name", searchTerm);
+        data.append("start", start);
+        data.append("limit", 50);
+        data.append("calling_type", 1);
+
+        try {
+            const res = await axios.post("city_list", data);
+            const allCities = res.data.data.all_city || [];
+
+            const newCities = allCities.slice(0, 50);
+
+            if (start === 0) {
+                setCities(newCities);
+            } else {
+                setCities((prevCities) => [...prevCities, ...newCities]);
+            }
+        } catch (error) {
+            console.error("Error fetching city list:", error);
+        } finally {
+        }
+    };
+
 
     const getContactInfo = async () => {
         const data = new FormData();
@@ -183,6 +239,9 @@ const PassengerDetails = () => {
     };
 
     const handleGenderChange = (index, value) => {
+        
+        setCheckboxToggle(true)
+
         setPassengerData(prevData =>
             prevData.map((passenger, i) =>
                 i === index ? { ...passenger, gender: value } : passenger
@@ -321,7 +380,8 @@ const PassengerDetails = () => {
                     selectedUpperSeatPrice,
                     selectedLowerSeatPrice,
                     inputValue,
-                    booking_type
+                    booking_type,
+                    fromCity
                 }
             })
         }
@@ -389,13 +449,115 @@ const PassengerDetails = () => {
                                         </div>
                                         <div className="col-md-4">
                                             <div className="my-3 form-group">
-                                                <label htmlFor="name" className="form-label fs-6 fw-semibold text-capitalize">
-                                                    Email ID
+                                                <label htmlFor="city" className="form-label fs-6 fw-semibold text-capitalize">
+                                                    City
                                                 </label>
-                                                <TextField className="form-control" size='small'
-                                                    placeholder='Email ID'
-                                                    value={emailId}
-                                                    onChange={(e) => setEmailId(e.target.value)} />
+
+                                                <Autocomplete
+                                                    id="from-city"
+                                                    options={cities}
+                                                    getOptionLabel={(option) => {
+                                                        const labels = [
+                                                            option.city_name,
+                                                            option.taluka_name,
+                                                            option.jilla_name,
+                                                            option.state_name,
+                                                        ].filter(Boolean);
+
+                                                        return labels.join(", ");
+                                                    }}
+                                                    style={{
+                                                        padding: "0rem",
+                                                        color: "#666",
+                                                    }}
+                                                    value={fromCity}
+                                                    onChange={(event, newValue) => {
+                                                        setFromCity(newValue);
+                                                    }}
+                                                    onInputChange={(event, newInputValue) => {
+                                                        handleInputChange(newInputValue);
+                                                    }}
+                                                    onFocus={() => {
+                                                        if (cities.length === 0) cityList("", 0);
+                                                        fetchCityListInstant("");
+                                                    }}
+                                                    onKeyDown={(event) => {
+                                                        if (
+                                                            event.key === "ArrowDown" ||
+                                                            event.key === "Enter"
+                                                        ) {
+                                                            const selectedOption = cities.find(
+                                                                (city) =>
+                                                                    city.city_name === busInputValue
+                                                            );
+                                                            if (selectedOption) {
+                                                                setFromCity(selectedOption);
+                                                            }
+                                                        }
+                                                    }}
+
+                                                    renderOption={(props, option, state) => (
+                                                        <>
+                                                            <li
+                                                                {...props}
+                                                                style={{
+                                                                    display: "grid",
+                                                                    padding: "8px",
+                                                                    cursor: "pointer",
+                                                                }}
+                                                                onClick={() => setFromCity(option)}
+                                                            >
+                                                                <span
+                                                                    style={{
+                                                                        fontSize: "1rem",
+                                                                        fontWeight: "bold",
+                                                                    }}
+                                                                >
+                                                                    {option.city_name}
+                                                                </span>
+                                                                <span
+                                                                    style={{
+                                                                        fontSize: "0.7rem",
+                                                                        color: "#666",
+                                                                    }}
+                                                                >
+                                                                    {[
+                                                                        option.taluka_name,
+                                                                        option.jilla_name,
+                                                                        option.state_name,
+                                                                    ]
+                                                                        .filter(Boolean)
+                                                                        .join(", ")}
+                                                                </span>
+                                                            </li>
+
+
+                                                        </>
+                                                    )}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            size="small"
+                                                            variant="outlined"
+
+                                                            sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    padding: '0 !important',
+                                                                    '& input': {
+                                                                        padding: '8px 12px !important',
+                                                                    },
+                                                                    '& .MuiAutocomplete-endAdornment': {
+                                                                        right: '8px !important',
+                                                                    }
+                                                                },
+                                                                '& .MuiInputBase-root': {
+                                                                    padding: '0 !important',
+                                                                }
+                                                            }}
+                                                        />
+                                                    )}
+                                                />
+
                                             </div>
                                         </div>
                                     </div>
@@ -502,7 +664,7 @@ const PassengerDetails = () => {
                                                                         id={`MALE-${index}`}
                                                                         checked={passengerData[index]?.gender === 'MALE'}
                                                                         onChange={() => handleGenderChange(index, 'MALE')}
-                                                                        style={{border:"2px solid  #792C8F"}}
+                                                                        style={{ border: "2px solid  #792C8F" }}
                                                                     />
                                                                     <img src='assets/images/male.png' style={{ height: "14px", marginInline: "5px" }} />
 
@@ -521,7 +683,7 @@ const PassengerDetails = () => {
                                                                         id={`FEMALE-${index}`}
                                                                         checked={passengerData[index]?.gender === 'FEMALE'}
                                                                         onChange={() => handleGenderChange(index, 'FEMALE')}
-                                                                        style={{border:"2px solid  #792C8F"}}
+                                                                        style={{ border: "2px solid  #792C8F" }}
 
                                                                     />
                                                                     <img src='assets/images/female.png' style={{ height: "14px", marginInline: "5px" }} />

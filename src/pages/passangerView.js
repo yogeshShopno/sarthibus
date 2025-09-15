@@ -71,10 +71,10 @@ const PassengerView = () => {
         inputValue = '',
         main_boarding_point_id = '',
         main_droping_point_id = '',
-        booking_type
+        booking_type,
+        fromCity,
     } = location.state || {};
     const [openLogin, setOpenLogin] = useState(false)
-
 
     const history = useHistory();
 
@@ -210,6 +210,7 @@ const PassengerView = () => {
                 from,
                 main_boarding_point_id,
                 main_droping_point_id,
+                fromCity
             };
             localStorage.setItem('formData', JSON.stringify(formData));
             localStorage.setItem('redirectPath', location.pathname);
@@ -279,7 +280,6 @@ const PassengerView = () => {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            console.log(newErrors);
             toast.error('Please fill in all the required fields before proceeding');
             return;
         }
@@ -434,6 +434,8 @@ const PassengerView = () => {
         data.append('order_id', '');
         data.append('created_type', '2');
         data.append('booking_type', booking_type);
+        data.append('contact_city_id', fromCity.city_id);
+
 
         for (let i = 0; i < selectedTotalSeat.length; i++) {
             data.append(`seat_number[${i}]`, selectedTotalSeat[i]);

@@ -703,7 +703,6 @@ const LoginPopup = ({ onClose }) => {
                                                                 }}
                                                                 value={from}
                                                                 onChange={(event, newValue) => {
-                                                                    console.log(newValue)
                                                                     setFrom(newValue);
                                                                     setOpen(false);
                                                                 }}
