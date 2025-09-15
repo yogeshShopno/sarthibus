@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import GoogleTranslate from '../components/GoogleTranslate.js'
 import '../styles/style.css';
 import LoginPopup from './LoginPopup.js';
+import axios from 'axios';
 
 
 const Header = () => {
@@ -19,17 +20,27 @@ const Header = () => {
     const handleShow = () => setShow(true);
     const [open, setOpen] = useState(false);
     const [openLogin, setOpenLogin] = useState(false)
+    const [walletAmount, setWalletAmount] = useState(false)
+const userID = localStorage.getItem('UserID')
+    useEffect(() => {
+        const getProfileData = async () => {
+            try {
+                const data = new FormData();
+                data.append("user_id", userID);
 
-    const handleLogOut = () => {
-        localStorage.removeItem('UserName')
-        localStorage.removeItem('EmailID')
-        localStorage.removeItem('MobileNo')
-        localStorage.removeItem('UserID')
-        setOpen(false)
-        localStorage.clear();
+                const res = await axios.post("get_profile", data);
+                setWalletAmount(res.data?.data?.wallet ?? 0);
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        };
 
-        history.push('/')
-    }
+        if (userID) {
+            getProfileData();
+        }
+    }, []);
+
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -52,6 +63,18 @@ const Header = () => {
         localStorage.removeItem('busState')
     }
 
+
+    const handleLogOut = () => {
+        localStorage.removeItem('UserName')
+        localStorage.removeItem('EmailID')
+        localStorage.removeItem('MobileNo')
+        localStorage.removeItem('UserID')
+        setOpen(false)
+        localStorage.clear();
+
+        history.push('/')
+    }
+
     return (
         <>
 
@@ -72,10 +95,38 @@ const Header = () => {
                             <Nav className="m-auto mb-2 mb-lg-0">
                                 <Nav.Link href="/" onClick={logoClick()}>Home</Nav.Link>
                                 <Nav.Link href="/about-us" >About</Nav.Link>
-
                                 <Nav.Link href="/contact-us">Contact</Nav.Link>
                             </Nav>
-
+                            {
+                                userID &&(<Nav.Link href="/profile/wallet">
+                                <div
+                                    className="d-inline-flex align-items-center justify-content-between px-3 py-1 rounded-pill shadow-sm border gap-2 "
+                                    style={{
+                                        background: "#f3e7f7",
+                                        border: "1px solid #e6d5ef",
+                                        boxShadow: "0 5px 15px rgba(121, 44, 143, 0.1)",
+                                        transition: "transform 0.3s ease",
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.transform = "scale(1.02)"}
+                                    onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+                                >
+                                    <img
+                                        src="/assets/icons/wallet.png"
+                                        alt="Wallet"
+                                        className="flex-shrink-0"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                            filter: "invert(18%) sepia(60%) saturate(750%) hue-rotate(275deg) brightness(90%) contrast(95%)",
+                                        }}
+                                    />
+                                    <span className=" text-xsm fs-6 whitespace-nowrap">
+                                        ₹ {walletAmount}
+                                    </span>
+                                </div>
+                            </Nav.Link>)
+                            }
+                            
                             <Nav className="list-unstyled m-0">
                                 <Dropdown>
                                     <Dropdown.Toggle id='id="google_translate_element"' variant="link" className="nav-link dropdown-toggle d-flex align-items-center gap-1">
@@ -83,6 +134,11 @@ const Header = () => {
                                     </Dropdown.Toggle>
                                 </Dropdown>
                             </Nav>
+
+
+
+
+
 
                             <Nav className="list-unstyled m-0">
                                 <Dropdown>
@@ -123,6 +179,12 @@ const Header = () => {
                             <Nav.Item>
                                 <Nav.Link href="/contact-us">Contact</Nav.Link>
                             </Nav.Item>
+
+                             {
+                                userID &&( <Nav.Item>
+                                <Nav.Link href="/profile/wallet">Wallet : ₹ {walletAmount}</Nav.Link>
+                            </Nav.Item>) }
+                           
                         </Nav>
 
                         <Nav className="list-unstyled m-0 mt-4">
