@@ -1,0 +1,117 @@
+/* Container */
+.error404-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f9fafb;
+    padding: 2rem;
+    text-align: center;
+    font-family: "Arial", sans-serif;
+}
+
+/* Ticket Graphic Box */
+.ticket-graphic {
+    position: relative;
+    background: #fff4db;
+    border: 2px dashed #e11d48;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 600px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* 404 Stamp */
+.ticket-stamp {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background: #e11d48;
+    color: #fff;
+    font-weight: bold;
+    font-size: 2.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transform: rotate(10deg);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Ticket Shape */
+.ticket-shape h2 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.8rem;
+    color: #1f2937;
+}
+
+.ticket-shape p {
+    color: #374151;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.bus-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.ticket-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btn-primary {
+    background-color: #e11d48;
+    color: #fff;
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #be123c;
+}
+
+.btn-secondary {
+    border: 2px solid #1f2937;
+    color: #1f2937;
+    padding: 0.9rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #1f2937;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .ticket-shape h2 {
+        font-size: 1.5rem;
+    }
+
+    .ticket-stamp {
+        font-size: 2rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+    }
+}

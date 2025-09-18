@@ -32,7 +32,7 @@ import SuccessTicket from './pages/success-ticket';
 import PaymentStatus from './pages/paymentStatus';
 import SeatLayout2 from './pages/seatLayout2';
 import SeatLayout1 from './pages/seatLayout1';
-
+import Error404Page from './pages/Error404Page';
 
 
 
@@ -121,6 +121,9 @@ function App() {
           </TitleRoute>
           <TitleRoute path='/success-ticket' title="Success Ticket - sarthibus.com">
             <SuccessTicket />
+          </TitleRoute>
+          <TitleRoute title="Page Not Found - sarthibus.com">
+            <Error404Page />
           </TitleRoute>
         </Switch>
       </Router>

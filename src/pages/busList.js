@@ -828,63 +828,63 @@ const BusList = (seat) => {
     main_boarding_point_id_arr,
     main_droping_point_id_arr
   ) => {
-   
-      
 
 
 
-      localStorage.setItem("bus_type", JSON.stringify(busType));
-      localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
-      localStorage.setItem("main_droping_point_id", JSON.stringify(main_droping_point_id));
-      localStorage.setItem("booking_type", JSON.stringify(booking_type));
-      localStorage.setItem("main_boarding_point_id_arr", JSON.stringify(main_boarding_point_id_arr));
-      localStorage.setItem("main_droping_point_id_arr", JSON.stringify(main_droping_point_id_arr));
 
-      const localBusId = localStorage.getItem("bus_id");
-      // const localSeat = localStorage.getItem("selectedSeats");
-      // const localUpperSeat = localStorage.getItem("selectedUpperSeats");
 
-      // if (selectedBusId !== busId) {
-      setSelectedLowerSeats([]);
-      setSelectedSeatBusId(busId);
-      setSelectedUpperSeats([]);
-      setSelectedLowerSeatPrice([]);
-      setSelectedUpperSeatPrice([]);
-      setSelectedUpperSeat([]);
-      setSelectedLowerSeat([]);
-      setImageSrcLower({});
-      setImageSrcUpper({});
-      setSelectedDropingValue({});
-      setSelectedBoardingValue({});
-      setTotalPrice(0);
+    localStorage.setItem("bus_type", JSON.stringify(busType));
+    localStorage.setItem("main_boarding_point_id", JSON.stringify(main_boarding_point_id));
+    localStorage.setItem("main_droping_point_id", JSON.stringify(main_droping_point_id));
+    localStorage.setItem("booking_type", JSON.stringify(booking_type));
+    localStorage.setItem("main_boarding_point_id_arr", JSON.stringify(main_boarding_point_id_arr));
+    localStorage.setItem("main_droping_point_id_arr", JSON.stringify(main_droping_point_id_arr));
 
-      // if (busId == JSON.parse(localBusId) && localSeat) {
-      //   setSelectedLowerSeats(JSON.parse(localSeat));
-      // }
+    const localBusId = localStorage.getItem("bus_id");
+    // const localSeat = localStorage.getItem("selectedSeats");
+    // const localUpperSeat = localStorage.getItem("selectedUpperSeats");
 
-      // if (busId == JSON.parse(localBusId) && localUpperSeat) {
-      //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
-      // }
-      // }
+    // if (selectedBusId !== busId) {
+    setSelectedLowerSeats([]);
+    setSelectedSeatBusId(busId);
+    setSelectedUpperSeats([]);
+    setSelectedLowerSeatPrice([]);
+    setSelectedUpperSeatPrice([]);
+    setSelectedUpperSeat([]);
+    setSelectedLowerSeat([]);
+    setImageSrcLower({});
+    setImageSrcUpper({});
+    setSelectedDropingValue({});
+    setSelectedBoardingValue({});
+    setTotalPrice(0);
 
-      setSelectedBusId(busId);
-      setBusTypeID(busType);
-      setShowSeats(true);
-      setReviewOpen(false);
-      setBookingPolicies(false);
-      setAmenitiesOpen(false);
-      setBusID(busId);
-      setBookingType(booking_type);
-      busLayoutAPI(busId, booking_type);
-      BusWiseBoardingDroppingPoints(
-        busId,
-        main_boarding_point_id,
-        main_droping_point_id,
-        booking_type,
-        main_boarding_point_id_arr,
-        main_droping_point_id_arr
-      );
-    
+    // if (busId == JSON.parse(localBusId) && localSeat) {
+    //   setSelectedLowerSeats(JSON.parse(localSeat));
+    // }
+
+    // if (busId == JSON.parse(localBusId) && localUpperSeat) {
+    //   setSelectedUpperSeats(JSON.parse(localUpperSeat));
+    // }
+    // }
+
+    setSelectedBusId(busId);
+    setBusTypeID(busType);
+    setShowSeats(true);
+    setReviewOpen(false);
+    setBookingPolicies(false);
+    setAmenitiesOpen(false);
+    setBusID(busId);
+    setBookingType(booking_type);
+    busLayoutAPI(busId, booking_type);
+    BusWiseBoardingDroppingPoints(
+      busId,
+      main_boarding_point_id,
+      main_droping_point_id,
+      booking_type,
+      main_boarding_point_id_arr,
+      main_droping_point_id_arr
+    );
+
   };
 
   const handleHideBusSeat = () => {
@@ -1119,7 +1119,7 @@ const BusList = (seat) => {
     );
   };
 
-  const  seatHoldAPI = async (item) => {
+  const seatHoldAPI = async (item) => {
     setLoading(true);
     const selectedTotalSeat = selectedUpperSeats.concat(selectedLowerSeats);
     let data = new FormData();
@@ -1288,13 +1288,13 @@ const BusList = (seat) => {
 
     const newErrors = {};
 
-    
+
     const userID = JSON.parse(localStorage.getItem("UserID"));
     if (!userID) {
       toast.error("Please Login To Book Ticket");
-  newErrors.selectedLowerSeats = "Select any Seat";
+      newErrors.selectedLowerSeats = "Select any Seat";
       setOpenLogin(true)
-    } 
+    }
     if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0 && selectedSeatLayout2.length == 0) {
       newErrors.selectedLowerSeats = "Select any Seat";
       toast.error("Select any Seat");
@@ -1796,53 +1796,64 @@ const BusList = (seat) => {
                                     />
                                     <label
                                       htmlFor={`bustype-ac-${index}`}
-                                      className="btn-group d-flex flex-between gap-2 btn btn-Link"
+                                      className="btn-group d-flex gap-2 btn btn-Link"
                                       style={{
                                         border: "1px solid #dfdfdf",
                                         cursor: "pointer",
                                         alignItems: "center",
-                                        // justifyContent: "center"
+                                        justifyContent: "space-between", // push cross to right
+                                        width: "100%", // make full width
                                       }}
                                     >
-                                      {label.image && (
-                                        <img
-                                          src={label?.image}
-                                          alt={label.type}
-                                          style={{
-                                            width: "25px",
-                                            height: "25px",
-                                            objectFit: "cover",
-                                            padding: "0px",
-                                            margin: "0px",
-                                            background: "white",
-                                            padding: "1px",
-                                            border: "2px solid white",
-                                            borderRadius: "2px"
-                                          }}
-                                        />
-                                      )}
-                                      <span style={{ fontSize: "13px", display: "flex", alignItems: "center", gap: "4px", }}>
-                                        {label.type}
-
-                                      </span>
-                                      {selectedBusTypeAc.includes(label.type) && (
+                                      {/* Left section: image + text */}
+                                      <div className="d-flex align-items-center gap-2">
+                                        {label.image && (
+                                          <img
+                                            src={label?.image}
+                                            alt={label.type}
+                                            style={{
+                                              width: "25px",
+                                              height: "25px",
+                                              objectFit: "cover",
+                                              background: "white",
+                                              padding: "1px",
+                                              border: "2px solid white",
+                                              borderRadius: "2px",
+                                            }}
+                                          />
+                                        )}
                                         <span
-
                                           style={{
-                                            cursor: "pointer",
-                                            color: "#888",
-                                            fontWeight: "bold",
-                                            fontSize: "14px",
+                                            fontSize: "13px",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "4px",
                                           }}
                                         >
-                                          <ImCross style={{
-                                            color: "white",
-                                            marginBottom: "2px",
-                                          }} />
+                                          {label.type}
+                                        </span>
+                                      </div>
 
+                                      {/* Right section: cross */}
+                                      {selectedBusTypeAc.includes(label.type) && (
+                                        <span
+                                          style={{
+                                            cursor: "pointer",
+                                            fontWeight: "bold",
+                                            fontSize: "14px",
+                                            marginLeft: "auto", // ensure push right
+                                          }}
+                                        >
+                                          <ImCross
+                                            style={{
+                                              color: "white",
+                                              marginBottom: "2px",
+                                            }}
+                                          />
                                         </span>
                                       )}
                                     </label>
+
                                   </div>
                                 </li>
                               ))}
@@ -1917,15 +1928,16 @@ const BusList = (seat) => {
                                             color: "#888",
                                             fontWeight: "bold",
                                             fontSize: "14px",
+                                            marginLeft: "auto", // ensure push right
                                           }}
                                         >
                                           <ImCross style={{
                                             color: "white",
                                             marginBottom: "2px",
                                           }} />
-
                                         </span>
                                       )}
+
                                     </label>
                                   </div>
                                 </li>
@@ -2003,6 +2015,7 @@ const BusList = (seat) => {
                                             color: "#888",
                                             fontWeight: "bold",
                                             fontSize: "14px",
+                                            
                                           }}
                                         >
                                           <ImCross style={{
