@@ -828,24 +828,9 @@ const BusList = (seat) => {
     main_boarding_point_id_arr,
     main_droping_point_id_arr
   ) => {
-    const userID = JSON.parse(localStorage.getItem("UserID"));
-    if (!userID) {
-      const redirectPath = localStorage.getItem("redirectPath");
-      toast.error("Please Login To Book Ticket");
-      // setTimeout(() => {
-      //   history.push({
-      //     pathname: "/login",
-      //     state: {
-      //       formattedDate,
-      //       to,
-      //       from,
-      //       inputValue,
-      //       redirectPath,
-      //     },
-      //   });
-      // }, 2000);
-      setOpenLogin(true)
-    } else {
+   
+      
+
 
 
       localStorage.setItem("bus_type", JSON.stringify(busType));
@@ -899,7 +884,7 @@ const BusList = (seat) => {
         main_boarding_point_id_arr,
         main_droping_point_id_arr
       );
-    }
+    
   };
 
   const handleHideBusSeat = () => {
@@ -1134,7 +1119,7 @@ const BusList = (seat) => {
     );
   };
 
-  const seatHoldAPI = async (item) => {
+  const  seatHoldAPI = async (item) => {
     setLoading(true);
     const selectedTotalSeat = selectedUpperSeats.concat(selectedLowerSeats);
     let data = new FormData();
@@ -1302,6 +1287,14 @@ const BusList = (seat) => {
   const handleConfirmSeat = (item) => {
 
     const newErrors = {};
+
+    
+    const userID = JSON.parse(localStorage.getItem("UserID"));
+    if (!userID) {
+      toast.error("Please Login To Book Ticket");
+  newErrors.selectedLowerSeats = "Select any Seat";
+      setOpenLogin(true)
+    } 
     if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0 && selectedSeatLayout2.length == 0) {
       newErrors.selectedLowerSeats = "Select any Seat";
       toast.error("Select any Seat");
@@ -1315,6 +1308,7 @@ const BusList = (seat) => {
       newErrors.totalPrice = "Select ";
       toast.error("Select any Seat");
     }
+
 
     setErrors(newErrors);
 

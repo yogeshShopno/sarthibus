@@ -11,7 +11,7 @@ import PassengerDetails from './pages/passanger';
 import TicketConfirmation from './pages/confim_ticket';
 import ProfileDetails from './pages/profile';
 import RegisterDetail from './pages/register';
-import LoginDetail from './pages/login';
+// import LoginDetail from './pages/login';
 import ForgotPasswordDetail from './pages/forgot-password';
 import AboutUs from './pages/aboutUs';
 import PassengerView from './pages/passangerView';
@@ -88,15 +88,15 @@ function App() {
           <TitleRoute path="/profile/cancel-refund-policy" component={ProfileDetails} title="Profile - sarthibus.com" />
           <TitleRoute path="/profile/privacy-policy" component={ProfileDetails} title="Profile - sarthibus.com" />
           <TitleRoute path="/profile/faq" component={ProfileDetails} title="Profile - sarthibus.com" />
-          <TitleRoute path='/sign-up' title="Register - sarthibus.com">
+          {/* <TitleRoute path='/sign-up' title="Register - sarthibus.com">
             <RegisterDetail />
-          </TitleRoute>
-          <TitleRoute path='/login' title="Login - sarthibus.com">
+          </TitleRoute> */}
+          {/* <TitleRoute path='/login' title="Login - sarthibus.com">
             <LoginDetail />
-          </TitleRoute>
-          <TitleRoute path='/forgot-password' title="Reset Pasword - sarthibus.com">
+          </TitleRoute> */}
+          {/* <TitleRoute path='/forgot-password' title="Reset Pasword - sarthibus.com">
             <ForgotPasswordDetail />
-          </TitleRoute>
+          </TitleRoute> */}
           <TitleRoute path='/about-us' title="About - sarthibus.com">
             <AboutUs />
           </TitleRoute >
