@@ -313,7 +313,7 @@ const BusList = (seat) => {
 
 
   useEffect(() => {
-    const userID = JSON.parse(localStorage.getItem("UserID"));
+    const userID = (localStorage.getItem("UserID"));
     const localBusType = JSON.parse(localStorage.getItem("bus_type"));
     const localBusId = JSON.parse(localStorage.getItem("bus_id"));
     const localMainBoardingPointId = JSON.parse(localStorage.getItem("main_boarding_point_id"));
@@ -1289,7 +1289,7 @@ const BusList = (seat) => {
     const newErrors = {};
 
 
-    const userID = JSON.parse(localStorage.getItem("UserID"));
+    const userID = localStorage.getItem("UserID");
     if (!userID) {
       toast.error("Please Login To Book Ticket");
       newErrors.selectedLowerSeats = "Select any Seat";
@@ -2015,7 +2015,7 @@ const BusList = (seat) => {
                                             color: "#888",
                                             fontWeight: "bold",
                                             fontSize: "14px",
-                                            
+
                                           }}
                                         >
                                           <ImCross style={{

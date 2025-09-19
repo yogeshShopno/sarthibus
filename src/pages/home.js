@@ -368,9 +368,13 @@ const Home = () => {
 
     const bannerMainList = async () => {
         let data = new FormData();
+        data.append('user_id', localStorage.getItem('UserID') || "");
         try {
             const res = await axios.post("home", data);
             setBannerMainImg(res.data.data);
+            if (res.data.data.home_type === "2") {
+                localStorage.removeItem("UserID")
+            }
         } catch (error) {
         }
     };

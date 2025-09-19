@@ -359,6 +359,7 @@ const PassengerDetails = () => {
                 emailId,
                 fromCity,
                 to,
+                from,
                 selectedTotalSeat,
                 totalPrice,
                 serviceTax,

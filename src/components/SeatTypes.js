@@ -5,8 +5,7 @@ return(<>
 
 <div className="w-100 justify-content-between knowabt3">
   <h5 className="my-4">
-    Know About Seats
-    Type
+    Know About Seats Type
   </h5>
   <div className="row justify-content-center">
     <div className="col-lg-12 col-4">

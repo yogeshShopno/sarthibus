@@ -73,6 +73,7 @@ const PassengerView = () => {
         main_droping_point_id = '',
         booking_type,
         fromCity,
+        coupon_id = ''
     } = location.state || {};
     const [openLogin, setOpenLogin] = useState(false)
 
@@ -174,7 +175,6 @@ const PassengerView = () => {
 
     }, [finalAmount, bus_id])
 
-
     const processToPayment = () => {
         const newErrors = {};
         const userID = localStorage.getItem('UserID');
@@ -210,7 +210,8 @@ const PassengerView = () => {
                 from,
                 main_boarding_point_id,
                 main_droping_point_id,
-                fromCity
+                fromCity,
+                coupon_id
             };
             localStorage.setItem('formData', JSON.stringify(formData));
             localStorage.setItem('redirectPath', location.pathname);
@@ -254,7 +255,6 @@ const PassengerView = () => {
 
             return;
         }
-
         if (!name) newErrors.name = 'Name is required';
         if (!mobileNo) newErrors.mobileNo = 'Mobile number is required';
         if (!selectedTotalSeat) newErrors.selectedTotalSeat = 'Please select the number of seats';
@@ -288,7 +288,6 @@ const PassengerView = () => {
 
         if (isValid) {
             submitTicket();
-
         }
     };
 
@@ -399,6 +398,8 @@ const PassengerView = () => {
 
         return () => clearInterval(interval);
     }, [timer]);
+
+
     const submitTicket = async () => {
         setLoading(true);
         let data = new FormData();
@@ -435,6 +436,8 @@ const PassengerView = () => {
         data.append('created_type', '2');
         data.append('booking_type', booking_type);
         data.append('contact_city_id', fromCity.city_id);
+        data.append('coupon_id',couponID);
+        console.log(couponID)
 
 
         for (let i = 0; i < selectedTotalSeat.length; i++) {
@@ -457,7 +460,7 @@ const PassengerView = () => {
 
         try {
             const res = await axios.post("add_ticket_hold", data);
-
+            console.log(res)
             if (res.data.success) {
                 toast.success(res.data.message);
                 setLoading(false);
@@ -584,44 +587,84 @@ const PassengerView = () => {
             data.append('coupon_id', couponID || "")
 
             try {
-                await axios.post("ticket_wallet_amount_web_data", data, {
-                }).then((res) => {
-                    setFinalAmountApi(res.data.data.total_main_price)
-                    setWalletAmount(res.data.data.total_wallet)
-                    setFinalSarthiDis(res.data.data.sarthi_discount)
-                    setOrderId(res.data.data.orderId)
-                    setServiceChargeAPI(res.data.data.total_service_charge)
-                    setGSTAmountApi(res.data.data.total_gst_amount)
-                    setAmountData(res.data.data)
-                })
-            }
-            catch (error) {
-                toast.error(error.data.message);
+                const res = await axios.post("ticket_wallet_amount_web_data", data);
+                setFinalAmountApi(res.data.data.total_main_price)
+                setWalletAmount(res.data.data.total_wallet)
+                setFinalSarthiDis(res.data.data.sarthi_discount)
+                setOrderId(res.data.data.orderId)
+                setServiceChargeAPI(res.data.data.total_service_charge)
+                setGSTAmountApi(res.data.data.total_gst_amount)
+                setAmountData(res.data.data)
+                return res.data; // Return the response
+            } catch (error) {
+                toast.error(error.response?.data?.message || 'Error fetching wallet amount');
+                throw error;
             }
         } else {
-            console.error('cant call  wallet ammount')
-            return
+            console.error('cant call wallet amount')
+            throw new Error('User ID not found');
         }
-
-    }
-
-    const handleApplyOffer = (coupon_id) => {
-        getWalletAmount()
-        setCouponID(coupon_id)
-        setIsCouponApplied(true);
-        handleHideCoupon();
-        toast.success('Apply Coupon successfully.')
-
-    }
-
-    const handleRemoveOffer = () => {
-
-        getWalletAmount()
-        setIsCouponApplied(false);
-        setCouponID('')
-        handleHideCoupon();
-        toast.success('Coupon removed successfully.');
     };
+
+
+    // Add this new function to handle the API call
+    const applyCouponAPI = async (coupon_id) => {
+        let data = new FormData();
+        data.append('coupon_id', coupon_id);
+        data.append('user_id', localStorage.getItem('UserID'));
+        data.append('booking_date', formattedDate);
+
+        try {
+            const response = await axios.post("apply_coupon", data);
+            if (response.data.success) {
+                return { success: true, message: response.data.message };
+            } else {
+                return { success: false, message: response.data.message || 'Failed to apply coupon' };
+            }
+        } catch (error) {
+            return { success: false, message: error.response?.data?.message || 'Error applying coupon' };
+        }
+    };
+
+    // Update the handleApplyOffer function
+    const handleApplyOffer = async (coupon_id) => {
+        setLoading(true);
+
+        try {
+            const result = await applyCouponAPI(coupon_id);
+
+            if (result.success) {
+                getWalletAmount();
+                setCouponID(coupon_id);
+                setIsCouponApplied(true);
+                handleHideCoupon();
+                toast.success(result.message || 'Apply Coupon successfully.');
+            } else {
+                toast.error(result.message);
+            }
+        } catch (error) {
+            toast.error('Something went wrong while applying coupon');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+    // Update the handleRemoveOffer function
+    const handleRemoveOffer = async () => {
+        setLoading(true);
+
+        try {
+            // First clear the coupon state
+            setCouponID('');
+            setIsCouponApplied(false);
+        } catch (error) {
+            toast.error('Something went wrong while removing coupon');
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     return (
 

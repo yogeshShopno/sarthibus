@@ -101,7 +101,7 @@ const EditProfile = () => {
                 setEmail(res.data.data.email)
                 setSelectedDate(res.data.data.dob && !isNaN(new Date(res.data.data.dob)) ? new Date(res.data.data.dob) : new Date());
                 setGender(res.data.data.gender)
-                setUserID(res.data.data.id)
+                setUserID(userID)
             })
         }
         catch (error) {
