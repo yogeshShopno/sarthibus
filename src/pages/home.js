@@ -432,7 +432,7 @@ const Home = () => {
                                         welcome to <span style={{ color: "#6c2a7f" }}>sarthi bus</span> booking
                                     </h1>
                                     <h5 className="text-gray text-capitalize">
-                                        Your journey to seamless and convenient bus travel starts here.
+                                        Your journey to seamless and convenient bus travel starts here
                                     </h5>
                                 </div>
                                 <div className="runningbus mt-5">
@@ -649,7 +649,7 @@ const Home = () => {
                                                                     fullWidth
                                                                     onChange={(e) => {
                                                                         setInputValue(e.target.value)
-                                                                        localStorage.setItem("inputValue",JSON.stringify(e.target.value))
+                                                                        localStorage.setItem("inputValue", JSON.stringify(e.target.value))
 
                                                                     }}
                                                                 />
