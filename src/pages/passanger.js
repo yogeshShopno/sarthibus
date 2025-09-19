@@ -239,7 +239,7 @@ const PassengerDetails = () => {
     };
 
     const handleGenderChange = (index, value) => {
-        
+
         setCheckboxToggle(true)
 
         setPassengerData(prevData =>
@@ -307,11 +307,13 @@ const PassengerDetails = () => {
     const handleDetails = () => {
         const newErrors = {};
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         localStorage.setItem('passengerData', JSON.stringify(passengerData))
         localStorage.setItem("Name", JSON.stringify(name))
         localStorage.setItem("Email", JSON.stringify(emailId))
         localStorage.setItem("Mobile", JSON.stringify(mobileNo))
 
+        // Passenger validations
         passengerData.forEach((passenger, index) => {
             if (!passenger.name) {
                 newErrors[`name-${index}`] = `Name is required for Passenger ${index + 1}`;
@@ -328,11 +330,11 @@ const PassengerDetails = () => {
             }
         });
 
+        // Main user validations
         if (!name) {
             newErrors.name = 'Name is required';
             toast.error('Name is required');
-        }
-        else if (!mobileNo) {
+        } else if (!mobileNo) {
             newErrors.mobileNo = 'Mobile No is required';
             toast.error('Mobile No is required');
         } else if (!/^\d{10}$/.test(mobileNo)) {
@@ -340,52 +342,59 @@ const PassengerDetails = () => {
             toast.error('Mobile number must be 10 digits');
         }
 
+        // ✅ City validation
+        if (!fromCity || !fromCity.city_id) {
+            newErrors.fromCity = 'City is required';
+            toast.error('City is required');
+        }
+
         setErrors(newErrors);
         const isValid = Object.keys(newErrors).length === 0;
+
         if (isValid) {
+            const submittedData = {
+                passengerData,
+                name,
+                mobileNo,
+                emailId,
+                fromCity,
+                to,
+                selectedTotalSeat,
+                totalPrice,
+                serviceTax,
+                selectedTotalSeatPrice,
+                bus_id,
+                bus_name,
+                boarding_point_name,
+                droping_point_name,
+                selectedboardingValue,
+                selecteddropingValue,
+                bus_ac,
+                droping_time,
+                boarding_time,
+                droping_date,
+                boarding_date,
+                busIcon,
+                time_different,
+                formattedDate,
+                remainingTime: timer,
+                main_boarding_point_id,
+                main_droping_point_id,
+                selectedUpperSeats,
+                selectedLowerSeats,
+                selectedUpperSeatPrice,
+                selectedLowerSeatPrice,
+                inputValue,
+                booking_type,
+            };
 
             history.push({
                 pathname: '/passenger-detail-view',
-                state: {
-                    passengerData,
-                    name,
-                    mobileNo,
-                    emailId,
-                    selectedTotalSeat,
-                    totalPrice,
-                    serviceTax,
-                    selectedTotalSeatPrice,
-                    bus_id,
-                    bus_name,
-                    boarding_point_name,
-                    droping_point_name,
-                    selectedboardingValue,
-                    selecteddropingValue,
-                    bus_ac,
-                    droping_time,
-                    boarding_time,
-                    droping_date,
-                    boarding_date,
-                    busIcon,
-                    time_different,
-                    formattedDate,
-                    to,
-                    from,
-                    remainingTime: timer,
-                    main_boarding_point_id,
-                    main_droping_point_id,
-                    selectedUpperSeats,
-                    selectedLowerSeats,
-                    totalPrice,
-                    selectedUpperSeatPrice,
-                    selectedLowerSeatPrice,
-                    inputValue,
-                    booking_type,
-                    fromCity
-                }
-            })
+                state: submittedData
+            });
         }
     };
+
 
     return (
         <>

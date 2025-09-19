@@ -5,7 +5,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #f9fafb;
+    background: linear-gradient(135deg, rgba(179, 73, 209, 0.1), rgba(103, 11, 129, 0.05));
+
     padding: 2rem;
     text-align: center;
     font-family: "Arial", sans-serif;
@@ -14,10 +15,10 @@
 /* Ticket Graphic Box */
 .ticket-graphic {
     position: relative;
-    background: #fff4db;
-    border: 2px dashed #e11d48;
+    background: linear-gradient(135deg, #a258b6, #8e46a2, #6c2a7f);
+    border: 2px dashed #fff;
     border-radius: 16px;
-    padding: 2rem;
+    padding: 4rem;
     max-width: 600px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
@@ -28,7 +29,7 @@
     position: absolute;
     top: -20px;
     right: -20px;
-    background: #e11d48;
+    background: #6c2a7f;
     color: #fff;
     font-weight: bold;
     font-size: 2.5rem;
@@ -42,11 +43,11 @@
 .ticket-shape h2 {
     margin: 1rem 0 0.5rem;
     font-size: 1.8rem;
-    color: #1f2937;
+    color: #fff;
 }
 
 .ticket-shape p {
-    color: #374151;
+    color: #fff;
     font-size: 1.1rem;
     line-height: 1.6;
     margin: 0 auto;
@@ -62,14 +63,14 @@
 /* Buttons */
 .ticket-actions {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
 }
 
 .btn-primary {
-    background-color: #e11d48;
+    background-color: #6c2a7f;
     color: #fff;
-    padding: 0.9rem 2rem;
+    padding: 5rem;
     border-radius: 12px;
     border: none;
     cursor: pointer;
@@ -79,12 +80,12 @@
 }
 
 .btn-primary:hover {
-    background-color: #be123c;
+    background-color: #6c2a7f;
 }
 
 .btn-secondary {
-    border: 2px solid #1f2937;
-    color: #1f2937;
+    border: 2px solid #6c2a7f;
+    color: #6c2a7f;
     padding: 0.9rem 2rem;
     border-radius: 12px;
     cursor: pointer;
@@ -94,7 +95,7 @@
 }
 
 .btn-secondary:hover {
-    background-color: #1f2937;
+    background-color: #6c2a7f;
     color: #fff;
 }
 
