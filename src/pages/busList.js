@@ -246,6 +246,7 @@ const BusList = (seat) => {
   const [filterSearch, setFilterSearch] = useState(false);
 
   const [openLogin, setOpenLogin] = useState(false)
+  const [pendingBusItem, setPendingBusItem] = useState(null);
 
   const resetAddDialogReview = () => {
     setOpen(false);
@@ -1293,7 +1294,9 @@ const BusList = (seat) => {
     if (!userID) {
       toast.error("Please Login To Book Ticket");
       newErrors.selectedLowerSeats = "Select any Seat";
+      setPendingBusItem(item);
       setOpenLogin(true)
+      return; // stop here until login
     }
     if (selectedLowerSeats.length == 0 && selectedUpperSeats.length == 0 && selectedSeatLayout2.length == 0) {
       newErrors.selectedLowerSeats = "Select any Seat";
@@ -3395,7 +3398,19 @@ const BusList = (seat) => {
             </div>
           </div>
         </div>
-        {openLogin && <LoginPopup onClose={() => setOpenLogin(false)} />}
+
+        {openLogin && (
+          <LoginPopup
+            onClose={() => setOpenLogin(false)}
+            onLoginSuccess={() => {
+              setOpenLogin(false);
+              if (pendingBusItem) {
+                handleConfirmSeat(pendingBusItem);
+                setPendingBusItem(null);
+              }
+            }}
+          />
+        )}
 
         <Footer />
       </div>

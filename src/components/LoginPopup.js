@@ -9,7 +9,7 @@ import axios from "axios";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import debounce from 'lodash.debounce';
 
-const LoginPopup = ({ onClose }) => {
+const LoginPopup = ({ onClose,onLoginSuccess  }) => {
     const [step, setStep] = useState(1);
     const [mobileNo, setMobileNo] = useState("");
     const [referralCode, setReferralCode] = useState("");
@@ -184,8 +184,9 @@ const LoginPopup = ({ onClose }) => {
 
                     // Condition for 'type 1'
                     if (res?.data?.user_data?.type == "1") {
-                        onClose(); // Fixed typo from 'onclose'
                         localStorage.setItem('UserID', res?.data?.user_data?.id);
+                         if (onLoginSuccess) onLoginSuccess()
+                        onClose(); // Fixed typo from 'onclose'
 
                     }
                     setStep(3);
@@ -225,6 +226,7 @@ const LoginPopup = ({ onClose }) => {
 
                     if (res?.data?.user_data?.type == "1") {
                         localStorage.setItem('UserID', userId);
+                         if (onLoginSuccess) onLoginSuccess()
                         onClose()
                     }
                 } else {
