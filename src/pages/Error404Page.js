@@ -1,6 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import "./Error404Page.css";
+import { AiOutlineMobile } from "react-icons/ai";
+import { FaTicketAlt } from 'react-icons/fa';
+
 
 const Error404Page = () => {
     const history = useHistory();
@@ -30,11 +33,11 @@ const Error404Page = () => {
 
             {/* Action Buttons */}
             <div className="ticket-actions">
-                <button onClick={handleBackToHomepage} className="btn-primary">
-                    🎟️ Book New Ticket
+                <button onClick={handleBackToHomepage} className="btn-secondary">
+                    <FaTicketAlt />  Book New Ticket
                 </button>
                 <button onClick={handleContactSupport} className="btn-secondary">
-                    📞 Contact Support
+                    <AiOutlineMobile />  Contact Support
                 </button>
             </div>
         </div>

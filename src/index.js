@@ -12,7 +12,7 @@ import TawkMessengerReact from '@tawk.to/tawk-messenger-react';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = 'https://admin.sarthibus.com/api/V1/';
+axios.defaults.baseURL = 'https://admin.sarthibus.com/api/V1_web/';
 
 let username = 'sarthi_bus';
 let password = '20$tgbsv09u';
@@ -22,7 +22,7 @@ axios.defaults.headers.common['Authorization'] = base64encodedData;
 root.render(
   <React.StrictMode>
     <App />
-    </React.StrictMode>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

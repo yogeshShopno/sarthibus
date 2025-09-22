@@ -42,10 +42,6 @@ const EditProfile = () => {
             newErrors.name = 'Name is required';
             toast.error('Name is required');
         }
-        if (!password) {
-            newErrors.password = 'Password is required';
-            toast.error('Password is required');
-        }
         setErrors(newErrors);
         const isValid = Object.keys(newErrors).length === 0;
         if (isValid) {
@@ -57,7 +53,6 @@ const EditProfile = () => {
         let data = new FormData();
         data.append('user_id', userID)
         data.append('name', name)
-        data.append('password', password)
         const formattedDOB = selectedDate instanceof Date && !isNaN(selectedDate)
             ? selectedDate.toISOString().split('T')[0] // Converts to 'YYYY-MM-DD'
             : null;
@@ -101,12 +96,12 @@ const EditProfile = () => {
 
             ).then((res) => {
                 setName(res.data.data.fname)
-                setPassword(res.data.data.password)
+                // setPassword(res.data.data.password)
                 setMobileNo(res.data.data.number)
                 setEmail(res.data.data.email)
                 setSelectedDate(res.data.data.dob && !isNaN(new Date(res.data.data.dob)) ? new Date(res.data.data.dob) : new Date());
                 setGender(res.data.data.gender)
-                setUserID(res.data.data.id)
+                setUserID(userID)
             })
         }
         catch (error) {
@@ -117,14 +112,14 @@ const EditProfile = () => {
         getProfileDate()
     }, [])
 
-    const handlePasswordChange = () => {
-        if (password !== repeatPassword) {
-            toast.error("Passwords do not match");
-        } else {
-            validUpdateDetails();
-            setActiveCard('default'); // Proceed with password change if valid
-        }
-    };
+    // const handlePasswordChange = () => {
+    //     if (password !== repeatPassword) {
+    //         toast.error("Passwords do not match");
+    //     } else {
+    //         validUpdateDetails();
+    //         setActiveCard('default'); // Proceed with password change if valid
+    //     }
+    // };
     const handleGenderChange = (event) => {
         const selectedGender = event.target.value;
         setGender(selectedGender);
@@ -194,7 +189,7 @@ const EditProfile = () => {
                                                                     {email}
                                                                 </div>
                                                             </div>
-                                                            <div className="form-group00 fs-6 row ">
+                                                            {/* <div className="form-group00 fs-6 row ">
                                                                 <label htmlFor="password" className="form-label fs-6 fw-semibold text-capitalize col-md-4">Password : </label>
                                                                 <div className='col-md-8'>
                                                                     <FormControl variant="outlined" className="form-control default_sec_dis_pass">
@@ -219,7 +214,7 @@ const EditProfile = () => {
                                                                         />
                                                                     </FormControl>
                                                                 </div>
-                                                            </div>
+                                                            </div> */}
                                                             <div className="form-group00 fs-6 row ">
                                                                 <label htmlFor="dob" className="form-label fs-6 fw-semibold text-capitalize col-md-4">DOB : </label>
                                                                 <div className='col-md-8' >
@@ -279,7 +274,7 @@ const EditProfile = () => {
                                                                 <TextField size='small' className="form-control edit_sec_dis" placeholder="Email" value={email} disabled onChange={(e) => setEmail(e.target.value)} />
                                                             </div>
                                                         </div>
-                                                        <div className="mb-4 form-group">
+                                                        {/* <div className="mb-4 form-group">
                                                             <label htmlFor="password" className="form-label fs-6 fw-semibold text-capitalize edit_profile_flds">Password</label>
                                                             <div className='customfield'>
                                                                 <FormControl variant="outlined" className="form-control edit_sec_pass_fld">
@@ -305,7 +300,7 @@ const EditProfile = () => {
                                                                     />
                                                                 </FormControl>
                                                             </div>
-                                                        </div>
+                                                        </div> */}
                                                         <div className="form-label mb-4" >
                                                             <label htmlFor="dob" className="form-label fs-6 fw-semibold text-capitalize">DOB</label>
 
@@ -338,7 +333,7 @@ const EditProfile = () => {
                                             </Card>
                                         )}
 
-                                        {activeCard === 'changePassword' && (
+                                        {/* {activeCard === 'changePassword' && (
                                             <Card className='p-3 col-md-12' >
                                                 <div className="roww">
                                                     <div className="col-md-9 mt-3 mx-auto">
@@ -401,7 +396,7 @@ const EditProfile = () => {
                                                     </div>
                                                 </div>
                                             </Card>
-                                        )}
+                                        )} */}
 
                                         <div className="d-flex form-group gap-5 justify-content-end mb-4 mt-5 text-end">
                                             {activeCard === "default" && (
@@ -410,11 +405,12 @@ const EditProfile = () => {
                                             {activeCard === "edit" && (
                                                 <Button variant='contained' onClick={() => { validUpdateDetails(); }} style={{ backgroundColor: "rgb(121 44 143)", width: "30%" }}> Update </Button>
                                             )}
-                                            {activeCard === "default" && (
-                                                <Button variant='contained' onClick={() => { setActiveCard("changePassword") }} style={{ backgroundColor: "white", color: 'rgb(121 44 143)', width: "30%", border: "1px solid rgb(121 44 143)" }}>Change Password</Button>
-                                            )}
 
-                                            {activeCard === "changePassword" && (
+                                            {/* {activeCard === "default" && (
+                                                <Button variant='contained' onClick={() => { setActiveCard("changePassword") }} style={{ backgroundColor: "white", color: 'rgb(121 44 143)', width: "30%", border: "1px solid rgb(121 44 143)" }}>Change Password</Button>
+                                            )} */}
+
+                                            {/* {activeCard === "changePassword" && (
 
                                                 <Button variant='contained' onClick={() => { setActiveCard('default') }} style={{ backgroundColor: "white", color: 'rgb(121 44 143)', width: "30%", border: "1px solid rgb(121 44 143)" }}>Back</Button>
                                             )}
@@ -422,7 +418,7 @@ const EditProfile = () => {
                                             {activeCard === "changePassword" && (
 
                                                 <Button variant='contained' onClick={() => { handlePasswordChange() }} style={{ backgroundColor: "rgb(121 44 143)", width: "30%" }}>Change Password</Button>
-                                            )}
+                                            )} */}
 
                                         </div>
                                         <div className="mb-4 form-group text-end mt-5">
