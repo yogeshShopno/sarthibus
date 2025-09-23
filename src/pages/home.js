@@ -23,6 +23,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import { IoChevronBack, IoChevronForwardSharp } from 'react-icons/io5';
 import debounce from 'lodash.debounce';
 import SathiBanner from '../components/sarthiBanner';
+import { Box, Typography, Paper, Stack, Chip, IconButton } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 
 const Home = () => {
@@ -57,6 +60,57 @@ const Home = () => {
     const formattedDate = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : localStorage.getItem('formattedDate') || '';
 
     const history = useHistory()
+
+
+    const sections = [
+        {
+            title: "Popular Bus Routes",
+            routes: [
+                "Delhi To Manali Bus",
+                "Delhi To Rishikesh Bus",
+                "Delhi To Shimla Bus",
+                "Delhi To Nainital Bus",
+            ],
+        },
+        {
+            title: "Popular Cities  ",
+            routes: [
+                "Bangalore To Goa Bus",
+                "Bangalore To Hyderabad Bus",
+                "Bangalore To Chennai Bus",
+            ],
+        },
+        {
+            title: "Popular Bus Operators",
+            routes: [
+                "Pune To Goa Bus",
+                "Pune To Delhi Bus",
+            ],
+        },
+        {
+            title: "Popular Bus ",
+            routes: [
+                "Pune To surat Bus",
+                "Pune To Mumbai Bus",
+            ],
+        },
+        {
+            title: "Popular Sarthi Bus ",
+            routes: [
+                "Pune To Ahemdabad Bus",
+                "Pune To Delhi Bus",
+            ],
+        }
+    ];
+    const [openSections, setOpenSections] = useState(
+        Array(sections.length).fill(false)
+    );
+
+    const toggleSection = (index) => {
+        const updated = [...openSections];
+        updated[index] = !updated[index];
+        setOpenSections(updated);
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -695,6 +749,66 @@ const Home = () => {
                 </div>
             </section>
             <ChooseUs />
+
+            <section className="mt-100 whyus--sec">
+                <div className="container">
+                    <div className="whyus--main">
+                        <div className="whyus--div">
+                            <Box sx={{ mt: 10, p: 3, bgcolor: "#f6f0f8", borderRadius: 2 }}>
+
+                                {sections.map((section, idx) => (
+                                    <div key={idx}>
+                                        {/* Header row */}
+                                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", py: 1 }}>
+                                            <Typography sx={{ fontSize: "18px", color: 'black' }} >
+                                                {section.title}
+                                            </Typography>
+                                            <IconButton onClick={() => toggleSection(idx)}>
+                                                <ExpandMoreIcon
+                                                    sx={{
+                                                        transform: openSections[idx] ? "rotate(180deg)" : "rotate(0deg)",
+                                                        transition: "transform 0.3s",
+                                                    }}
+                                                />
+                                            </IconButton>
+                                        </Box>
+
+
+                                        {openSections[idx] && (
+                                            <Box sx={{ p: 2, maxHeight: 300, overflowY: "auto", bgcolor: "white", borderRadius: 1, mb: 1 }}>
+                                                <Stack direction="row" flexWrap="wrap" gap={1}>
+                                                    {section.routes.map((route, index) => (
+                                                        <Chip
+                                                            key={index}
+                                                            label={route}
+                                                            clickable
+
+                                                            variant="outlined"
+                                                            sx={{
+                                                                borderColor: "#44164c",
+                                                                color: "#44164c",
+                                                                borderRadius: 2,
+                                                                "&:hover": {
+                                                                    bgcolor: "#e0e0e0",
+                                                                    transform: "scale(1.05)",
+                                                                    transition: "all 0.3s",
+                                                                },
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </Stack>
+                                            </Box>
+                                        )}
+
+                                    </div>
+                                ))}
+
+                            </Box>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <Footer />
         </div>
 
