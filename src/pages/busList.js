@@ -402,25 +402,42 @@ const BusList = (seat) => {
   };
   // Function to compare boarding date and time with current date and time
   const isBoardingTimePassed = (boardingTime) => {
-    if (formattedDate && boardingTime) {
-      // Parse the date part
-      const [year, month, day] = formattedDate.split("-").map(Number);
+  if (!selectedDate || !boardingTime) return false;
 
-      // Convert "6:30 PM" to 24-hour time
-      const [time, meridian] = boardingTime.split(" ");
-      let [hour, minute] = time.split(":").map(Number);
+  try {
+    const [year, month, day] = selectedDate.split("-").map(Number);
+    const boardingDateObj = new Date(year, month - 1, day);
 
-      if (meridian === "PM" && hour < 12) hour += 12;
-      if (meridian === "AM" && hour === 12) hour = 0;
+    const now = new Date();
 
-      const boardingDateObj = new Date(year, month - 1, day, hour, minute);
-      const currentDateObj = new Date();
-
-      return boardingDateObj < currentDateObj;
+    // If the boarding date is in the future → not passed
+    if (boardingDateObj.toDateString() !== now.toDateString()) {
+      return false;
     }
 
+    // Parse time (e.g. "6:30 PM")
+    const [time, meridian] = boardingTime.trim().split(" ");
+    let [hour, minute] = time.split(":").map(Number);
+
+    if (meridian.toUpperCase() === "PM" && hour < 12) hour += 12;
+    if (meridian.toUpperCase() === "AM" && hour === 12) hour = 0;
+
+    // Build today's boarding datetime
+    const boardingTimeToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hour,
+      minute
+    );
+
+    return boardingTimeToday < now; // true if time already passed today
+  } catch (err) {
+    console.error("Invalid boardingTime:", boardingTime, err);
     return false;
-  };
+  }
+};
+
   useEffect(() => {
     if (formattedDate) {
       if (filterSearch == true) {
